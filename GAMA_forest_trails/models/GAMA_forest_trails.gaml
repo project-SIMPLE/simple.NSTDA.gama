@@ -8,7 +8,7 @@
 model GAMA_forest_trails
 
 global {
-	shape_file roads_shape_file <- shape_file("/Users/lilti/Documents/GAMA_workspace/new_shape/includes/Trail_4_5.shp");
+	shape_file roads_shape_file <- shape_file("../includes/Trail_4_5.shp");
 	geometry shape <- envelope(roads_shape_file);
 	graph road_network;
 	
