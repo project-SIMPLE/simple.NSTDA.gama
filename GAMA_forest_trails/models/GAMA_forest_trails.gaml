@@ -157,7 +157,7 @@ experiment forrest type: gui {
     		int limit_harvest_per_action <- 0;
     		ask small_tree at_distance collect_seeds_distance{
     			if limit_harvest_per_action < 1{
-    				if self in red_small_tree_list{
+    				if self in red_small_tree_list and color = #red{
     					color <- #black;
 //		    			write self;
 //	    				write color;
@@ -171,7 +171,7 @@ experiment forrest type: gui {
 	    	}
 	    	ask medium_tree at_distance collect_seeds_distance{
     			if limit_harvest_per_action < 1{
-    				if self in red_medium_tree_list{
+    				if self in red_medium_tree_list and color = #red{
     					color <- #black;
 //		    			write self;
 //	    				write color;
@@ -185,7 +185,7 @@ experiment forrest type: gui {
 	    	}
 	    	ask big_tree at_distance collect_seeds_distance{
     			if limit_harvest_per_action < 1{
-    				if self in red_big_tree_list{
+    				if self in red_big_tree_list and color = #red{
     					color <- #black;
 //		    			write self;
 //	    				write color;
