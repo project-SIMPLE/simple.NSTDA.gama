@@ -199,7 +199,8 @@ experiment forrest type: gui {
 	    	}
     	}
     }
-	output synchronized: true {
+	output{
+//		layout #split;
 		display "Main" type: 3d background: rgb(50,50,50){
 			camera 'default' locked:true; //location: {445,750,750} 
 			
@@ -214,6 +215,7 @@ experiment forrest type: gui {
 		}
 		display "Summary" type: 2d {
 			chart "Number of seeds collected" type:histogram
+			y_range:[0, 10+total_seeds]
 			x_serie_labels: ["Collected from"]
 			style:"3d"
 			series_label_position: xaxis
@@ -228,11 +230,12 @@ experiment forrest type: gui {
 //				style:stack
 				color:#blue;
 //				marker_shape:marker_circle ;
-				data "Total" value:total_seeds
+//				data "Total" value:total_seeds
 //				style:stack
-				color:#red;
+//				color:#red;
 			}
-		} 
+		}
+		monitor "Number of seeds" value:total_seeds;
 	}
 }
 
