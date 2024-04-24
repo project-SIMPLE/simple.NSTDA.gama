@@ -145,7 +145,7 @@ species player{
 	}
 }
 
-experiment forrest type: gui {
+experiment forest type: gui {
 	action move_player{
 		ask player {
     		location <- #user_location;
