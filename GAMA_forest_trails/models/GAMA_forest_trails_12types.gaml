@@ -5,8 +5,6 @@
 * Tags: 
 */
 
-// ต้นไม้ 12  แบบ มี 1 แบบเกิดใกล้น้ำ ทำ gradiant เกิด trail ไหนก็ได้ แต่ยิ่งใกลยิ่งมี prob เยอะ
-
 model GAMA_forest_trails
 
 global {
@@ -15,17 +13,17 @@ global {
 	graph road_network;
 	
 	// Parameter
-	int n_tree_type1 <- 10;
-	int n_tree_type2 <- 10;
-	int n_tree_type3 <- 10;
-	int n_tree_type4 <- 10;
-	int n_tree_type5 <- 10;
-	int n_tree_type6 <- 10;
-	int n_tree_type7 <- 10;
-	int n_tree_type8 <- 10;
-	int n_tree_type9 <- 10;
-	int n_tree_type10 <- 10;
-	int n_tree_type11 <- 10;
+	int n_tree_type1 <- 50;
+	int n_tree_type2 <- 50;
+	int n_tree_type3 <- 50;
+	int n_tree_type4 <- 50;
+	int n_tree_type5 <- 50;
+	int n_tree_type6 <- 50;
+	int n_tree_type7 <- 50;
+	int n_tree_type8 <- 50;
+	int n_tree_type9 <- 50;
+	int n_tree_type10 <- 50;
+	int n_tree_type11 <- 50;
 	int n_tree_type12 <- 100;
 	int collect_seeds_distance <- 5;
 	
@@ -48,13 +46,18 @@ global {
 	list red_tree_type11_list <- [];
 	list red_tree_type12_list <- [];
 	
-	float x_max_radius <- 160.0;
-	float y_max_radius <- 250.0;
-	float x_river <- 0.0;
-	float y_river <- 442.0;
+	float max_radius <- 200.0; //250.0
+	float x_river <- 0.0 ;//300.0; //0.0
+	float y_river <- 442.0 ;//375.0; //442.0
 	
 	init {
-		list tree_loc_list <- (list(-10,-9,-8,-7,-6,-5,-4,-3,-2,2,3,4,5,6,7,8,9,10));
+		list tree_loc_list <- (list(-10,-9,-8,-7,-6,-5,5,6,7,8,9,10));
+		float x_max <- sqrt((max_radius^2)/2);
+		write(x_max);
+		
+		create river{
+			location <- {x_river, y_river, 0.0};
+		}
 		
 		create road from: roads_shape_file ;
 		road_network <- as_edge_graph(road);
@@ -154,12 +157,32 @@ global {
 		create tree_type12 number:n_tree_type12{
 			point at_location;
 			point target_location;
-			at_location <- any_location_in(road[0]);
-			loop while: (at_location.x > 160 or at_location.y < 250){
-				at_location <- any_location_in(any(road));
+			bool false_position <- true;
+//			at_location <- any_location_in(road[0]);
+//			loop while: (at_location.x > 160 or at_location.y < 250){
+//				at_location <- any_location_in(any(road));
+//			}
+//			target_location <- {at_location.x + tree_loc_list[rnd_choice(tree_loc_list)],at_location.y + tree_loc_list[rnd_choice(tree_loc_list)],at_location.z};		
+//			location <- target_location;
+			loop while: false_position{
+				at_location <- any_location_in(any(road)) ;
+				float distance <- sqrt(((x_river - at_location.x)^2) + ((y_river - at_location.y)^2));
+//				write(distance);
+				loop while: distance > max_radius{
+					at_location <- any_location_in(any(road)) ;
+					distance <- sqrt(((x_river - at_location.x)^2) + ((y_river - at_location.y)^2));
+				}
+				float p_x_y <- 1 - (distance/max_radius) ;
+				write(p_x_y) ;
+				bool create_or_not <- flip(p_x_y);
+				write(create_or_not) ;
+				if create_or_not{
+					write("pass!");
+					false_position <- false;
+					target_location <- {at_location.x + tree_loc_list[rnd_choice(tree_loc_list)],at_location.y + tree_loc_list[rnd_choice(tree_loc_list)],at_location.z};		
+					location <- target_location;	
+				}
 			}
-			target_location <- {at_location.x + tree_loc_list[rnd_choice(tree_loc_list)],at_location.y + tree_loc_list[rnd_choice(tree_loc_list)],at_location.z};		
-			location <- target_location;
 		}
 	}
 	
@@ -379,7 +402,7 @@ species tree_type12{
 	int initial_seed <- 0;
 	rgb color <- #red;
 	aspect default{
-		draw triangle(5#m) color:it_red? color:#blue;
+		draw triangle(10#m) color:it_red? color:#blue;
 	}
 }
 
@@ -395,7 +418,17 @@ species player{
 	}
 }
 
+species river{
+	aspect default {
+		draw circle(max_radius#m) color:rgb(138, 178, 242);
+		draw circle(5#m) color:#red;
+	}
+}
+
 experiment forest type: gui {
+	
+
+	
 	action move_player{
 		ask player {
     		location <- #user_location;
@@ -454,6 +487,7 @@ experiment forest type: gui {
 		display "Main" type: 3d background: rgb(50,50,50){
 			camera 'default' locked:true; //location: {445,750,750} 
 			
+			species river;
 			species road;
 			species tree_type1;
 			species tree_type2;
