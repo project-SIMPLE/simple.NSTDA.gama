@@ -3,7 +3,7 @@ model GAMA_forest_trails_model_VR
 import "GAMA_forest_trails_12types.gaml"
 
 species unity_linker parent: abstract_unity_linker {
-	string player_species <- string(unity_player); //player
+	string player_species <- string(unity_player);
 	int max_num_players  <- -1;
 	int min_num_players  <- 1;
 	unity_property up_road;
@@ -18,7 +18,7 @@ species unity_linker parent: abstract_unity_linker {
 	list<point> init_locations <- define_init_locations();
 
 	list<point> define_init_locations {
-		return [{50.0,400.0,2.0}];
+		return [{50.0,50.0,0.0}];
 	}
 
 
@@ -26,11 +26,6 @@ species unity_linker parent: abstract_unity_linker {
 		do define_properties;
 		do add_background_geometries(road collect (each.shape + 2.0),up_road);
 	}
-	
-	action unity_to_gama(string id){
-		write id;
-	}
-	
 	action define_properties {
 		unity_aspect road_aspect <- geometry_aspect(1.0,#gray,precision);
 		up_road <- geometry_properties("road","road",road_aspect,#ray_interactable,false);
@@ -137,7 +132,7 @@ experiment vr_xp parent:forest autorun: false type: unity {
 		 display Main_VR parent:Main{
 			 species unity_player;
 			 event #mouse_down{
-				 float t <- machine_time;
+				 float t <- gama.machine_time;
 				 if (t - t_ref) > 500 {
 					 ask unity_linker {
 						 move_player_event <- true;
