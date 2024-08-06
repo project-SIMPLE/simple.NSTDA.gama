@@ -115,7 +115,7 @@ global{
 		}
 		current_time <- int((time_now-0.1) div (stop_time / stop_every_n_turn)) + 1;
 		
-		write "Time: " + time_now + " s, Turn: " + current_time ;
+		write "Time: " + time_now + " s, Turn: " + count_start ;
 
 		loop i from:0 to:(length(sum_total_seeds)-1){
 //			write sum(seeds[i]);
@@ -138,13 +138,13 @@ global{
 //		write(max_total_seed);
 	}
 	
-	reflex restart when:current_time=max_time{
+	reflex restart when:time_now=max_time{
 		time_now <- 0;
 		count_start <- 0 ;
 	}
 	
 	reflex do_resume when: (not paused) and can_start{
-		if user_confirm("Confirmation","Do you want to confirm?"){
+		if user_confirm("Confirmation","Do you want to start?"){
 			ask sign{
 				icon <- stop;
 				write "change to stop icon.";
@@ -163,6 +163,7 @@ global{
 			icon <- play;
 			write "change to start icon.";
 		}
+		
 		can_start <- true ;
 		do pause;
 	}

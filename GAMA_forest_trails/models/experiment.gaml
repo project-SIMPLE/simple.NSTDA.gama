@@ -49,8 +49,8 @@ experiment First type: gui {
 			event #mouse_drag action: move_player ; 
 
 			graphics Strings {
-				draw "Current turn: "+ current_time at:{width/3, -45} font:font("Times", 20, #bold+#italic) ; 
-				draw "Time: "+ ((max_time - time_now) div 60) + " minute " + ((max_time - time_now) mod 60) + " second" at:{width/3, -20} font:font("Times", 20, #bold+#italic) ;
+				draw "Current turn: "+ count_start at:{width/3, -45} font:font("Times", 20, #bold+#italic) ; 
+				draw "Remaining time: "+ ((stop_time*count_start - time_now) div 60) + " minutes " + ((stop_time*count_start - time_now) mod 60) + " seconds" at:{width/3, -20} font:font("Times", 20, #bold+#italic) ;
 			}
 		}
 		

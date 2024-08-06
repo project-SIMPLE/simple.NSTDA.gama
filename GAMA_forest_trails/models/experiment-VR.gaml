@@ -49,9 +49,9 @@ species unity_linker parent: abstract_unity_linker {
 //		list<tree> t1a <- tree where (each.tree_type < 3 and each.it_state <=3);
 //		list<tree> t1b <- tree where (each.tree_type < 3 and each.it_state =4);
 		
-		list<tree> t1 <- tree where (each.tree_type < 3);
-		list<tree> t2 <- tree where ((each.tree_type < 5) and (each.tree_type >= 3));
-		list<tree> t3 <- tree where (each.tree_type >= 5);
+		list<tree> t1 <- tree where (each.tree_type <= 2);
+		list<tree> t2 <- tree where ((each.tree_type <= 4) and (each.tree_type > 2));
+		list<tree> t3 <- tree where (each.tree_type > 4);
 		do add_geometries_to_send(t1,up_tree_1);
 		do add_geometries_to_send(t2,up_tree_2);
 		do add_geometries_to_send(t3,up_tree_3);
@@ -59,7 +59,7 @@ species unity_linker parent: abstract_unity_linker {
 }
 
 species unity_player parent: abstract_unity_player{
-	float player_size <- 1.0;
+	float player_size <- 20.0;
 	rgb color <- #red;
 	float cone_distance <- 10.0 * player_size;
 	float cone_amplitude <- 90.0;
@@ -82,10 +82,27 @@ experiment vr_xp parent:First autorun: false type: unity {
 	string unity_linker_species <- string(unity_linker);
 	list<string> displays_to_hide <- ["Main","Total seeds","Summary"];
 	float t_ref;
+	
+	action move_unity_player{
+		point cursor_location <- #user_location;
+		if (geometry(cursor_location) overlaps geometry(road)){ //(not paused) and (geometry(cursor_location) overlaps shape)
+			ask unity_player[0] {
+	    		location <- cursor_location;
+	    	}
+		}
+	}
 
 	action create_player(string id) {
 		ask unity_linker {
 			do create_player(id);
+			
+//			do build_invisible_walls(
+//				player: last(unity_player), //player to send the information to
+//				id: "wall_for_free_area", //id of the walls
+//				height: 40.0, //height of the walls
+//				wall_width: 1.0, //width ot the walls
+//				geoms: [road] //geometries used to defined the walls - the walls will be generated from the countour of these geometries
+//			);
 		}
 	}
 
