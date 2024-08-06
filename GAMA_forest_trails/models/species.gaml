@@ -54,7 +54,7 @@ species tree parent:tree_info{
 	
 	list assign_list_of_state(int state, int type){
 		switch type {
-			match_one [1,7]{
+			match_one [1,2]{
 				switch state {
 					match 1 {
 						return [1, 2, 3, 10, 11, 12];
@@ -70,7 +70,7 @@ species tree parent:tree_info{
 					}	
 				}
 			}
-			match_one [2,8]{
+			match_one [3,4]{
 				switch state {
 					match 1 {
 						return [1, 2, 3, 11, 12];
@@ -86,7 +86,7 @@ species tree parent:tree_info{
 					}	
 				}
 			}
-			match_one [3,9]{
+			match_one [5,6]{
 				switch state {
 					match 1 {
 						return [1, 2, 3, 4, 5, 6];
@@ -102,7 +102,7 @@ species tree parent:tree_info{
 					}	
 				}
 			}
-			match_one [4,10]{
+			match_one [7,8]{
 				switch state {
 					match 1 {
 						return [1, 8, 9, 10, 11, 12];
@@ -118,7 +118,7 @@ species tree parent:tree_info{
 					}	
 				}
 			}
-			match_one [5,11]{
+			match_one [9,10]{
 				switch state {
 					match 1 {
 						return [6, 7, 8, 9, 10];
@@ -134,7 +134,7 @@ species tree parent:tree_info{
 					}	
 				}
 			}
-			match_one [6,12]{
+			match_one [11,12]{
 				switch state {
 					match 1 {
 						return [4, 5, 6, 7, 8];

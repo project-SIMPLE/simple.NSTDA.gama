@@ -7,9 +7,9 @@ species unity_linker parent: abstract_unity_linker {
 	int num_players <- 1;
 	int max_num_players  <- num_players;
 	int min_num_players  <- num_players;
-//	unity_property up_tree_1;
-//	unity_property up_tree_2;
-//	unity_property up_tree_3;
+	unity_property up_tree_1;
+	unity_property up_tree_2;
+	unity_property up_tree_3;
 	unity_property up_tree_1a;
 	unity_property up_tree_1b;
 	unity_property up_tree_2a;
@@ -32,84 +32,85 @@ species unity_linker parent: abstract_unity_linker {
 	init {
 		do define_properties;
 		do add_background_geometries(road collect (each.geom_visu), up_road);
+//		do add_background_geometries(road, up_road);
 	}
 	action define_properties {
-//		unity_aspect tree_aspect_1 <- prefab_aspect("Prefabs/Visual Prefabs/Nature/PREFABS/Plants/SM_Arbre_001",2.0,0,1.0,0.5, precision);
-//		up_tree_1 <- geometry_properties("tree_1_","tree",tree_aspect_1,#ray_interactable,false);
-//		unity_properties << up_tree_1;
-//		
-//		unity_aspect tree_aspect_2 <- prefab_aspect("Prefabs/Visual Prefabs/Nature/PREFABS/Plants/SM_Arbre_003",2.0,0,1.0,0.5, precision);
-//		up_tree_2 <- geometry_properties("tree_1_","tree",tree_aspect_2,#ray_interactable,false);
-//		unity_properties << up_tree_2;
-//
-//		unity_aspect tree_aspect_3 <- prefab_aspect("Prefabs/Visual Prefabs/Nature/PREFABS/Plants/SM_Bananier_005",3.0,0,1.0,0.5, precision);
-//		up_tree_3 <- geometry_properties("tree_2_","tree",tree_aspect_3,#ray_interactable,false);
-//		unity_properties << up_tree_3;
+		unity_aspect tree_aspect_1 <- prefab_aspect("Prefabs/Visual Prefabs/Nature/PREFABS/Plants/SM_Arbre_001",2.0,0,1.0,0.5, precision);
+		up_tree_1 <- geometry_properties("tree_1_","tree",tree_aspect_1,#ray_interactable,false);
+		unity_properties << up_tree_1;
+		
+		unity_aspect tree_aspect_2 <- prefab_aspect("Prefabs/Visual Prefabs/Nature/PREFABS/Plants/SM_Arbre_003",2.0,0,1.0,0.5, precision);
+		up_tree_2 <- geometry_properties("tree_2_","tree",tree_aspect_2,#ray_interactable,false);
+		unity_properties << up_tree_2;
+
+		unity_aspect tree_aspect_3 <- prefab_aspect("Prefabs/Visual Prefabs/Nature/PREFABS/Plants/SM_Bananier_005",3.0,0,1.0,0.5, precision);
+		up_tree_3 <- geometry_properties("tree_3_","tree",tree_aspect_3,#ray_interactable,false);
+		unity_properties << up_tree_3;
 		
 		unity_aspect tree_aspect_1a <- prefab_aspect("Prefabs/Visual Prefabs/Nature/PREFABS/Plants/SM_Arbre_001",2.0,0,1.0,0.5, precision);
-		up_tree_1a <- geometry_properties("tree_1_","tree",tree_aspect_1a,#ray_interactable,false);
+		up_tree_1a <- geometry_properties("tree_1_a","tree",tree_aspect_1a,#ray_interactable,false);
 		unity_properties << up_tree_1a;
 		
 		unity_aspect tree_aspect_1b <- prefab_aspect("Prefabs/Visual Prefabs/Nature/PREFABS/Plants/SM_Arbre_003",2.0,0,1.0,0.5, precision);
-		up_tree_1b <- geometry_properties("tree_1_","tree",tree_aspect_1b,#ray_interactable,false);
+		up_tree_1b <- geometry_properties("tree_1_b","tree",tree_aspect_1b,#ray_interactable,false);
 		unity_properties << up_tree_1b;
 
 		unity_aspect tree_aspect_2a <- prefab_aspect("Prefabs/Visual Prefabs/Nature/PREFABS/Plants/SM_Bananier_005",3.0,0,1.0,0.5, precision);
-		up_tree_2a <- geometry_properties("tree_2_","tree",tree_aspect_2a,#ray_interactable,false);
+		up_tree_2a <- geometry_properties("tree_2_a","tree",tree_aspect_2a,#ray_interactable,false);
 		unity_properties << up_tree_2a;
 		
 		unity_aspect tree_aspect_2b <- prefab_aspect("Prefabs/Visual Prefabs/Nature/PREFABS/Plants/SM_Bananier_005",3.0,0,1.0,0.5, precision);
-		up_tree_2b <- geometry_properties("tree_2_","tree",tree_aspect_2b,#ray_interactable,false);
+		up_tree_2b <- geometry_properties("tree_2_b","tree",tree_aspect_2b,#ray_interactable,false);
 		unity_properties << up_tree_2b;
 		
 		unity_aspect tree_aspect_3a <- prefab_aspect("Prefabs/Visual Prefabs/Nature/PREFABS/Plants/SM_Coriandre_001",8.0,0,1.0,0.5, precision);
-		up_tree_3a <- geometry_properties("tree_3_","tree",tree_aspect_3a,#ray_interactable,false);
+		up_tree_3a <- geometry_properties("tree_3_a","tree",tree_aspect_3a,#ray_interactable,false);
 		unity_properties << up_tree_3a;
 		
 		unity_aspect tree_aspect_3b <- prefab_aspect("Prefabs/Visual Prefabs/Nature/PREFABS/Plants/SM_Coriandre_001",8.0,0,1.0,0.5, precision);
-		up_tree_3b <- geometry_properties("tree_3_","tree",tree_aspect_3b,#ray_interactable,false);
+		up_tree_3b <- geometry_properties("tree_3_b","tree",tree_aspect_3b,#ray_interactable,false);
 		unity_properties << up_tree_3b;
 		
-		unity_aspect road_aspect <- geometry_aspect(0.2,#gray,precision);
+		unity_aspect road_aspect <- geometry_aspect(0.5,#gray,precision);
 		up_road <- geometry_properties("road","",road_aspect,#no_interaction,false);
 		unity_properties << up_road;
 
 	}
 	reflex send_geometries {
-		list<tree> t1a <- tree where ((each.tree_type <= 2) and (each.it_state <=3));
-		list<tree> t1b <- tree where ((each.tree_type <= 2) and (each.it_state =4));
-		
-		list<tree> t2a <- tree where (((each.tree_type <= 4) and (each.tree_type > 2)) and (each.it_state <=3));
-		list<tree> t2b <- tree where (((each.tree_type <= 4) and (each.tree_type > 2)) and (each.it_state =4));
-		
-		list<tree> t3a <- tree where ((each.tree_type > 4) and (each.it_state <=3));
-		list<tree> t3b <- tree where ((each.tree_type > 4) and (each.it_state =4));
-		
-		write "t1a" + t1a;
-		write "t1a" + t1b;
-		write "t2a" + t2a;
-		write "t2a" + t2b;
-		write "t3a" + t3a;
-		write "t3a" + t3b;
-		
-		do add_geometries_to_send(t1a,up_tree_1a);
-		do add_geometries_to_send(t1a,up_tree_1b);
-		do add_geometries_to_send(t2a,up_tree_2a);
-		do add_geometries_to_send(t2b,up_tree_2b);
-		do add_geometries_to_send(t3a,up_tree_3a);
-		do add_geometries_to_send(t3b,up_tree_3b);
+//		list<tree> t1a <- tree where ((each.tree_type <= 2) and (each.it_state <=3));
+//		list<tree> t1b <- tree where ((each.tree_type <= 2) and (each.it_state =4));
+//		
+//		list<tree> t2a <- tree where (((each.tree_type <= 4) and (each.tree_type > 2)) and (each.it_state <=3));
+//		list<tree> t2b <- tree where (((each.tree_type <= 4) and (each.tree_type > 2)) and (each.it_state =4));
+//		
+//		list<tree> t3a <- tree where ((each.tree_type > 4) and (each.it_state <=3));
+//		list<tree> t3b <- tree where ((each.tree_type > 4) and (each.it_state =4));
+//		
+//		write "t1a" + t1a;
+////		write "t1b" + t1b;
+//		write "t2a" + t2a;
+////		write "t2b" + t2b;
+//		write "t3a" + t3a;
+////		write "t3b" + t3b;
+//		
+//		do add_geometries_to_send(t1a,up_tree_1a);
+////		do add_geometries_to_send(t1a,up_tree_1b);
+//		do add_geometries_to_send(t2a,up_tree_2a);
+////		do add_geometries_to_send(t2b,up_tree_2b);
+//		do add_geometries_to_send(t3a,up_tree_3a);
+////		do add_geometries_to_send(t3b,up_tree_3b);
 
-//		list<tree> t1 <- tree where (each.tree_type <= 2);
-//		list<tree> t2 <- tree where ((each.tree_type <= 4) and (each.tree_type > 2));
-//		list<tree> t3 <- tree where (each.tree_type > 4);
-//		
-//		write "t1" + t1;
-//		write "t2" + t2;
-//		write "t3" + t3;
-//		
-//		do add_geometries_to_send(t1,up_tree_1);
-//		do add_geometries_to_send(t2,up_tree_2);
-//		do add_geometries_to_send(t3,up_tree_3);
+		list<tree> t1 <- tree where (each.tree_type <= 2);
+		list<tree> t2 <- tree where ((each.tree_type <= 4) and (each.tree_type > 2));
+		list<tree> t3 <- tree where (each.tree_type > 4);
+		
+		write "t1" + t1;
+		write "t2" + t2;
+		write "t3" + t3;
+		
+		do add_geometries_to_send(t1,up_tree_1);
+		do add_geometries_to_send(t2,up_tree_2);
+		do add_geometries_to_send(t3,up_tree_3);
 	}
 	
 }

@@ -18,7 +18,7 @@ global{
 //	geometry free_space <- bg_out - bg_in;
 //	geometry shape <- envelope(border_shape_file);
 
-	shape_file Trail_shape_file <- shape_file("../includes/Trail_4_5.shp");
+	shape_file Trail_shape_file <- shape_file("../includes/Trail.shp");
 
 	geometry usable_area;
 
@@ -32,7 +32,7 @@ global{
 	int n_player <- 6;
 	list n_tree <- [50,50,50];
 	int collect_seeds_distance <- 5;
-	int stop_time <- 600; //second
+	int stop_time <- 1800; //second
 	
 	// Variable
 	int stop_every_n_turn <- 12 div n_player; //turn
@@ -75,6 +75,7 @@ global{
 		
 		create road from: split_lines(Trail_shape_file);
 //		create bg from: list(bg_in);
+
 		
 		usable_area <-  union(road collect each.geom_visu);
 		
