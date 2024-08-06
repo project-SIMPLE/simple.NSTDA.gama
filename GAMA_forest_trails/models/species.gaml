@@ -42,6 +42,12 @@ species player_info{
 }
 
 species tree parent:tree_info{
+	
+	action initialize(geometry area) {
+		shape <- circle(3+size#m);
+		location <- any_location_in(area);
+	}
+	
 	aspect default{
 		draw shape color:color;
 	}
@@ -170,8 +176,10 @@ species river{
 }
 
 species road{
+	float buffer_size <- 5.0;
+	geometry geom_visu <- shape + buffer_size;
 	aspect default {
-		draw shape color: #grey ;	
+		draw geom_visu color: #grey ;	
 	}
 }
 

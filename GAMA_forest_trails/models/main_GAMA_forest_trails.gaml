@@ -18,20 +18,24 @@ global{
 //	geometry free_space <- bg_out - bg_in;
 //	geometry shape <- envelope(border_shape_file);
 
-	shape_file free_space <- shape_file("../includes/trail_buffer.shp");
-	geometry shape <- geometry(free_space);
+	shape_file Trail_shape_file <- shape_file("../includes/Trail_4_5.shp");
+
+	geometry usable_area;
+
+	//shape_file free_space <- shape_file("../includes/trail_buffer.shp");
+	geometry shape <- envelope(Trail_shape_file);
 	
 	float width <- shape.width;
 	float height <- shape.height;
 	
 	// Parameter
-	int n_player <- 4;
+	int n_player <- 6;
 	list n_tree <- [50,50,50];
 	int collect_seeds_distance <- 5;
-	int stop_time <- 10; //second
-	int stop_every_n_turn <- 2; //turn
+	int stop_time <- 600; //second
 	
 	// Variable
+	int stop_every_n_turn <- 12 div n_player; //turn
 	list<list<int>> seeds <- [];
 	list<list<int>> alien_seeds <- [];
 	list<int> sum_total_seeds <- [];
@@ -52,6 +56,7 @@ global{
 	float x_river <- 0.0 ;
 	float y_river <-  260.0 ;
 	
+
 	init{		
 //		write shape;
 		seeds <- list_with(n_player, list_with(length(n_tree) * 2, 0));
@@ -68,33 +73,31 @@ global{
 //		write sum_total_seeds;
 //		save matrix(seeds) to: "test.csv" format:"csv" rewrite: true;
 		
-		create road from: free_space;
+		create road from: split_lines(Trail_shape_file);
 //		create bg from: list(bg_in);
+		
+		usable_area <-  union(road collect each.geom_visu);
 		
 		create sign{
 			location <- {width/3 - 35, -45, 0};
 		}
 		
-		loop i from:1 to:n_player{
-			create player{
-				team <- i;
-				location <- any_location_in(any(road));
-			}
-		}
+//		loop i from:1 to:n_player{
+//			create player{
+//				team <- i;
+//				location <- any_location_in(any(road));
+//			}
+//		}
 		
 		int temp <- 0 ;
 		loop i from:1 to:(length(n_tree) * 2) step:2{			
 			create tree number:n_tree[temp]{
 				tree_type <- i;
-				shape <- circle(3+size#m);
-				
-				location <- any_location_in(any(road));
+				do initialize(usable_area);
 			}
 			create tree number:n_tree[temp]{
 				tree_type <- i+1;
-				shape <- circle(3+size#m);
-				
-				location <- any_location_in(any(road));
+				do initialize(usable_area);
 			}
 			temp <- temp + 1;
 		}
@@ -131,11 +134,12 @@ global{
 					upper_bound <- temp;
 				}
 						
-			}				
+			}	
 		}
 		
 		max_total_seed <- int(max(sum_total_seeds));
 //		write(max_total_seed);
+
 	}
 	
 	reflex restart when:time_now=max_time{
@@ -222,10 +226,10 @@ global{
 	
 	reflex random{
 		if flip(0.1){
-			do collect(rnd(1,n_player),rnd(1,length(n_tree)*2),rnd(1,10), true);
+			do collect(rnd(1,n_player),rnd(1,length(n_tree)*2),rnd(1,2), true);
 		}
 		if flip(0.1){
-			do collect(rnd(1,n_player),rnd(1,length(n_tree)*2),rnd(1,10), false);
+			do collect(rnd(1,n_player),rnd(1,length(n_tree)*2),rnd(1,2), false);
 		}
 	}
 }

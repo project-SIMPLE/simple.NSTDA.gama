@@ -11,7 +11,7 @@ model myexperiment
 import 'main_GAMA_forest_trails.gaml'
 
 experiment First type: gui {
-	list<rgb> player_colors <-[#green,#blue,#yellow,#orange,#lime,#purple];
+	list<rgb> player_colors <-[#green, #blue, #yellow, #orange, #lime, #purple];
 	
 	action move_player{
 		point cursor_location <- #user_location;
@@ -30,10 +30,9 @@ experiment First type: gui {
 //		tabs: false consoles: true toolbars: false;
 //		layout horizontal([vertical([0::4, 1::3])::1500, vertical([horizontal([2::1000, 3::1000, 4::1000])::1250, horizontal([5::1000, 6::1000, 7::1000])::1250])::2500])
 		
-		layout vertical([horizontal([0::1, 1::1])::1, 2::1]) tabs: false consoles: false toolbars: false;
+		layout vertical([horizontal([0::1, 1::1])::1, 2::1]) tabs: false consoles: true toolbars: false;
 		display "Main" type: 3d background: rgb(50,50,50){
 			camera 'default' locked:true distance:550 ; //, vertical([5::1000, 6::1000, 7::1000]))::2500 //distance:850
-			
 			species road refresh: false;
 			species tree;
 			species player;
@@ -70,10 +69,10 @@ experiment First type: gui {
 		
 		//loop i from:1 to:n_team {
 		display "Summary" type: 2d { 			
-			chart "Summary" type:histogram 			
-			y_range:[0, 10 + upper_bound] 			
-			x_serie_labels: ["species"] 			
-			style:"3d" 			
+			chart "Number of seeds by tree species and by team ID" type:histogram 
+			x_serie_labels: ["Species"] 				
+			y_range:[0, 10 + upper_bound] 		
+			style:"3d" 			 
 			series_label_position: xaxis {
 				loop i from:0 to:(n_player-1){
 					int temp <- 1 ;
