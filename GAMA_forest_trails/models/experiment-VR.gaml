@@ -24,7 +24,7 @@ species unity_linker parent: abstract_unity_linker {
 
 	init {
 		do define_properties;
-		do add_background_geometries(road,up_road);
+		do add_background_geometries(road, up_road);
 	}
 	action define_properties {
 		unity_aspect tree_aspect_1 <- prefab_aspect("Prefabs/Visual Prefabs/Nature/PREFABS/Plants/SM_Arbre_001",2.0,0,1.0,0.5, precision);
@@ -40,13 +40,15 @@ species unity_linker parent: abstract_unity_linker {
 		unity_properties << up_tree_3;
 		
 
-		unity_aspect road_aspect <- geometry_aspect(0.5,#gray,precision);
+		unity_aspect road_aspect <- geometry_aspect(1.0,#gray,precision);
 		up_road <- geometry_properties("road","",road_aspect,#no_interaction,false);
 		unity_properties << up_road;
 
-
 	}
 	reflex send_geometries {
+//		list<tree> t1a <- tree where (each.tree_type < 3 and each.it_state <=3);
+//		list<tree> t1b <- tree where (each.tree_type < 3 and each.it_state =4);
+		
 		list<tree> t1 <- tree where (each.tree_type < 3);
 		list<tree> t2 <- tree where ((each.tree_type < 5) and (each.tree_type >= 3));
 		list<tree> t3 <- tree where (each.tree_type >= 5);

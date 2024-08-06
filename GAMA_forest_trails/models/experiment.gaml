@@ -12,9 +12,13 @@ import 'main_GAMA_forest_trails.gaml'
 
 experiment First type: gui {
 	list<rgb> player_colors <-[#green,#blue,#yellow,#orange,#lime,#purple];
+	
 	action move_player{
 		point cursor_location <- #user_location;
-		if (not paused) and (geometry(cursor_location) overlaps shape){
+//		write geometry(cursor_location);
+//		write geometry(road);
+		if (geometry(cursor_location) overlaps geometry(road)){ //(not paused) and (geometry(cursor_location) overlaps shape)
+//			write true;
 			ask player[0] {
 	    		location <- cursor_location;
 	    	}
@@ -26,9 +30,9 @@ experiment First type: gui {
 //		tabs: false consoles: true toolbars: false;
 //		layout horizontal([vertical([0::4, 1::3])::1500, vertical([horizontal([2::1000, 3::1000, 4::1000])::1250, horizontal([5::1000, 6::1000, 7::1000])::1250])::2500])
 		
-		layout vertical([horizontal([0::1, 1::1])::1, 2::1]) tabs: false consoles: true toolbars: false;
+		layout vertical([horizontal([0::1, 1::1])::1, 2::1]) tabs: false consoles: false toolbars: false;
 		display "Main" type: 3d background: rgb(50,50,50){
-			camera 'default' locked:true distance:850 ; //, vertical([5::1000, 6::1000, 7::1000]))::2500
+			camera 'default' locked:true distance:550 ; //, vertical([5::1000, 6::1000, 7::1000]))::2500 //distance:850
 			
 			species road refresh: false;
 			species tree;

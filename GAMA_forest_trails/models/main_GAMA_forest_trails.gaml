@@ -18,9 +18,8 @@ global{
 //	geometry free_space <- bg_out - bg_in;
 //	geometry shape <- envelope(border_shape_file);
 
-	shape_file free_space <- shape_file("../includes/Trail_4_5.shp");
-	geometry shape2 <- envelope(free_space);
-	geometry shape <- shape2 + 10;
+	shape_file free_space <- shape_file("../includes/trail_buffer.shp");
+	geometry shape <- geometry(free_space);
 	
 	float width <- shape.width;
 	float height <- shape.height;
@@ -54,7 +53,7 @@ global{
 	float y_river <-  260.0 ;
 	
 	init{		
-		
+//		write shape;
 		seeds <- list_with(n_player, list_with(length(n_tree) * 2, 0));
 		alien_seeds <- list_with(n_player, list_with(length(n_tree) * 2, 0));
 		sum_total_seeds <- list_with(n_player, 0);
@@ -69,9 +68,8 @@ global{
 //		write sum_total_seeds;
 //		save matrix(seeds) to: "test.csv" format:"csv" rewrite: true;
 		
-		create road from: list(free_space);
+		create road from: free_space;
 //		create bg from: list(bg_in);
-		write road;
 		
 		create sign{
 			location <- {width/3 - 35, -45, 0};
@@ -106,6 +104,7 @@ global{
 			list_of_state2 <- assign_list_of_state(2, tree_type);
 			list_of_state3 <- assign_list_of_state(3, tree_type);
 			list_of_state4 <- assign_list_of_state(4, tree_type);
+//			write self.location;
 		}
 	}
 	
