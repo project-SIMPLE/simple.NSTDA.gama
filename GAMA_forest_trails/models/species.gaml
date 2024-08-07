@@ -57,48 +57,48 @@ species tree parent:tree_info{
 			match_one [1,2]{
 				switch state {
 					match 1 {
-						return [1, 2, 3, 10, 11, 12];
+						return [3, 4, 9, 10];
 					}
 					match 2 {
-						return [4, 5];
+						return [];
 					}	
 					match 3 {
-						return [6, 7];
+						return [];
 					}	
 					match 4 {
-						return [8, 9];
+						return [1, 2, 5, 6, 7, 8, 11, 12];
 					}	
 				}
 			}
 			match_one [3,4]{
 				switch state {
 					match 1 {
-						return [1, 2, 3, 11, 12];
+						return [5, 6, 11, 12];
 					}
 					match 2 {
-						return [4];
+						return [];
 					}	
 					match 3 {
-						return [5, 6, 7, 8];
+						return [];
 					}	
 					match 4 {
-						return [9, 10];
+						return [1, 2, 3, 4, 7, 8, 9, 10];
 					}	
 				}
 			}
 			match_one [5,6]{
 				switch state {
 					match 1 {
-						return [1, 2, 3, 4, 5, 6];
+						return [1, 2, 7, 8];
 					}
 					match 2 {
-						return [7, 8];
+						return [];
 					}	
 					match 3 {
-						return [9, 10];
+						return [];
 					}	
 					match 4 {
-						return [11, 12];
+						return [3, 4, 5, 6, 9, 10, 11, 12];
 					}	
 				}
 			}

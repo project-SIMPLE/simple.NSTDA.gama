@@ -74,7 +74,7 @@ experiment First type: gui {
 			y_range:[0, 10 + upper_bound] 		
 			style:"3d" 			 
 			series_label_position: xaxis {
-				loop i from:0 to:(n_player-1){
+				loop i from:0 to:(n_team-1){
 					int temp <- 1 ;
 					loop j from:0 to:((length(n_tree)*2)-1) step:2{ 
 //						data "Team"+ j + "Tree" + i value:(empty(seeds) ? 0 : seeds[i][j]) color:player_colors[i]; 

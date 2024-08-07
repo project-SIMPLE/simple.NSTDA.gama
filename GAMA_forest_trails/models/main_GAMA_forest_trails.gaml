@@ -29,13 +29,15 @@ global{
 	float height <- shape.height;
 	
 	// Parameter
-	int n_player <- 6;
+	int n_team <- 4;
 	list n_tree <- [50,50,50];
 	int collect_seeds_distance <- 5;
-	int stop_time <- 1800; //second
+	int stop_time <- 4; //second
 	
 	// Variable
-	int stop_every_n_turn <- 12 div n_player; //turn
+//	int stop_every_n_turn <- 12 div n_team; //turn
+	int n_turn <- 6;
+	int n_month_by_turn <- 2;
 	list<list<int>> seeds <- [];
 	list<list<int>> alien_seeds <- [];
 	list<int> sum_total_seeds <- [];
@@ -45,7 +47,7 @@ global{
 	bool can_start <- true ;
 	int current_time <- 1 ;
 	float current_day <- 0.0 ;
-	int max_time <- stop_time * n_player;
+	int max_time <- stop_time * n_turn;
 	rgb color_state1 <- rgb(117, 148, 69);
 	rgb color_state2 <- rgb(133, 134, 66);
 	rgb color_state3 <- rgb(165, 105, 60);
@@ -59,9 +61,9 @@ global{
 
 	init{		
 //		write shape;
-		seeds <- list_with(n_player, list_with(length(n_tree) * 2, 0));
-		alien_seeds <- list_with(n_player, list_with(length(n_tree) * 2, 0));
-		sum_total_seeds <- list_with(n_player, 0);
+		seeds <- list_with(n_team, list_with(length(n_tree) * 2, 0));
+		alien_seeds <- list_with(n_team, list_with(length(n_tree) * 2, 0));
+		sum_total_seeds <- list_with(n_team, 0);
 
 //		write seeds;
 //		write seeds[0][0];
@@ -83,7 +85,7 @@ global{
 			location <- {width/3 - 35, -45, 0};
 		}
 		
-//		loop i from:1 to:n_player{
+//		loop i from:1 to:n_team{
 //			create player{
 //				team <- i;
 //				location <- any_location_in(any(road));
@@ -92,11 +94,11 @@ global{
 		
 		int temp <- 0 ;
 		loop i from:1 to:(length(n_tree) * 2) step:2{			
-			create tree number:n_tree[temp]{
+			create tree number:(n_tree[temp] div 2){
 				tree_type <- i;
 				do initialize(usable_area);
 			}
-			create tree number:n_tree[temp]{
+			create tree number:(n_tree[temp] div 2){
 				tree_type <- i+1;
 				do initialize(usable_area);
 			}
@@ -117,9 +119,9 @@ global{
 			init_time <- gama.machine_time div 1000;
 			time_now <- time_now + 1;
 		}
-		current_time <- int((time_now-0.1) div (stop_time / stop_every_n_turn)) + 1;
+		current_time <- int((time_now-0.1) div (stop_time / n_month_by_turn)) + 1;
 		
-		write "Time: " + time_now + " s, Turn: " + count_start ;
+		write "Time: " + time_now + " s, Turn: " + count_start + " Month: " + current_time ;
 
 		loop i from:0 to:(length(sum_total_seeds)-1){
 //			write sum(seeds[i]);
@@ -128,7 +130,7 @@ global{
 			sum_total_seeds[i] <- int(sum(seeds[i])) + int(sum(alien_seeds[i]));
 		}
 		
-		loop i from:0 to:(n_player-1){
+		loop i from:0 to:(n_team-1){
 			loop j from:0 to:((length(n_tree)*2)-1) step:2{ 
 				int temp <- int(seeds[i][j] + alien_seeds[i][j]) +  int(seeds[i][j+1] + alien_seeds[i][j+1]);
 				if temp > upper_bound{
@@ -227,10 +229,10 @@ global{
 	
 	reflex random{
 		if flip(0.1){
-			do collect(rnd(1,n_player),rnd(1,length(n_tree)*2),rnd(1,2), true);
+			do collect(rnd(1,n_team),rnd(1,length(n_tree)*2),rnd(1,2), true);
 		}
 		if flip(0.1){
-			do collect(rnd(1,n_player),rnd(1,length(n_tree)*2),rnd(1,2), false);
+			do collect(rnd(1,n_team),rnd(1,length(n_tree)*2),rnd(1,2), false);
 		}
 	}
 }
