@@ -32,7 +32,7 @@ global{
 	int n_team <- 4;
 	list n_tree <- [50,50,50];
 	int collect_seeds_distance <- 5;
-	int stop_time <- 4; //second
+	int stop_time <- 60; //second
 	
 	// Variable
 //	int stop_every_n_turn <- 12 div n_team; //turn

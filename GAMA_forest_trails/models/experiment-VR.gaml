@@ -4,7 +4,7 @@ import "experiment.gaml"
 
 species unity_linker parent: abstract_unity_linker {
 	string player_species <- string(unity_player);
-	int num_players <- 1;
+	int num_players <- 2;
 	int max_num_players  <- num_players;
 	int min_num_players  <- num_players;
 //	unity_property up_tree_1;
@@ -18,12 +18,19 @@ species unity_linker parent: abstract_unity_linker {
 	unity_property up_tree_3b;
 	unity_property up_road;
 
+	unity_property up_ghost;
+	unity_property up_lg;
+	unity_property up_slime;
+	unity_property up_turtle;
+	
+	
+	
 	list<point> init_locations <- define_init_locations();
 
 	list<point> define_init_locations {
 		list<point> init_pos;
 		loop times: num_players {
-			init_pos << any_location_in(usable_area);
+			init_pos << any_location_in(usable_area - 1.5);
 		}
 		return init_pos;
 	}
@@ -31,6 +38,7 @@ species unity_linker parent: abstract_unity_linker {
 
 	init {
 		do define_properties;
+		player_unity_properties <- [ up_lg,up_turtle, up_slime, up_ghost ];
 		do add_background_geometries(road collect (each.geom_visu), up_road);
 	}
 	action define_properties {
@@ -73,6 +81,39 @@ species unity_linker parent: abstract_unity_linker {
 		unity_aspect road_aspect <- geometry_aspect(0.5,#gray,precision);
 		up_road <- geometry_properties("road","",road_aspect,#no_interaction,false);
 		unity_properties << up_road;
+		
+		//define a unity_aspect called ghost_aspect that will display in Unity a player with the Ghost prefab, with a scale of 2.0, no y-offset, 
+		//a rotation coefficient of -1.0, a rotation offset of 90°, and we use the default precision. 
+		unity_aspect ghost_aspect <- prefab_aspect("Prefabs/Visual Prefabs/Character/Ghost",2.0,0.0,-1.0,90.0,precision);
+		//define the up_ghost unity property, with the name "ghost", no specific layer, a collider, and the agents location are not sent back to GAMA. 
+		up_ghost <- geometry_properties("ghost","",ghost_aspect,#collider,false);
+		// add the up_ghost unity_property to the list of unity_properties
+		unity_properties << up_ghost; 
+		
+		//define a unity_aspect called slime_aspect that will display in Unity a player with the Slime prefab, with a scale of 2.0, no y-offset, 
+		//a rotation coefficient of -1.0, a rotation offset of 90°, and we use the default precision. 
+		unity_aspect slime_aspect <- prefab_aspect("Prefabs/Visual Prefabs/Character/Slime",2.0,0.0,-1.0,90.0,precision);
+		//define the up_slime unity property, with the name "slime", no specific layer, a collider, and the agents location are not sent back to GAMA. 
+		up_slime <- geometry_properties("slime","",slime_aspect,new_geometry_interaction(true, false,false,[]),false);
+		// add the up_slime unity_property to the list of unity_properties
+		unity_properties << up_slime; 
+		
+			//define a unity_aspect called lg_aspect that will display in Unity a player with the LittleGhost prefab, with a scale of 2.0, no y-offset, 
+		//a rotation coefficient of -1.0, a rotation offset of 90°, and we use the default precision. 
+		unity_aspect lg_aspect <- prefab_aspect("Prefabs/Visual Prefabs/Character/LittleGhost",2.0,0.0,-1.0,90.0,precision);
+		//define the up_lg unity property, with the name "little_ghost", no specific layer, a collider, and the agents location are not sent back to GAMA. 
+		up_lg <- geometry_properties("little_ghost","",lg_aspect,new_geometry_interaction(true, false,false,[]),false);
+		// add the up_lg unity_property to the list of unity_properties
+		unity_properties << up_lg; 
+		
+		//define a unity_aspect called turtle_aspect that will display in Unity a player with the TurtleShell prefab, with a scale of 2.0, no y-offset, 
+		//a rotation coefficient of -1.0, a rotation offset of 90°, and we use the default precision. 
+		unity_aspect turtle_aspect <- prefab_aspect("Prefabs/Visual Prefabs/Character/TurtleShell",2.0,0.0,-1.0,90.0,precision);
+		//define the up_turtle unity property, with the name "turtle", no specific layer, a collider, and the agents location are not sent back to GAMA. 
+		up_turtle <- geometry_properties("turtle","",turtle_aspect,new_geometry_interaction(true, false,false,[]),false);
+		// add the up_turtle unity_property to the list of unity_properties
+		unity_properties << up_turtle; 
+		
 
 	}
 	reflex send_geometries {
@@ -174,6 +215,14 @@ experiment vr_xp parent:First autorun: false type: unity {
 				wall_width: 1.0, //width ot the walls
 				geoms: [usable_area] + usable_area.holes  //geometries used to defined the walls - the walls will be generated from the countour of these geometries
 			);
+			
+				// change the area on which the player can teleport
+			do send_teleport_area(
+				player: last(unity_player), //player to send the information to
+				id: "Teleport_free_area",//id of the teleportation area
+				geoms: to_sub_geometries((usable_area - 1.0) ,[0.5, 0.5]) //geometries used to defined the teleportation area
+			);
+			
 		}
 	}
 
