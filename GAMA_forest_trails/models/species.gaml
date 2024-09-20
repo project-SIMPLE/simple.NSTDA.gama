@@ -161,13 +161,6 @@ species player parent:player_info{
 	}
 }
 
-//species road skills: [road_skill] {
-//	aspect default {
-//		draw shape + 1#m color: #white depth:1;
-////		draw shape color: #white ;
-//	}
-//}
-
 species river{
 	aspect default {
 		draw circle(max_radius#m) color:rgb(138, 178, 242);
@@ -180,11 +173,5 @@ species road{
 	geometry geom_visu <- shape + buffer_size;
 	aspect default {
 		draw geom_visu color: #grey ;	
-	}
-}
-
-species bg{
-	aspect default {
-		draw shape color: #black ;	
 	}
 }
