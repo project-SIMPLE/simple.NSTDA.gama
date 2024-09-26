@@ -11,9 +11,7 @@ global {
 	image_file play <- image_file("../images/play.png");
 	image_file stop <- image_file("../images/stop.png");
 	
-	int size <- 3 ;
 	float max_radius <- 200.0;
-	
 }
 
 
@@ -24,7 +22,12 @@ species sign {
 	}
 }
 	
-species tree_info{
+
+species player_info{
+	int team <- 0;
+}
+
+species tree{
 	int tree_type <- 0;
 	bool it_alien <- false;
 	bool can_collect ;
@@ -35,18 +38,11 @@ species tree_info{
 	list list_of_state2 <- [];
 	list list_of_state3 <- [];
 	list list_of_state4 <- [];
-}
-
-species player_info{
-	int team <- 0;
-}
-
-species tree parent:tree_info{
-	
-	action initialize(geometry area) {
-		shape <- circle(3+size#m);
-		location <- any_location_in(area);
-	}
+	geometry shape <- circle(5#m);
+//	action initialize(geometry area) {
+//		shape <- circle(3+size#m);
+//		location <- any_location_in(area);
+//	}
 	
 	aspect default{
 		draw shape color:color;
@@ -169,9 +165,24 @@ species river{
 }
 
 species road{
-	float buffer_size <- 5.0;
+	rgb color <- #grey;
+	float buffer_size <- 10.0;
 	geometry geom_visu <- shape + buffer_size;
 	aspect default {
-		draw geom_visu color: #grey ;	
+		draw geom_visu color: color ;	
+//		draw square(10) color:#white;
+	}
+	reflex write when:cycle=0{
+		write location;
+	}
+}
+
+species offroad{
+	rgb color <- #blue;
+//	float buffer_size <- 0.0;
+//	geometry geom_visu <- shape + buffer_size;
+	aspect default {
+//		draw geom_visu color: #blue ;	
+		draw shape color: color ;	
 	}
 }
