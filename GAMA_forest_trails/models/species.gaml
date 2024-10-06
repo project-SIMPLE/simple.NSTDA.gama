@@ -177,12 +177,12 @@ species road{
 	}
 }
 
-species offroad{
-	rgb color <- #blue;
-//	float buffer_size <- 0.0;
-//	geometry geom_visu <- shape + buffer_size;
-	aspect default {
-//		draw geom_visu color: #blue ;	
-		draw shape color: color ;	
-	}
-}
+//species offroad{
+//	rgb color <- #blue;
+////	float buffer_size <- 0.0;
+////	geometry geom_visu <- shape + buffer_size;
+//	aspect default {
+////		draw geom_visu color: #blue ;	
+//		draw shape color: color ;	
+//	}
+//}

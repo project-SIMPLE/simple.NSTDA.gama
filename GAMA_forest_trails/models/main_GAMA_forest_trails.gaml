@@ -10,17 +10,23 @@ model mainGAMAforesttrails2
 import 'species.gaml'
 import "main_GAMA_forest_trails-VR.gaml"
 
-// quest3 ก่อนจะได้ดูว่าเป็นที่ model หรือ unity
-// ทำแมพพี่ตั้ม
-// multiplayer
+// quest3 ก่อนจะได้ดูว่าเป็นที่ model หรือ unity done!
+// ทำแมพพี่ตั้ม done!
+// multiplayer done!
 // ปรับ function ให้รับ unity ได้
-// output csv treespeice team จน เมล้ด
+// output csv treespeice team จน เมล็ด done!
 
 // goal : link เมล็ดให้ได้
 
+//---------------------------------------------------------------------------------------------------------
+// ให้ invi wall อ้อมต้นไม้ได้ done!
+// turn สุดท้ายให้แสดง turn 6 คงไว้
+// รูปพี่ตั้มมาใส่ บน gama
+// เปลี่ยนหัวตาราง
+
 global{
 	shape_file Trail_shape_file <- shape_file("../includes/Trail.shp");
-	shape_file offtrail_shape_file <- shape_file("../includes/export/offtrail.shp");
+//	shape_file offtrail_shape_file <- shape_file("../includes/export/offtrail.shp");
 
 	geometry usable_area;
 	geometry usable_area_for_tree;
@@ -32,15 +38,14 @@ global{
 	// Parameter
 	int n_team <- 4;
 	list n_tree <- [50,50,50];
-	int collect_seeds_distance <- 5;
-	int stop_time <- 10; //second
+	int stop_time <- 60; //second
 	
 	// Variable
 	int n_turn <- 6;
 	int n_month_by_turn <- 2;
-	list<list<int>> seeds <- [];
-	list<list<int>> alien_seeds <- [];
-	list<int> sum_total_seeds <- [];
+	list<list<int>> seeds <- list_with(n_team, list_with(length(n_tree), 0));
+	list<list<int>> alien_seeds <- list_with(n_team, list_with(length(n_tree), 0));
+	list<int> sum_total_seeds <- list_with(n_team, 0);
 	int init_time <- 0;
 	int time_now <- 0;
 	int count_start <- 0 ;
@@ -60,38 +65,36 @@ global{
 	
 	list<string> player_id_list <- [];
 	list<string> tree_id_list <- [];
-	geometry offTrail;
+//	geometry offTrail;
 	
 	map<string, int> map_player_id ;
-	map<string, int> map_tree_id ;
+//	map<string, int> map_tree_id ;
 	
 	init{
 //		write map_player_id;
 //		write player_id_list; 
-		seeds <- list_with(n_team, list_with(length(n_tree), 0));
-		alien_seeds <- list_with(n_team, list_with(length(n_tree), 0));
-		sum_total_seeds <- list_with(n_team, 0);
-		write seeds;
-		write alien_seeds;
+
+//		write seeds;
+//		write alien_seeds;
 		
 //		create road from: split_lines(Trail_shape_file);
 		create road from: Trail_shape_file;
 //		save road to:"../includes/export/trail.shp" format:"shp";
 //		write length(road);
 		
-		ask road[0]{
-			color <- #yellow;
-		}
-		ask road[1]{
-			color <- #lime;
-		}
-		ask road[2]{
-			color <- #red;
-		}
+//		ask road[0]{
+//			color <- #yellow;
+//		}
+//		ask road[1]{
+//			color <- #lime;
+//		}
+//		ask road[2]{
+//			color <- #red;
+//		}
 		
 //		offTrail<- world.shape - (road collect (each.shape.contour+5.0));
 //		save offTrail to:"../includes/export/offtrail.shp" format:"shp";
-		create offroad from: offtrail_shape_file;
+//		create offroad from: offtrail_shape_file;
 //		write length(offroad);
 		
 		usable_area <- union(road collect each.geom_visu);
@@ -101,45 +104,53 @@ global{
 			location <- {width/3 - 35, -45, 0};
 		}
 		
+		int count_create_tree <- 0;
 		loop i from:0 to:(length(n_tree)-1){		
 			loop j from:1 to:(n_tree[i] div 2){
 				create tree{
 					tree_type <- 2*i+1;
 //					do initialize(usable_area);
-					ask tree {
-						usable_area_for_tree <- usable_area_for_tree - self.shape;
+					if count_create_tree > 0{
+						ask tree[count_create_tree-1] {
+							usable_area_for_tree <- usable_area_for_tree - self.shape;
+							usable_area <- usable_area + self.shape;
+						}
 					}
 					location <- any_location_in(usable_area_for_tree);
 //					location <- any_location_in(usable_area);
-					add "tree"+ (length(tree)-1)::i to:map_tree_id;
+//					add "tree"+ (length(tree)-1)::i to:map_tree_id;
 					add "tree"+ (length(tree)-1) to:tree_id_list;
+					count_create_tree <- count_create_tree + 1;
 				}
+			}
+			loop j from:1 to:(n_tree[i] - (n_tree[i] div 2)){
 				create tree{
 					tree_type <- 2*i+2;
 //					do initialize(usable_area);
-					ask tree {
+					ask tree[count_create_tree-1] {
 						usable_area_for_tree <- usable_area_for_tree - self.shape;
+						usable_area <- usable_area + self.shape;
 					}
 					location <- any_location_in(usable_area_for_tree);
 //					location <- any_location_in(usable_area);
-					add "tree"+ (length(tree)-1)::i to:map_tree_id;
+//					add "tree"+ (length(tree)-1)::i to:map_tree_id;
 					add "tree"+ (length(tree)-1) to:tree_id_list;
+					count_create_tree <- count_create_tree + 1;
 				}
 			}
 		}
+		save usable_area_for_tree to:"../includes/export/usable_area_for_tree.shp" format:"shp";
 		
 		ask tree {
 			list_of_state1 <- assign_list_of_state(1, tree_type);
 			list_of_state2 <- assign_list_of_state(2, tree_type);
 			list_of_state3 <- assign_list_of_state(3, tree_type);
 			list_of_state4 <- assign_list_of_state(4, tree_type);
-			
-			
 		}
 	}
 	
 	reflex test{
-		write map_player_id;
+//		write map_player_id;
 //		write player_id_list; 
 //		write map_player_id[player_id_list[0]];
 //		write map_tree_id;
@@ -165,9 +176,9 @@ global{
 		}
 		current_time <- int((time_now - 0.01) div (stop_time / n_month_by_turn)) + 1;
 //		write "Time: " + time_now + " s, Turn: " + count_start + " Month: " + current_time ;
-//		ask unity_linker{
-//			do send_message players: unity_player as list mes: ["start":: !can_start, "remaining_time":: (stop_time*count_start - time_now)];
-//		}
+		ask unity_linker{
+			do send_message players: unity_player as list mes: ["start":: !can_start, "remaining_time":: (stop_time*count_start - time_now)];
+		}
 
 		loop i from:0 to:(length(sum_total_seeds)-1){
 			sum_total_seeds[i] <- int(sum(seeds[i])) + int(sum(alien_seeds[i]));
@@ -190,6 +201,32 @@ global{
 	reflex restart when:time_now=max_time{
 		time_now <- 0;
 		count_start <- 0 ;
+		do save_total_seeds_to_csv;
+	}
+	
+	action save_total_seeds_to_csv{
+		ask unity_player{
+			int key_player <- map_player_id[name];
+//			write key_player;
+			list temp <- [];
+			list header <- [];
+//			save temp to: "../results/total_seed.csv" format:"csv" rewrite:true;
+			add 'Team' + int(key_player + 1) to: temp;
+			loop i from:0 to:length(n_tree) - 1{
+				add container(seeds[key_player])[i] to: temp;
+				add 'Type' + (i+1) to: header;
+			}
+			write temp;
+			if self = unity_player[0]{
+//				write 'here!!!';
+				save temp to: "../results/total_seed.csv" header:false format:"csv" rewrite:true;
+			}
+			else{
+				save temp to: "../results/total_seed.csv" header:false format:"csv" rewrite:false;
+			}
+//			save temp to: "../results/total_seed.csv" header:false format:"csv" rewrite:false;
+		}
+		
 	}
 	
 	reflex do_resume when: (not paused) and can_start{
@@ -238,7 +275,7 @@ global{
 					enable:false
 				);
 			}
-		}	
+		}
 	}
 	
 	reflex growth_up{ 
@@ -285,10 +322,10 @@ experiment First type: gui {
 	list<rgb> player_colors <-[#green, #blue, #yellow, #orange, #lime, #purple];
 	
 	output{
-		layout vertical([horizontal([0::1, 1::1])::1, 2::1]) tabs: false consoles: true toolbars: false;
+		layout vertical([horizontal([0::1, 1::1])::1, 2::1]) tabs:false consoles:false toolbars:false;
 		display "Main" type: 3d background: rgb(50,50,50){
 			camera 'default' locked:false distance:550 ;
-			species offroad refresh: false;
+//			species offroad refresh: false;
 			species road refresh: false;
 			species tree;
 			species player;

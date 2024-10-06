@@ -21,28 +21,39 @@ species unity_linker parent: abstract_unity_linker {
 	unity_property up_slime;
 	unity_property up_turtle;
 	
-	action collect_seeds(string player_ID, string tree_ID){ 
+//	action collect_seeds(string player_ID, string tree_ID){ 
+	action collect_seeds(string player_ID, int tree_ID){ 
 		write "Player " + player_ID + " collect: " + tree_ID;
 		int key_player <- map_player_id[player_ID];
-		int key_tree <- map_tree_id[tree_ID];
-		ask tree[key_tree]{
-			if it_alien{
-				int temp <- int(container(alien_seeds[key_player])[key_tree]);
-				container(alien_seeds[key_player])[key_tree] <- int(temp + 1);
-			}
-			else{
-				int temp <- int(container(seeds[key_player])[key_tree]);
-				container(seeds[key_player])[key_tree] <- int(temp + 1);
-			}
+		
+		if false{
+			int temp <- int(container(alien_seeds[key_player])[tree_ID - 1]);
+			container(alien_seeds[key_player])[tree_ID - 1] <- int(temp + 1);
 		}
+		else{
+			int temp <- int(container(seeds[key_player])[tree_ID - 1]);
+			container(seeds[key_player])[tree_ID - 1] <- int(temp + 1);
+		}
+		
+//		int key_tree <- map_tree_id[tree_ID];
+//		ask tree[key_tree]{
+//			if it_alien{
+//				int temp <- int(container(alien_seeds[key_player])[key_tree]);
+//				container(alien_seeds[key_player])[key_tree] <- int(temp + 1);
+//			}
+//			else{
+//				int temp <- int(container(seeds[key_player])[key_tree]);
+//				container(seeds[key_player])[key_tree] <- int(temp + 1);
+//			}
+//		}
 	}
 	
 	reflex random{
-		if flip(0.1){
-			do collect_seeds(player_id_list[rnd(0, length(player_id_list)-1)], tree_id_list[rnd(0, length(tree_id_list)-1)]);
-		}
-		if flip(0.1){
-			do collect_seeds(player_id_list[rnd(0, length(player_id_list)-1)], tree_id_list[rnd(0, length(tree_id_list)-1)]);
+//		if flip(0.1){
+//			do collect_seeds(player_id_list[rnd(0, length(player_id_list)-1)], tree_id_list[rnd(0, length(tree_id_list)-1)]);
+//		}
+		if flip(0.1) and player_id_list{
+			do collect_seeds(player_id_list[rnd(0, length(player_id_list)-1)], rnd(1,length(n_tree)));
 		}
 	}
 
@@ -61,7 +72,7 @@ species unity_linker parent: abstract_unity_linker {
 	init {
 		do define_properties;
 //		player_unity_properties <- [up_lg, up_turtle, up_slime, up_ghost];
-		player_unity_properties <- [up_lg];
+		player_unity_properties <- [up_lg,up_lg,up_lg,up_lg,up_lg,up_lg];
 		do add_background_geometries(road collect (each.geom_visu), up_road);
 //		do add_background_geometries(offroad, up_offroad);
 	}
@@ -71,7 +82,7 @@ species unity_linker parent: abstract_unity_linker {
 		up_tree_1a <- geometry_properties("tree_1_a","tree",tree_aspect_1a,#no_interaction,false);
 		unity_properties << up_tree_1a;
 		
-		unity_aspect tree_aspect_1b <- prefab_aspect("temp/Prefab/Tree/FicusTree",1.0,0.01,1.0,0.5, precision);
+		unity_aspect tree_aspect_1b <- prefab_aspect("temp/Prefab/Tree/FicusTree",1.0,0.05,1.0,0.5, precision);
 		up_tree_1b <- geometry_properties("tree_1_b","tree",tree_aspect_1b,#no_interaction,false);
 		unity_properties << up_tree_1b;
 		
