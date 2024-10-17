@@ -74,7 +74,7 @@ species unity_linker parent: abstract_unity_linker {
 //		player_unity_properties <- [up_lg, up_turtle, up_slime, up_ghost];
 		player_unity_properties <- [up_lg,up_lg,up_lg,up_lg,up_lg,up_lg];
 		do add_background_geometries(road collect (each.geom_visu), up_road);
-//		do add_background_geometries(island, up_road);
+		do add_background_geometries(island, up_road);
 		
 //		do add_background_geometries(offroad, up_offroad);
 	}
@@ -182,12 +182,84 @@ species unity_linker parent: abstract_unity_linker {
 			do add_geometries_to_send(t2,up_tree_2a);
 		}
 		
-		list<tree> t3 <- tree where ((each.tree_type > 4));
-		if empty(tree where ((each.tree_type > 4) and (each.it_state <=3))){
+		list<tree> t3 <- tree where (((each.tree_type <= 6) and (each.tree_type > 4)));
+		if empty(tree where (((each.tree_type <= 6) and (each.tree_type > 4)) and (each.it_state <=3))){
 			do add_geometries_to_send(t3,up_tree_3b);
 		}
 		else{
 			do add_geometries_to_send(t3,up_tree_3a);
+		}
+		
+		list<tree> t4 <- tree where (((each.tree_type <= 8) and (each.tree_type > 6)));
+		if empty(tree where (((each.tree_type <= 8) and (each.tree_type > 6)) and (each.it_state <=3))){
+			do add_geometries_to_send(t4,up_tree_1b);
+		}
+		else{
+			do add_geometries_to_send(t4,up_tree_1a);
+		}
+		
+		list<tree> t5 <- tree where (((each.tree_type <= 10) and (each.tree_type > 8)));
+		if empty(tree where (((each.tree_type <= 10) and (each.tree_type > 8)) and (each.it_state <=3))){
+			do add_geometries_to_send(t5,up_tree_2b);
+		}
+		else{
+			do add_geometries_to_send(t5,up_tree_2a);
+		}
+		
+		list<tree> t6 <- tree where (((each.tree_type <= 12) and (each.tree_type > 10)));
+		if empty(tree where (((each.tree_type <= 12) and (each.tree_type > 10)) and (each.it_state <=3))){
+			do add_geometries_to_send(t6,up_tree_3b);
+		}
+		else{
+			do add_geometries_to_send(t6,up_tree_3a);
+		}
+		
+		list<tree> t7 <- tree where (((each.tree_type <= 14) and (each.tree_type > 12)));
+		if empty(tree where (((each.tree_type <= 14) and (each.tree_type > 12)) and (each.it_state <=3))){
+			do add_geometries_to_send(t7,up_tree_1b);
+		}
+		else{
+			do add_geometries_to_send(t7,up_tree_1a);
+		}
+		
+		list<tree> t8 <- tree where (((each.tree_type <= 16) and (each.tree_type > 14)));
+		if empty(tree where (((each.tree_type <= 16) and (each.tree_type > 14)) and (each.it_state <=3))){
+			do add_geometries_to_send(t8,up_tree_2b);
+		}
+		else{
+			do add_geometries_to_send(t8,up_tree_2a);
+		}
+		
+		list<tree> t9 <- tree where (((each.tree_type <= 18) and (each.tree_type > 16)));
+		if empty(tree where (((each.tree_type <= 18) and (each.tree_type > 16)) and (each.it_state <=3))){
+			do add_geometries_to_send(t9,up_tree_3b);
+		}
+		else{
+			do add_geometries_to_send(t9,up_tree_3a);
+		}
+		
+		list<tree> t10 <- tree where (((each.tree_type <= 20) and (each.tree_type > 18)));
+		if empty(tree where (((each.tree_type <= 20) and (each.tree_type > 18)) and (each.it_state <=3))){
+			do add_geometries_to_send(t10,up_tree_1b);
+		}
+		else{
+			do add_geometries_to_send(t10,up_tree_1a);
+		}
+		
+		list<tree> t11 <- tree where (((each.tree_type <= 22) and (each.tree_type > 20)));
+		if empty(tree where (((each.tree_type <= 22) and (each.tree_type > 20)) and (each.it_state <=3))){
+			do add_geometries_to_send(t11,up_tree_2b);
+		}
+		else{
+			do add_geometries_to_send(t11,up_tree_2a);
+		}
+		
+		list<tree> t12 <- tree where (((each.tree_type <= 24) and (each.tree_type > 22)));
+		if empty(tree where (((each.tree_type <= 24) and (each.tree_type > 22)) and (each.it_state <=3))){
+			do add_geometries_to_send(t12,up_tree_3b);
+		}
+		else{
+			do add_geometries_to_send(t12,up_tree_3a);
 		}
 	}
 }

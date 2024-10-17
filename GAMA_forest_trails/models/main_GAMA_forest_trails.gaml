@@ -37,7 +37,7 @@ global{
 	
 	// Parameter
 	int n_team <- 4;
-	list n_tree <- [50,50,50];
+	list n_tree <- [25,25,25,25,25,25,25,25,25,25,25,25];
 	int stop_time <- 60; //second
 	
 	// Variable
@@ -82,6 +82,8 @@ global{
 		create island{
 			location <- {width/2, height/2, 0};
 		}
+//		save island to:"../includes/export/island.shp" format:"shp";
+		
 //		save road to:"../includes/export/trail.shp" format:"shp";
 //		write length(road);
 		
@@ -112,6 +114,7 @@ global{
 			loop j from:1 to:(n_tree[i] div 2){
 				create tree{
 					tree_type <- 2*i+1;
+					write tree_type;
 //					do initialize(usable_area);
 					if count_create_tree > 0{
 						ask tree[count_create_tree-1] {
@@ -129,6 +132,7 @@ global{
 			loop j from:1 to:(n_tree[i] - (n_tree[i] div 2)){
 				create tree{
 					tree_type <- 2*i+2;
+					write tree_type;
 //					do initialize(usable_area);
 					ask tree[count_create_tree-1] {
 						usable_area_for_tree <- usable_area_for_tree - self.shape;
@@ -292,7 +296,7 @@ global{
 					if not it_alien{
 						self.color <- color_state1 ;	
 					}
-					initial_seed <- 0;
+//					initial_seed <- 0;
 					can_collect <- false ;
 					it_state <- 1 ;
 				}
@@ -300,7 +304,7 @@ global{
 					if not it_alien{
 						self.color <- color_state2 ;
 					}
-					initial_seed <- 0;
+//					initial_seed <- 0;
 					can_collect <- false ;
 					it_state <- 2 ;
 				}
@@ -308,7 +312,7 @@ global{
 					if not it_alien{
 						self.color <- color_state3 ;
 					}
-					initial_seed <- 0;
+//					initial_seed <- 0;
 					can_collect <- false ;
 					it_state <- 3 ;
 				}
@@ -316,7 +320,7 @@ global{
 					if not it_alien{
 						self.color <- color_state4 ;
 					}
-					initial_seed <- rnd(1,10);
+//					initial_seed <- rnd(1,10);
 					can_collect <- true ;
 					it_state <- 4 ;
 				}
@@ -329,7 +333,7 @@ experiment First type: gui {
 	list<rgb> player_colors <-[#green, #blue, #yellow, #orange, #lime, #purple];
 	
 	output{
-		layout vertical([horizontal([0::1, 1::1])::1, 2::1]) tabs:false consoles:false toolbars:false;
+		layout vertical([horizontal([0::1, 1::1])::1, 2::1]) tabs:false consoles:true toolbars:false;
 		display "Main" type: 3d background: rgb(50,50,50){
 			camera 'default' locked:false distance:550 ;
 //			species offroad refresh: false;
