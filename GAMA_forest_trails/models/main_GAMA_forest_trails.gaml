@@ -79,6 +79,9 @@ global{
 		
 //		create road from: split_lines(Trail_shape_file);
 		create road from: Trail_shape_file;
+		create island{
+			location <- {width/2, height/2, 0};
+		}
 //		save road to:"../includes/export/trail.shp" format:"shp";
 //		write length(road);
 		
@@ -176,9 +179,9 @@ global{
 		}
 		current_time <- int((time_now - 0.01) div (stop_time / n_month_by_turn)) + 1;
 //		write "Time: " + time_now + " s, Turn: " + count_start + " Month: " + current_time ;
-		ask unity_linker{
-			do send_message players: unity_player as list mes: ["start":: !can_start, "remaining_time":: (stop_time*count_start - time_now)];
-		}
+//		ask unity_linker{
+//			do send_message players: unity_player as list mes: ["start":: !can_start, "remaining_time":: (stop_time*count_start - time_now)];
+//		}
 
 		loop i from:0 to:(length(sum_total_seeds)-1){
 			sum_total_seeds[i] <- int(sum(seeds[i])) + int(sum(alien_seeds[i]));
@@ -251,13 +254,15 @@ global{
 		can_start <- false ;
 		
 		ask unity_linker {
+			do send_message players: unity_player as list mes: ["Head"::"Start", "Body"::""];
+			write "send start";
 			loop p over: unity_player {
 				do enable_player_movement(
 					player:p,
 					enable:true
 				);
 			}
-		}	
+		}
 	}
 	
 	reflex do_pause when: (time_now >= stop_time*count_start) and (cycle != 0) {
@@ -269,6 +274,8 @@ global{
 		do pause;
 
 		ask unity_linker {
+			do send_message players: unity_player as list mes: ["Head"::"Stop", "Body"::""];
+			write "send stop";
 			loop p over: unity_player {
 				do enable_player_movement(
 					player:p,
@@ -330,6 +337,7 @@ experiment First type: gui {
 			species tree;
 			species player;
 			species sign;
+			species island;
 			event #mouse_down {
 				if ((#user_location distance_to sign[0]) < 25) {
 					ask world {

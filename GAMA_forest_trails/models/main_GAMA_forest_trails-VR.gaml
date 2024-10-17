@@ -22,17 +22,17 @@ species unity_linker parent: abstract_unity_linker {
 	unity_property up_turtle;
 	
 //	action collect_seeds(string player_ID, string tree_ID){ 
-	action collect_seeds(string player_ID, int tree_ID){ 
+	action collect_seeds(string player_ID, string tree_ID){
 		write "Player " + player_ID + " collect: " + tree_ID;
 		int key_player <- map_player_id[player_ID];
 		
 		if false{
-			int temp <- int(container(alien_seeds[key_player])[tree_ID - 1]);
-			container(alien_seeds[key_player])[tree_ID - 1] <- int(temp + 1);
+			int temp <- int(container(alien_seeds[key_player])[int(tree_ID) - 1]);
+			container(alien_seeds[key_player])[int(tree_ID) - 1] <- int(temp + 1);
 		}
 		else{
-			int temp <- int(container(seeds[key_player])[tree_ID - 1]);
-			container(seeds[key_player])[tree_ID - 1] <- int(temp + 1);
+			int temp <- int(container(seeds[key_player])[int(tree_ID) - 1]);
+			container(seeds[key_player])[int(tree_ID) - 1] <- int(temp + 1);
 		}
 		
 //		int key_tree <- map_tree_id[tree_ID];
@@ -48,14 +48,14 @@ species unity_linker parent: abstract_unity_linker {
 //		}
 	}
 	
-	reflex random{
-//		if flip(0.1){
-//			do collect_seeds(player_id_list[rnd(0, length(player_id_list)-1)], tree_id_list[rnd(0, length(tree_id_list)-1)]);
+//	reflex random{
+////		if flip(0.1){
+////			do collect_seeds(player_id_list[rnd(0, length(player_id_list)-1)], tree_id_list[rnd(0, length(tree_id_list)-1)]);
+////		}
+//		if flip(0.1) and player_id_list{
+//			do collect_seeds(player_id_list[rnd(0, length(player_id_list)-1)], rnd(1,length(n_tree)));
 //		}
-		if flip(0.1) and player_id_list{
-			do collect_seeds(player_id_list[rnd(0, length(player_id_list)-1)], rnd(1,length(n_tree)));
-		}
-	}
+//	}
 
 
 	list<point> init_locations <- define_init_locations();
@@ -74,6 +74,8 @@ species unity_linker parent: abstract_unity_linker {
 //		player_unity_properties <- [up_lg, up_turtle, up_slime, up_ghost];
 		player_unity_properties <- [up_lg,up_lg,up_lg,up_lg,up_lg,up_lg];
 		do add_background_geometries(road collect (each.geom_visu), up_road);
+//		do add_background_geometries(island, up_road);
+		
 //		do add_background_geometries(offroad, up_offroad);
 	}
 	

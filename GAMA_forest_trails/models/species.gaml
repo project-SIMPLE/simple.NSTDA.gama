@@ -177,6 +177,13 @@ species road{
 	}
 }
 
+species island{
+	rgb color <- #grey;
+	aspect default {
+		draw square(40) color: color ;
+	}
+}
+
 //species offroad{
 //	rgb color <- #blue;
 ////	float buffer_size <- 0.0;
