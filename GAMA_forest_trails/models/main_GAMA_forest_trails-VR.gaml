@@ -2,6 +2,59 @@ model mainGAMAforesttrails2_model_VR
 
 import "main_GAMA_forest_trails.gaml"
 
+
+global {
+	action save_total_seeds_to_csv{
+		ask unity_player{
+			int key_player <- map_player_id[name];
+//			write key_player;
+			list temp <- [];
+			list header <- [];
+//			save temp to: "../results/total_seed.csv" format:"csv" rewrite:true;
+			add 'Team' + int(key_player + 1) to: temp;
+			loop i from:0 to:length(n_tree) - 1{
+				add container(seeds[key_player])[i] to: temp;
+				add 'Type' + (i+1) to: header;
+			}
+			write temp;
+			if self = unity_player[0]{
+//				write 'here!!!';
+				save temp to: "../results/total_seed.csv" header:false format:"csv" rewrite:true;
+			}
+			else{
+				save temp to: "../results/total_seed.csv" header:false format:"csv" rewrite:false;
+			}
+//			save temp to: "../results/total_seed.csv" header:false format:"csv" rewrite:false;
+		}
+		
+	}
+	action resume_game {
+		ask unity_linker {
+			do send_message players: unity_player as list mes: ["Head"::"Start", "Body"::""];
+			write "send start";
+			loop p over: unity_player {
+				do enable_player_movement(
+					player:p,
+					enable:true
+				);
+			}
+		}
+	}
+	action pause_game {
+		ask unity_linker {
+			do send_message players: unity_player as list mes: ["Head"::"Stop", "Body"::""];
+			write "send stop";
+			loop p over: unity_player {
+				do enable_player_movement(
+					player:p,
+					enable:false
+				);
+			}
+		}
+	}
+
+}
+
 species unity_linker parent: abstract_unity_linker {
 	string player_species <- string(unity_player);
 	int num_players <- n_team;

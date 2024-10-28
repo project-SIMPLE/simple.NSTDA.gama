@@ -8,7 +8,6 @@
 model mainGAMAforesttrails2
 
 import 'species.gaml'
-import "main_GAMA_forest_trails-VR.gaml"
 
 // quest3 ก่อนจะได้ดูว่าเป็นที่ model หรือ unity done!
 // ทำแมพพี่ตั้ม done!
@@ -239,30 +238,10 @@ global{
 		do save_total_seeds_to_csv;
 	}
 	
-	action save_total_seeds_to_csv{
-		ask unity_player{
-			int key_player <- map_player_id[name];
-//			write key_player;
-			list temp <- [];
-			list header <- [];
-//			save temp to: "../results/total_seed.csv" format:"csv" rewrite:true;
-			add 'Team' + int(key_player + 1) to: temp;
-			loop i from:0 to:length(n_tree) - 1{
-				add container(seeds[key_player])[i] to: temp;
-				add 'Type' + (i+1) to: header;
-			}
-			write temp;
-			if self = unity_player[0]{
-//				write 'here!!!';
-				save temp to: "../results/total_seed.csv" header:false format:"csv" rewrite:true;
-			}
-			else{
-				save temp to: "../results/total_seed.csv" header:false format:"csv" rewrite:false;
-			}
-//			save temp to: "../results/total_seed.csv" header:false format:"csv" rewrite:false;
-		}
-		
-	}
+	action save_total_seeds_to_csv;
+	
+	
+	
 	
 	reflex do_resume when: (not paused) and can_start{
 //		if user_confirm("Confirmation","Do you want to start?"){
@@ -285,17 +264,9 @@ global{
 		init_time <- gama.machine_time div 1000;
 		can_start <- false ;
 		
-		ask unity_linker {
-			do send_message players: unity_player as list mes: ["Head"::"Start", "Body"::""];
-			write "send start";
-			loop p over: unity_player {
-				do enable_player_movement(
-					player:p,
-					enable:true
-				);
-			}
-		}
+		do resume_game;
 	}
+	action resume_game;
 	
 	reflex do_pause when: (time_now >= stop_time*count_start) and (cycle != 0) {
 		ask sign{
@@ -305,17 +276,10 @@ global{
 		can_start <- true ;
 		do pause;
 
-		ask unity_linker {
-			do send_message players: unity_player as list mes: ["Head"::"Stop", "Body"::""];
-			write "send stop";
-			loop p over: unity_player {
-				do enable_player_movement(
-					player:p,
-					enable:false
-				);
-			}
-		}
+		do pause_game;
 	}
+	
+	action pause_game;
 	
 	reflex growth_up{ 
 		ask tree{
