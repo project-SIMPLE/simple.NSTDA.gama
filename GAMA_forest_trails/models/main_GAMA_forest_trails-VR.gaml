@@ -32,7 +32,9 @@ species unity_linker parent: abstract_unity_linker {
 		}
 		else{
 			int temp <- int(container(seeds[key_player])[int(tree_ID) - 1]);
+			write container(seeds[key_player])[int(tree_ID) - 1];
 			container(seeds[key_player])[int(tree_ID) - 1] <- int(temp + 1);
+			write container(seeds[key_player])[int(tree_ID) - 1];
 		}
 		
 //		int key_tree <- map_tree_id[tree_ID];
@@ -48,14 +50,14 @@ species unity_linker parent: abstract_unity_linker {
 //		}
 	}
 	
-//	reflex random{
-////		if flip(0.1){
-////			do collect_seeds(player_id_list[rnd(0, length(player_id_list)-1)], tree_id_list[rnd(0, length(tree_id_list)-1)]);
-////		}
-//		if flip(0.1) and player_id_list{
-//			do collect_seeds(player_id_list[rnd(0, length(player_id_list)-1)], rnd(1,length(n_tree)));
+	reflex random{
+//		if flip(0.1){
+//			do collect_seeds(player_id_list[rnd(0, length(player_id_list)-1)], tree_id_list[rnd(0, length(tree_id_list)-1)]);
 //		}
-//	}
+		if flip(0.1) and player_id_list{
+			do collect_seeds(player_id_list[rnd(0, length(player_id_list)-1)], string(rnd(1,3)));
+		}
+	}
 
 
 	list<point> init_locations <- define_init_locations();
@@ -93,16 +95,16 @@ species unity_linker parent: abstract_unity_linker {
 		up_tree_2a <- geometry_properties("tree_2_a","tree",tree_aspect_2a,#no_interaction,false);
 		unity_properties << up_tree_2a;
 		
-		unity_aspect tree_aspect_2b <- prefab_aspect("temp/Prefab/Tree/QuercusTree_Short",1.0,0.05,1.0,0.5, precision);
+		unity_aspect tree_aspect_2b <- prefab_aspect("temp/Prefab/Tree/QuercusTree_Short_2",1.0,0.05,1.0,0.5, precision);
 		up_tree_2b <- geometry_properties("tree_2_b","tree",tree_aspect_2b,#no_interaction,false);
-		unity_properties << up_tree_2b;
+		unity_properties << up_tree_2b; 
 		
 		unity_aspect tree_aspect_3a <- prefab_aspect("temp/Prefab/Tree/SapindusTree_Short_NoFruit",1.0,0.05,1.0,0.5, precision);
 		up_tree_3a <- geometry_properties("tree_3_a","tree",tree_aspect_3a,#no_interaction,false);
 		unity_properties << up_tree_3a;
 
 		
-		unity_aspect tree_aspect_3b <- prefab_aspect("temp/Prefab/Tree/SapindusTree_Short",1.0,0.05,1.0,0.5, precision);
+		unity_aspect tree_aspect_3b <- prefab_aspect("temp/Prefab/Tree/SapindusTree_Short_2",1.0,0.05,1.0,0.5, precision);
 		up_tree_3b <- geometry_properties("tree_3_b","tree",tree_aspect_3b,#no_interaction,false);
 		unity_properties << up_tree_3b;
 		

@@ -36,8 +36,8 @@ global{
 	float height <- shape.height;
 	
 	// Parameter
-	int n_team <- 4;
-	list n_tree <- [25,25,25,25,25,25,25,25,25,25,25,25];
+	int n_team <- 2;
+	list n_tree <- [50,50,50,50,50,50,50,50,50,50,50,50];
 	int stop_time <- 60; //second
 	
 	// Variable
