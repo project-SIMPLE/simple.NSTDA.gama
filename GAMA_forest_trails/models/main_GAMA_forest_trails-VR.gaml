@@ -298,11 +298,11 @@ experiment vr_xp parent:First autorun: false type: unity {
 			do build_invisible_walls(
 				player: last(unity_player), //player to send the information to
 				id: "wall_for_free_area", //id of the walls
-				height: 40.0, //height of the walls
-				wall_width: 1.0, //width ot the walls
-				geoms: [usable_area] + usable_area.holes  //geometries used to defined the walls - the walls will be generated from the countour of these geometries
+				height: 10.0, //height of the walls
+				wall_width: 0.5, //width ot the walls
+				geoms: [usable_area] + usable_area.holes //geometries used to defined the walls - the walls will be generated from the countour of these geometries
 			);
-//			
+//			 
 //				// change the area on which the player can teleport
 //			do send_teleport_area(
 //				player: last(unity_player), //player to send the information to

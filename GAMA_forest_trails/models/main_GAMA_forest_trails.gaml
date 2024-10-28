@@ -25,18 +25,19 @@ import "main_GAMA_forest_trails-VR.gaml"
 // เปลี่ยนหัวตาราง
 
 global{
+	
 	shape_file Trail_shape_file <- shape_file("../includes/Trail.shp");
 //	shape_file offtrail_shape_file <- shape_file("../includes/export/offtrail.shp");
 
 	geometry usable_area;
 	geometry usable_area_for_tree;
-	geometry shape <- envelope(Trail_shape_file);
+	geometry shape <- (envelope(Trail_shape_file));
 	
 	float width <- shape.width;
 	float height <- shape.height;
 	
 	// Parameter
-	int n_team <- 2;
+	int n_team <- 1;
 	list n_tree <- [50,50,50,50,50,50,50,50,50,50,50,50];
 	int stop_time <- 60; //second
 	
@@ -102,47 +103,74 @@ global{
 //		create offroad from: offtrail_shape_file;
 //		write length(offroad);
 		
-		usable_area <- union(road collect each.geom_visu);
-		usable_area_for_tree <- usable_area;
 		
 		create sign{
 			location <- {width/3 - 35, -45, 0};
 		}
-		
-		int count_create_tree <- 0;
-		loop i from:0 to:(length(n_tree)-1){		
-			loop j from:1 to:(n_tree[i] div 2){
-				create tree{
-					tree_type <- 2*i+1;
-					write tree_type;
-//					do initialize(usable_area);
-					if count_create_tree > 0{
+		bool still_do <- true;
+		loop while: still_do {
+			still_do <- false;
+			bool is_ok <- true;
+			tree_id_list <- [];
+			ask tree {do die;}
+			usable_area <- union(road collect each.geom_visu) inter world.shape ;
+			usable_area_for_tree <- usable_area - 3 ;
+			int count_create_tree <- 0;
+			loop i from:0 to:(length(n_tree)-1){		
+				loop j from:1 to:(n_tree[i] div 2){
+					create tree{
+						tree_type <- 2*i+1;
+						
+	//					do initialize(usable_area);
+						if count_create_tree > 0{
+							ask tree[count_create_tree-1] {
+								usable_area_for_tree <- usable_area_for_tree - self.shape;
+								usable_area <- usable_area + self.shape;
+							}
+						}
+						if (usable_area_for_tree = nil) {
+							is_ok <- false;
+						} else {
+							location <- any_location_in(usable_area_for_tree);
+		//					location <- any_location_in(usable_area);
+		//					add "tree"+ (length(tree)-1)::i to:map_tree_id;
+							add "tree"+ (length(tree)-1) to:tree_id_list;
+							count_create_tree <- count_create_tree + 1;
+						}
+					}
+					if (not is_ok) {
+						break;
+					}
+					
+				}
+				loop j from:1 to:(n_tree[i] - (n_tree[i] div 2)){
+					create tree{
+						tree_type <- 2*i+2;
+						
+	//					do initialize(usable_area);
 						ask tree[count_create_tree-1] {
 							usable_area_for_tree <- usable_area_for_tree - self.shape;
 							usable_area <- usable_area + self.shape;
 						}
+						if (usable_area_for_tree = nil) {
+							is_ok <- false;
+						} else {
+							
+							location <- any_location_in(usable_area_for_tree);
+		//					location <- any_location_in(usable_area);
+		//					add "tree"+ (length(tree)-1)::i to:map_tree_id;
+							add "tree"+ (length(tree)-1) to:tree_id_list;
+							count_create_tree <- count_create_tree + 1;
+						}
+						
 					}
-					location <- any_location_in(usable_area_for_tree);
-//					location <- any_location_in(usable_area);
-//					add "tree"+ (length(tree)-1)::i to:map_tree_id;
-					add "tree"+ (length(tree)-1) to:tree_id_list;
-					count_create_tree <- count_create_tree + 1;
+					if (not is_ok) {
+						break;
+					}
 				}
-			}
-			loop j from:1 to:(n_tree[i] - (n_tree[i] div 2)){
-				create tree{
-					tree_type <- 2*i+2;
-					write tree_type;
-//					do initialize(usable_area);
-					ask tree[count_create_tree-1] {
-						usable_area_for_tree <- usable_area_for_tree - self.shape;
-						usable_area <- usable_area + self.shape;
-					}
-					location <- any_location_in(usable_area_for_tree);
-//					location <- any_location_in(usable_area);
-//					add "tree"+ (length(tree)-1)::i to:map_tree_id;
-					add "tree"+ (length(tree)-1) to:tree_id_list;
-					count_create_tree <- count_create_tree + 1;
+				if (not is_ok) {
+					still_do <- true;
+					break;
 				}
 			}
 		}
@@ -333,7 +361,7 @@ experiment First type: gui {
 	list<rgb> player_colors <-[#green, #blue, #yellow, #orange, #lime, #purple];
 	
 	output{
-		layout vertical([horizontal([0::1, 1::1])::1, 2::1]) tabs:false consoles:true toolbars:false;
+		layout vertical([horizontal([0::1, 1::1])::1, 2::1]);// tabs:false consoles:true toolbars:false;
 		display "Main" type: 3d background: rgb(50,50,50){
 			camera 'default' locked:false distance:550 ;
 //			species offroad refresh: false;
@@ -342,6 +370,9 @@ experiment First type: gui {
 			species player;
 			species sign;
 			species island;
+			
+			
+			
 			event #mouse_down {
 				if ((#user_location distance_to sign[0]) < 25) {
 					ask world {
