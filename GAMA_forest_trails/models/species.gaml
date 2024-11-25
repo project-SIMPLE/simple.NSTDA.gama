@@ -14,6 +14,14 @@ global {
 	float max_radius <- 200.0;
 }
 
+//grid my_grid width:3 height:2 use_regular_agents:false{
+//	rgb color <- rgb(173, 158, 130);
+//	init {
+////        write "my column index is:" + grid_x;
+////        write "my row index is:" + grid_y;
+////        list<point> bugs_inside -> {road inside self};
+//    }
+//}
 
 species sign {
 	image_file icon <- play;
@@ -21,17 +29,10 @@ species sign {
 		draw icon size: {50, 50};
 	}
 }
-	
-
-species player_info{
-	int team <- 0;
-}
 
 species tree{
 	int tree_type <- 0;
 	bool it_alien <- false;
-	bool can_collect ;
-	int initial_seed <- 0;
 	rgb color <- rgb(43, 150, 0);
 	int it_state ;
 	list list_of_state1 <- [];
@@ -50,7 +51,7 @@ species tree{
 	
 	list assign_list_of_state(int state, int type){
 		switch type {
-			match_one [1,2]{
+			match_one [1]{
 				switch state {
 					match 1 {
 						return [3, 4, 9, 10];
@@ -66,7 +67,7 @@ species tree{
 					}	
 				}
 			}
-			match_one [3,4]{
+			match_one [2]{
 				switch state {
 					match 1 {
 						return [5, 6, 11, 12];
@@ -82,7 +83,7 @@ species tree{
 					}	
 				}
 			}
-			match_one [5,6]{
+			match_one [3]{
 				switch state {
 					match 1 {
 						return [1, 2, 7, 8];
@@ -98,7 +99,7 @@ species tree{
 					}	
 				}
 			}
-			match_one [7,8]{
+			match_one [4]{
 				switch state {
 					match 1 {
 						return [1, 8, 9, 10, 11, 12];
@@ -114,7 +115,7 @@ species tree{
 					}	
 				}
 			}
-			match_one [9,10]{
+			match_one [5]{
 				switch state {
 					match 1 {
 						return [6, 7, 8, 9, 10];
@@ -130,7 +131,7 @@ species tree{
 					}	
 				}
 			}
-			match_one [11,12]{
+			match_one [6]{
 				switch state {
 					match 1 {
 						return [4, 5, 6, 7, 8];
@@ -146,7 +147,7 @@ species tree{
 					}	
 				}
 			}
-			match_one [13,14]{
+			match_one [7]{
 				switch state {
 					match 1 {
 						return [3, 4, 9, 10];
@@ -162,7 +163,7 @@ species tree{
 					}	
 				}
 			}
-			match_one [15,16]{
+			match_one [8]{
 				switch state {
 					match 1 {
 						return [5, 6, 11, 12];
@@ -178,7 +179,7 @@ species tree{
 					}	
 				}
 			}
-			match_one [17,18]{
+			match_one [9]{
 				switch state {
 					match 1 {
 						return [1, 2, 7, 8];
@@ -194,7 +195,7 @@ species tree{
 					}	
 				}
 			}
-			match_one [19,20]{
+			match_one [10]{
 				switch state {
 					match 1 {
 						return [1, 8, 9, 10, 11, 12];
@@ -210,7 +211,7 @@ species tree{
 					}	
 				}
 			}
-			match_one [21,22]{
+			match_one [11]{
 				switch state {
 					match 1 {
 						return [6, 7, 8, 9, 10];
@@ -226,7 +227,7 @@ species tree{
 					}	
 				}
 			}
-			match_one [23,24]{
+			match_one [12]{
 				switch state {
 					match 1 {
 						return [4, 5, 6, 7, 8];
@@ -246,38 +247,33 @@ species tree{
 	}
 }
 
-species player parent:player_info{
+species player2{
+	int team <- 0;
 	aspect default {
 		draw circle(10#m) color: #blue border:#black;
 		draw ("Team" + team) font:font("Times", 18, #bold); 
 	}
 }
 
-species river{
-	aspect default {
-		draw circle(max_radius#m) color:rgb(138, 178, 242);
-		draw circle(5#m) color:#red;
-	}
-}
-
 species road{
 	rgb color <- #grey;
-	float buffer_size <- 10.0;
+	rgb color2 <- #white;
+	float buffer_size <- 15.0;
 	geometry geom_visu <- shape + buffer_size;
 	aspect default {
 		draw geom_visu color: color ;	
-//		draw square(10) color:#white;
+//		draw circle(100) color:color2;
 	}
-	reflex write when:cycle=0{
-		write location;
-	}
+//	reflex write when:cycle=0{
+//		write location;
+//	}
 }
 
 species island{
 	rgb color <- #grey;
-	geometry shape <- square(40);
+	geometry shape <- square(80);
 //	aspect default {
-//		draw square(40) color: color ;
+//		draw square(50) color: color ;
 //	}
 }
 

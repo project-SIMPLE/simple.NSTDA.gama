@@ -5,44 +5,46 @@
 * Tags: 
 */
 
-model mainGAMAforesttrails2
+// เพิ่มระยะห่างต้นไม้ + ลดจำนวนต้นไม้
+// เอเลี่ยนรอบ 2
+// สัปดาห์หน้าทำ เอเลี่ยนให้เสร็จ
+
+// 14Nov2024
+// ให้ผู้เล่นเข้า zone tutorial ก่อน แล้วถ้าผู้เล่นเล่นเสร็จแล้ว พี่เติ้ลจะส่ง playerID ของคนที่เสร็จแล้วมาให้ done!
+// ถ้าส่งมาครบแล้วปุ่ม start ถึงจะกดได้ แล้ววาร์ปทุกคนไปที่ zone แรก done!
+// เล่นจบแล้ววาร์ปไป tutorial
+
+model mainGAMAforesttrails
 
 import 'species.gaml'
-
-// quest3 ก่อนจะได้ดูว่าเป็นที่ model หรือ unity done!
-// ทำแมพพี่ตั้ม done!
-// multiplayer done!
-// ปรับ function ให้รับ unity ได้
-// output csv treespeice team จน เมล็ด done!
-
-// goal : link เมล็ดให้ได้
-
-//---------------------------------------------------------------------------------------------------------
-// ให้ invi wall อ้อมต้นไม้ได้ done!
-// turn สุดท้ายให้แสดง turn 6 คงไว้
-// รูปพี่ตั้มมาใส่ บน gama
-// เปลี่ยนหัวตาราง
 
 global{
 	
 	shape_file Trail_shape_file <- shape_file("../includes/Trail.shp");
-//	shape_file offtrail_shape_file <- shape_file("../includes/export/offtrail.shp");
+	csv_file my_csv_file <- csv_file("../includes/pheno_tz_7Nov2024.csv");
 
 	geometry usable_area;
 	geometry usable_area_for_tree;
+	
+	geometry spawn_point;
+	list<geometry> road_midpoint ;
 	geometry shape <- (envelope(Trail_shape_file));
 	
 	float width <- shape.width;
 	float height <- shape.height;
 	
 	// Parameter
-	int n_team <- 1;
-	list n_tree <- [50,50,50,50,50,50,50,50,50,50,50,50];
+	int n_team <- 2;
+//	list n_tree <- [50,50,50,50,50,50,50,50,50,50,50,50];
+//	list n_tree <- [50,50,50];
+	list<list<int>> fruiting_stage <- list_with(12, list_with(6, 0));
+	list<list<int>> n_tree <- list_with(12, list_with(6, 0));
+	list<list<int>> alien_tree <- list_with(12, list_with(6, 0));
 	int stop_time <- 60; //second
 	
 	// Variable
 	int n_turn <- 6;
-	int n_month_by_turn <- 2;
+	int n_month_by_turn <- 1;
 	list<list<int>> seeds <- list_with(n_team, list_with(length(n_tree), 0));
 	list<list<int>> alien_seeds <- list_with(n_team, list_with(length(n_tree), 0));
 	list<int> sum_total_seeds <- list_with(n_team, 0);
@@ -59,121 +61,181 @@ global{
 	rgb color_state4 <- rgb(198, 76, 54);
 	int upper_bound;
 	int max_total_seed;
+	bool alien_experimant <- false;
+	list<tree> tree_list <- [];
 	
-	float x_river <- 0.0 ;
-	float y_river <-  260.0 ;
+	list<int> map_zone <- list<int>([0::0, 1::2, 2::4, 3::5, 4::3, 5::1 ]);
 	
 	list<string> player_id_list <- [];
-	list<string> tree_id_list <- [];
-//	geometry offTrail;
+	
+	list<string> player_id_finish_tutorial_list <- [];
+	bool tutorial_finish <- true;
+	bool move_player_when_game_finish <- true;
 	
 	map<string, int> map_player_id ;
-//	map<string, int> map_tree_id ;
 	
 	init{
-//		write map_player_id;
-//		write player_id_list; 
-
-//		write seeds;
-//		write alien_seeds;
-		
-//		create road from: split_lines(Trail_shape_file);
+//		write envelope(Trail_shape_file);
 		create road from: Trail_shape_file;
-		create island{
-			location <- {width/2, height/2, 0};
+		
+		matrix data <- matrix(my_csv_file);
+
+		loop i from: 2 to: data.columns -1{
+			loop j from: 0 to: data.rows -1{
+				if i = 2{
+					container(fruiting_stage[j div 6])[j mod 6] <- int(data[i,j]);
+				}
+				else if i = 3{
+					container(n_tree[j div 6])[j mod 6] <- int(data[i,j]);
+				}
+				else if i = 4{
+					container(alien_tree[j div 6])[j mod 6] <- int(data[i,j]);
+				}
+			}	
 		}
-//		save island to:"../includes/export/island.shp" format:"shp";
 		
-//		save road to:"../includes/export/trail.shp" format:"shp";
-//		write length(road);
-		
-//		ask road[0]{
-//			color <- #yellow;
-//		}
-//		ask road[1]{
-//			color <- #lime;
-//		}
-//		ask road[2]{
-//			color <- #red;
-//		}
-		
-//		offTrail<- world.shape - (road collect (each.shape.contour+5.0));
-//		save offTrail to:"../includes/export/offtrail.shp" format:"shp";
-//		create offroad from: offtrail_shape_file;
-//		write length(offroad);
-		
+		loop j from:0 to:length(n_tree)-1{
+			write "fruiting_stage type" + (j+1) + " is \t" + fruiting_stage[j];
+			write "n_tree type" + (j+1) + " is \t\t\t" + n_tree[j];
+			write "alien_tree type" + (j+1) + " is \t\t" + alien_tree[j];
+			write " ";
+		}
 		
 		create sign{
 			location <- {width/3 - 35, -45, 0};
 		}
+		
+		create island{
+			location <- {width/2 - 20, height/2 - 20, 0};
+		}
+		
 		bool still_do <- true;
 		loop while: still_do {
 			still_do <- false;
 			bool is_ok <- true;
-			tree_id_list <- [];
 			ask tree {do die;}
 			usable_area <- union(road collect each.geom_visu) inter world.shape ;
 			usable_area_for_tree <- usable_area - 3 ;
+
+			road_midpoint <- split_geometry(usable_area_for_tree, {width/3, height/2});
+//			write road_midpoint;
+//			write length(road_midpoint);
+			
+//			create road from:road_midpoint;
+//			
+//			ask road[3]{
+//				color2 <- #red;
+//			}
+//			ask road[4]{
+//				color2 <- #blue;
+//			}
+//			ask road[5]{
+//				color2 <- #green;
+//			}
+//			ask road[6]{
+//				color2 <- #yellow;
+//			}
+//			ask road[7]{
+//				color2 <- #lime;
+//			}
+//			ask road[8]{
+//				color2 <- #purple;
+//			}
+//			
+//			ask road[2]{
+//				do die;
+//			}
+//			
+//			ask road[1]{
+//				do die;
+//			}
+//			
+//			ask road[0]{
+//				do die;
+//			}
+			
+			
 			int count_create_tree <- 0;
-			loop i from:0 to:(length(n_tree)-1){		
-				loop j from:1 to:(n_tree[i] div 2){
-					create tree{
-						tree_type <- 2*i+1;
-						
-	//					do initialize(usable_area);
-						if count_create_tree > 0{
-							ask tree[count_create_tree-1] {
-								usable_area_for_tree <- usable_area_for_tree - self.shape;
-								usable_area <- usable_area + self.shape;
+			
+			loop i from:0 to:length(n_tree)-1{
+				loop j from:0 to:length(n_tree[i])-1{
+					if n_tree[i][j] > 0{
+						create tree number:n_tree[i][j]{
+							tree_type <- i+1;
+							
+//							if j = 0{
+//								color <- #red;
+//							}
+//							if j = 1{
+//								color <- #blue;
+//							}
+//							if j = 2{
+//								color <- #green;
+//							}
+//							if j = 3{
+//								color <- #yellow;
+//							}
+//							if j = 4{
+//								color <- #lime;
+//							}
+//							if j = 5{
+//								color <- #purple;
+//							}
+							
+							if count_create_tree > 0{
+								ask tree[count_create_tree-1] {
+									usable_area_for_tree <- usable_area_for_tree - self.shape;
+									usable_area <- usable_area + self.shape;
+									save usable_area_for_tree to:"../includes/export/usable_area_for_tree.shp" format:"shp";
+								}
+							}
+							
+							if (usable_area_for_tree = nil) {
+								is_ok <- false;
+							} 
+							
+							else {
+//								location <- (point(usable_area_for_tree closest_points_with(road_midpoint[j])));
+//								write point(usable_area_for_tree closest_points_with(road_midpoint[j]));
+
+//								geometry spawn_point <- one_of(usable_area_for_tree overlapping road_midpoint);
+//								location <- any_location_in(spawn_point);
+//								location <- any_location_in(usable_area_for_tree) when distance_between(location, road_midpoint[j].location) > 70;
+								
+//								spawn_point <- one_of(road_midpoint);
+//								location <- any_location_in(one_of(road_midpoint));
+								
+								location <- any_location_in(usable_area_for_tree);
+								loop while: location distance_to road_midpoint[map_zone[j]].location > 100{
+//									write "Again!" + count_create_tree + " norm: " + location distance_to road_midpoint[j].location;
+									location <- any_location_in(usable_area_for_tree);
+								}
+
+//								write my_grid(location);
+//								loop while: my_grid(location) != my_grid[j] {
+//									write "Again!" + count_create_tree;
+//									location <- any_location_in(usable_area_for_tree);
+//								}
+								
+								count_create_tree <- count_create_tree + 1;
 							}
 						}
-						if (usable_area_for_tree = nil) {
-							is_ok <- false;
-						} else {
-							location <- any_location_in(usable_area_for_tree);
-		//					location <- any_location_in(usable_area);
-		//					add "tree"+ (length(tree)-1)::i to:map_tree_id;
-							add "tree"+ (length(tree)-1) to:tree_id_list;
-							count_create_tree <- count_create_tree + 1;
-						}
-					}
-					if (not is_ok) {
-						break;
-					}
-					
-				}
-				loop j from:1 to:(n_tree[i] - (n_tree[i] div 2)){
-					create tree{
-						tree_type <- 2*i+2;
 						
-	//					do initialize(usable_area);
-						ask tree[count_create_tree-1] {
-							usable_area_for_tree <- usable_area_for_tree - self.shape;
-							usable_area <- usable_area + self.shape;
+						if (not is_ok) {
+							break;
 						}
-						if (usable_area_for_tree = nil) {
-							is_ok <- false;
-						} else {
-							
-							location <- any_location_in(usable_area_for_tree);
-		//					location <- any_location_in(usable_area);
-		//					add "tree"+ (length(tree)-1)::i to:map_tree_id;
-							add "tree"+ (length(tree)-1) to:tree_id_list;
-							count_create_tree <- count_create_tree + 1;
-						}
-						
 					}
-					if (not is_ok) {
-						break;
-					}
-				}
-				if (not is_ok) {
-					still_do <- true;
-					break;
 				}
 			}
+			
+//			ask my_grid[0]{
+//				color <- #red;
+//			}
+			
 		}
+		save usable_area to:"../includes/export/usable_area.shp" format:"shp";
 		save usable_area_for_tree to:"../includes/export/usable_area_for_tree.shp" format:"shp";
+		save union(road_midpoint) to:"../includes/export/road_midpoint.shp" format:"shp";
 		
 		ask tree {
 			list_of_state1 <- assign_list_of_state(1, tree_type);
@@ -181,39 +243,25 @@ global{
 			list_of_state3 <- assign_list_of_state(3, tree_type);
 			list_of_state4 <- assign_list_of_state(4, tree_type);
 		}
+		
+//		create player2 number:1{
+//			team <- 1 ;
+//			location <- any_location_in(usable_area - 1.5) + {0, 0, 3};
+//		}
 	}
 	
 	reflex test{
-//		write map_player_id;
-//		write player_id_list; 
-//		write map_player_id[player_id_list[0]];
-//		write map_tree_id;
-//		write tree_id_list;
 
-//		write unity_player.name ;
-//		ask unity_player{
-//			write name;
-//		}
-//		write player_id_list;
-//		ask unity_linker{
-//			loop p over: unity_player {
-//				write p;
-//			}
-//		}
-//		write unity_player as list;
 	}
 	
-	reflex update_time_and_bound{
+	reflex update_time_and_bound when: (not paused) and tutorial_finish{
 		if (gama.machine_time div 1000) - init_time = 1{
 			init_time <- gama.machine_time div 1000;
 			time_now <- time_now + 1;
 		}
 		current_time <- int((time_now - 0.01) div (stop_time / n_month_by_turn)) + 1;
 //		write "Time: " + time_now + " s, Turn: " + count_start + " Month: " + current_time ;
-//		ask unity_linker{
-//			do send_message players: unity_player as list mes: ["start":: !can_start, "remaining_time":: (stop_time*count_start - time_now)];
-//		}
-
+		
 		loop i from:0 to:(length(sum_total_seeds)-1){
 			sum_total_seeds[i] <- int(sum(seeds[i])) + int(sum(alien_seeds[i]));
 		}
@@ -229,21 +277,19 @@ global{
 		}
 		
 		max_total_seed <- int(max(sum_total_seeds));
-//		write length(unity_player);
 	}
 	
-	reflex restart when:time_now=max_time{
-		time_now <- 0;
-		count_start <- 0 ;
-		do save_total_seeds_to_csv;
-	}
+//	reflex end_game when:time_now>=max_time{
+//		time_now <- max_time;
+////		count_start <- 0 ;
+//		can_start <- false;
+//		do save_total_seeds_to_csv;
+//	}
 	
 	action save_total_seeds_to_csv;
 	
-	
-	
-	
 	reflex do_resume when: (not paused) and can_start{
+//		write "alien_experimant" + alien_experimant;
 //		if user_confirm("Confirmation","Do you want to start?"){
 //			ask sign{
 //				icon <- stop;
@@ -260,82 +306,170 @@ global{
 		ask sign{
 			icon <- stop;
 		}
-		count_start <- count_start + 1 ;
-		init_time <- gama.machine_time div 1000;
-		can_start <- false ;
+		if tutorial_finish{
+			count_start <- count_start + 1 ;
+			init_time <- gama.machine_time div 1000;
+			can_start <- false ;
+			do growth_up;
+		}
 		
 		do resume_game;
 	}
 	action resume_game;
 	
-	reflex do_pause when: (time_now >= stop_time*count_start) and (cycle != 0) {
+	reflex do_pause when: (time_now >= stop_time*count_start) and (cycle != 0) and tutorial_finish{
 		ask sign{
 			icon <- play;
 //			write "change to start icon.";
 		}
 		can_start <- true ;
+		
 		do pause;
-
 		do pause_game;
 	}
 	
 	action pause_game;
 	
-	reflex growth_up{ 
-		ask tree{
-			switch current_time {
-				match_one list_of_state1{
-					if not it_alien{
-						self.color <- color_state1 ;	
+//	reflex growth_up when: tutorial_finish and count_start>0{
+	action growth_up {
+		loop i from:0 to:length(n_tree)-1{
+			write count_start;
+			if alien_tree[i][count_start-1] = 1{
+				write "Alien at i= " + i + " j= " + (count_start-1) + " num= "+ n_tree[i][count_start-1] + " num0.2= " + int(n_tree[i][count_start-1]*0.2);
+			}
+			
+			if fruiting_stage[i][count_start-1] = 1{
+//				write count_start;
+//				list<tree> tree_list <- tree where (each.tree_type = i+1);
+				tree_list <- tree where ((each.tree_type = i+1) and (each.location distance_to road_midpoint[map_zone[count_start-1]].location < 100));
+//					write tree_list;
+
+				if alien_experimant and alien_tree[i][count_start-1] = 1{
+					loop j from:0 to: int(n_tree[i][count_start-1]*0.4)-1{
+						ask tree_list[j]{
+							write self;
+							color <- #purple;
+							it_alien <- true;
+						}
 					}
-//					initial_seed <- 0;
-					can_collect <- false ;
-					it_state <- 1 ;
 				}
-				match_one list_of_state2{
-					if not it_alien{
-						self.color <- color_state2 ;
-					}
-//					initial_seed <- 0;
-					can_collect <- false ;
-					it_state <- 2 ;
-				}
-				match_one list_of_state3{
-					if not it_alien{
-						self.color <- color_state3 ;
-					}
-//					initial_seed <- 0;
-					can_collect <- false ;
-					it_state <- 3 ;
-				}
-				match_one list_of_state4{
+				
+				ask tree_list{
+					it_state <- 4 ;
 					if not it_alien{
 						self.color <- color_state4 ;
 					}
-//					initial_seed <- rnd(1,10);
-					can_collect <- true ;
-					it_state <- 4 ;
+//					write self;
+//					switch current_time {
+//						match_one list_of_state1{
+//							if not it_alien{
+//								self.color <- color_state1 ;	
+//							}
+//							it_state <- 1 ;
+//						}
+//						match_one list_of_state2{
+//							if not it_alien{
+//								self.color <- color_state2 ;
+//							}
+//							it_state <- 2 ;
+//						}
+//						match_one list_of_state3{
+//							if not it_alien{
+//								self.color <- color_state3 ;
+//							}
+//							it_state <- 3 ;
+//						}
+//						match_one list_of_state4{
+//							if not it_alien{
+//								self.color <- color_state4 ;
+//							}
+//							it_state <- 4 ;
+//						}
+//					}
+				}				
+			}
+			else if fruiting_stage[i][count_start-1] = 0{
+				tree_list <- tree where ((each.tree_type = i+1) and (each.location distance_to road_midpoint[map_zone[count_start-1]].location < 100));
+				ask tree_list{
+					it_state <- 1 ;
+					if not it_alien{
+						self.color <- color_state1 ;	
+					}
+//					switch current_time {
+//						match_one list_of_state1{
+//							if not it_alien{
+//								self.color <- color_state1 ;	
+//							}
+//							it_state <- 1 ;
+//						}
+//						match_one list_of_state2{
+//							if not it_alien{
+//								self.color <- color_state2 ;
+//							}
+//							it_state <- 2 ;
+//						}
+//						match_one list_of_state3{
+//							if not it_alien{
+//								self.color <- color_state3 ;
+//							}
+//							it_state <- 3 ;
+//						}
+//						match_one list_of_state4{
+//							if not it_alien{
+//								self.color <- color_state4 ;
+//							}
+//							it_state <- 4 ;
+//						}
+//					}
 				}
-			}	
+			}
 		}
+//		
+//		ask tree{			
+//			switch current_time {
+//				match_one list_of_state1{
+//					if not it_alien{
+//						self.color <- color_state1 ;	
+//					}
+//					it_state <- 1 ;
+//				}
+//				match_one list_of_state2{
+//					if not it_alien{
+//						self.color <- color_state2 ;
+//					}
+//					it_state <- 2 ;
+//				}
+//				match_one list_of_state3{
+//					if not it_alien{
+//						self.color <- color_state3 ;
+//					}
+//					it_state <- 3 ;
+//				}
+//				match_one list_of_state4{
+//					if not it_alien{
+//						self.color <- color_state4 ;
+//					}
+//					it_state <- 4 ;
+//				}
+//			}	
+//		}
 	}
 }
 
-experiment First type: gui {
+experiment init_exp type: gui {
 	list<rgb> player_colors <-[#green, #blue, #yellow, #orange, #lime, #purple];
+	float seed <- 0.5;
 	
 	output{
-		layout vertical([horizontal([0::1, 1::1])::1, 2::1]);// tabs:false consoles:true toolbars:false;
+		layout vertical([horizontal([0::1, 1::1])::1, 2::1]) ;//tabs:false consoles:false toolbars:false;
 		display "Main" type: 3d background: rgb(50,50,50){
 			camera 'default' locked:false distance:550 ;
-//			species offroad refresh: false;
+//			grid my_grid border: #darkgreen;
 			species road refresh: false;
-			species tree;
-			species player;
-			species sign;
 			species island;
-			
-			
+			species tree;
+//			species player2;
+			species sign;
 			
 			event #mouse_down {
 				if ((#user_location distance_to sign[0]) < 25) {
@@ -347,7 +481,13 @@ experiment First type: gui {
 
 			graphics Strings {
 				draw "Current turn: "+ count_start at:{width/3, -45} font:font("Times", 20, #bold+#italic) ; 
-				draw "Remaining time: "+ ((stop_time*count_start - time_now) div 60) + " minutes " + ((stop_time*count_start - time_now) mod 60) + " seconds" at:{width/3, -20} font:font("Times", 20, #bold+#italic) ;
+				if tutorial_finish{
+					draw "Remaining time: "+ ((stop_time*count_start - time_now) div 60) + " minutes " + ((stop_time*count_start - time_now) mod 60) + " seconds" at:{width/3, -20} font:font("Times", 20, #bold+#italic) ;
+				}
+				else{
+					draw "Tutorial" at:{width/3, -20} font:font("Times", 20, #bold+#italic) ;
+				}
+				
 			}
 		}
 		
@@ -369,7 +509,7 @@ experiment First type: gui {
 			chart "Number of seeds by tree species and by team ID" type:histogram 
 			x_serie_labels: ["Species"] 				
 			y_range:[0, 10 + upper_bound] 		
-			style:"3d" 			 
+			style:"3d" 			  
 			series_label_position: xaxis {
 				loop i from:0 to:(n_team-1){
 					int temp <- 1 ;
