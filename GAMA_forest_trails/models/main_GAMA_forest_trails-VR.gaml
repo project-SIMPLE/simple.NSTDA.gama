@@ -40,7 +40,7 @@ global {
 				ask unity_linker {
 					new_player_position[myself.name] <- [myself.location.x *precision,myself.location.y *precision,myself.location.z *precision];
 							move_player_event <- true;
-						}
+				}
 			}
 		}
 		else {
@@ -85,17 +85,17 @@ global {
 		}
 		
 		if move_player_when_game_finish {
-			ask unity_player{
-				location <- {180, 120, 3};
-				ask unity_linker {
-					new_player_position[myself.name] <- [myself.location.x *precision,myself.location.y *precision,myself.location.z *precision];
-							move_player_event <- true;
-						}
-			}
+//			ask unity_player{
+//				location <- {180, 120, 3};
+//				ask unity_linker {
+//					new_player_position[myself.name] <- [myself.location.x *precision,myself.location.y *precision,myself.location.z *precision];
+//							move_player_event <- true;
+//						}
+//			}
 			move_player_when_game_finish <- false;
 			
 			tutorial_finish <- false;
-			tutorial_finish <- true;
+//			tutorial_finish <- true;
 			player_id_finish_tutorial_list <- [];
 		}
 	}
@@ -172,7 +172,8 @@ species unity_linker parent: abstract_unity_linker {
 	action tutorial_finish(string player_ID, string tutorial_status){
 		add player_ID to: player_id_finish_tutorial_list;
 		write "Player " + player_ID + "finished tutorial.";
-		if length(player_id_finish_tutorial_list) = length(player_id_list){
+//		if length(player_id_finish_tutorial_list) >= length(player_id_list){
+		if length(player_id_finish_tutorial_list) >= length(unity_player){
 			ask world{
 				ask sign{
 					self.icon <- play;
@@ -228,8 +229,8 @@ species unity_linker parent: abstract_unity_linker {
 	init {
 		do define_properties;
 		player_unity_properties <- [up_player_jam,up_player_jam,up_player_jam,up_player_jam,up_player_jam,up_player_jam];
-		do add_background_geometries(road collect (each.geom_visu), up_road);
-		do add_background_geometries(island, up_island);
+//		do add_background_geometries(road collect (each.geom_visu), up_road);
+//		do add_background_geometries(island, up_island);
 		
 	}
 	
@@ -273,8 +274,14 @@ species unity_linker parent: abstract_unity_linker {
 		unity_aspect tree_aspect_5b <- prefab_aspect("temp/Prefab/Tree/AdjustableTree/PhoebeTreeAll",1.0,0.05,1.0,0.5, precision);
 		up_tree_5b <- geometry_properties("tree_5_b","tree",tree_aspect_5b,#no_interaction,false);
 		unity_properties << up_tree_5b;
-
-
+		
+		unity_aspect tree_aspect_6a <- prefab_aspect("temp/Prefab/Tree/AdjustableTree/DiospyrosTreeAll_NoFruit",1.0,0.05,1.0,0.5, precision);
+		up_tree_6a <- geometry_properties("tree_6_a","tree",tree_aspect_5a,#no_interaction,false);
+		unity_properties << up_tree_6a;
+		
+		unity_aspect tree_aspect_6b <- prefab_aspect("temp/Prefab/Tree/AdjustableTree/DiospyrosTreeAll",1.0,0.05,1.0,0.5, precision);
+		up_tree_6b <- geometry_properties("tree_6_b","tree",tree_aspect_5b,#no_interaction,false);
+		unity_properties << up_tree_6b;
 		
 		
 		
@@ -302,8 +309,8 @@ species unity_linker parent: abstract_unity_linker {
 		unity_properties << up_island;
 
 
-		unity_aspect lg_aspect <- prefab_aspect("temp/Prefab/Character/PlayerPrefab(JAM)",2.0,0.0,-1.0,90.0,precision);
-		up_player_jam <- geometry_properties("little_ghost","",lg_aspect,new_geometry_interaction(true, false,false,[]),false);
+		unity_aspect player_aspect <- prefab_aspect("temp/Prefab/Character/PlayerPrefab(JAM)",0.82,0.0,-1.0,90.0,precision);
+		up_player_jam <- geometry_properties("little_ghost","",player_aspect,new_geometry_interaction(true, false,false,[]),false);
 		unity_properties << up_player_jam; 
 	}
 	
@@ -377,10 +384,10 @@ species unity_linker parent: abstract_unity_linker {
 		list<tree> t6f <- tree where ((each.tree_type = 6) and (each.it_state = 4) and (each.it_alien = false));
 		list<tree> t6a <- tree where ((each.tree_type = 6) and (each.it_state = 4) and (each.it_alien = true));
 		if not empty(t6){
-			do add_geometries_to_send(t6,up_tree_1a);
+			do add_geometries_to_send(t6,up_tree_6a);
 		}
 		if not empty(t6f){
-			do add_geometries_to_send(t6f,up_tree_1b);
+			do add_geometries_to_send(t6f,up_tree_6b);
 		}
 		if not empty(t6a){
 			do add_geometries_to_send(t6a,up_alien_tree_3);
@@ -390,10 +397,10 @@ species unity_linker parent: abstract_unity_linker {
 		list<tree> t7f <- tree where ((each.tree_type = 7) and (each.it_state = 4) and (each.it_alien = false));
 		list<tree> t7a <- tree where ((each.tree_type = 7) and (each.it_state = 4) and (each.it_alien = true));
 		if not empty(t7){
-			do add_geometries_to_send(t7,up_tree_2a);
+			do add_geometries_to_send(t7,up_tree_1a);
 		}
 		if not empty(t7f){
-			do add_geometries_to_send(t7f,up_tree_2b);
+			do add_geometries_to_send(t7f,up_tree_1b);
 		}
 		if not empty(t7a){
 			do add_geometries_to_send(t7a,up_alien_tree_1);
@@ -403,10 +410,10 @@ species unity_linker parent: abstract_unity_linker {
 		list<tree> t8f <- tree where ((each.tree_type = 8) and (each.it_state = 4) and (each.it_alien = false));
 		list<tree> t8a <- tree where ((each.tree_type = 8) and (each.it_state = 4) and (each.it_alien = true));
 		if not empty(t8){
-			do add_geometries_to_send(t8,up_tree_3a);
+			do add_geometries_to_send(t8,up_tree_2a);
 		}
 		if not empty(t8f){
-			do add_geometries_to_send(t8f,up_tree_3b);
+			do add_geometries_to_send(t8f,up_tree_2b);
 		}
 		if not empty(t8a){
 			do add_geometries_to_send(t8a,up_alien_tree_2);
@@ -416,10 +423,10 @@ species unity_linker parent: abstract_unity_linker {
 		list<tree> t9f <- tree where ((each.tree_type = 9) and (each.it_state = 4) and (each.it_alien = false));
 		list<tree> t9a <- tree where ((each.tree_type = 9) and (each.it_state = 4) and (each.it_alien = true));
 		if not empty(t9){
-			do add_geometries_to_send(t9,up_tree_4a);
+			do add_geometries_to_send(t9,up_tree_3a);
 		}
 		if not empty(t9f){
-			do add_geometries_to_send(t9f,up_tree_4b);
+			do add_geometries_to_send(t9f,up_tree_3b);
 		}
 		if not empty(t9a){
 			do add_geometries_to_send(t9a,up_alien_tree_3);
@@ -429,10 +436,10 @@ species unity_linker parent: abstract_unity_linker {
 		list<tree> t10f <- tree where ((each.tree_type = 10) and (each.it_state = 4) and (each.it_alien = false));
 		list<tree> t10a <- tree where ((each.tree_type = 10) and (each.it_state = 4) and (each.it_alien = true));
 		if not empty(t10){
-			do add_geometries_to_send(t10,up_tree_5a);
+			do add_geometries_to_send(t10,up_tree_4a);
 		}
 		if not empty(t10f){
-			do add_geometries_to_send(t10f,up_tree_5b);
+			do add_geometries_to_send(t10f,up_tree_4b);
 		}
 		if not empty(t10a){
 			do add_geometries_to_send(t10a,up_alien_tree_2);
@@ -442,10 +449,10 @@ species unity_linker parent: abstract_unity_linker {
 		list<tree> t11f <- tree where ((each.tree_type = 11) and (each.it_state = 4) and (each.it_alien = false));
 		list<tree> t11a <- tree where ((each.tree_type = 11) and (each.it_state = 4) and (each.it_alien = true));
 		if not empty(t11){
-			do add_geometries_to_send(t11,up_tree_1a);
+			do add_geometries_to_send(t11,up_tree_5a);
 		}
 		if not empty(t11f){
-			do add_geometries_to_send(t11f,up_tree_1b);
+			do add_geometries_to_send(t11f,up_tree_5b);
 		}
 		if not empty(t11a){
 			do add_geometries_to_send(t11a,up_alien_tree_2);
@@ -455,10 +462,10 @@ species unity_linker parent: abstract_unity_linker {
 		list<tree> t12f <- tree where ((each.tree_type = 12) and (each.it_state = 4) and (each.it_alien = false));
 		list<tree> t12a <- tree where ((each.tree_type = 12) and (each.it_state = 4) and (each.it_alien = true));
 		if not empty(t12){
-			do add_geometries_to_send(t12,up_tree_2a);
+			do add_geometries_to_send(t12,up_tree_6a);
 		}
 		if not empty(t12f){
-			do add_geometries_to_send(t12f,up_tree_2b);
+			do add_geometries_to_send(t12f,up_tree_6b);
 		}
 		if not empty(t12a){
 			do add_geometries_to_send(t12a,up_alien_tree_3);

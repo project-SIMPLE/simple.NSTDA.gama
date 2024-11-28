@@ -12,7 +12,15 @@
 // 14Nov2024
 // ให้ผู้เล่นเข้า zone tutorial ก่อน แล้วถ้าผู้เล่นเล่นเสร็จแล้ว พี่เติ้ลจะส่ง playerID ของคนที่เสร็จแล้วมาให้ done!
 // ถ้าส่งมาครบแล้วปุ่ม start ถึงจะกดได้ แล้ววาร์ปทุกคนไปที่ zone แรก done!
-// เล่นจบแล้ววาร์ปไป tutorial
+// เล่นจบแล้ววาร์ปไป tutorial done!
+
+// 28Nov2024
+// ทำกราฟใหม่
+// แก้ tutorial ให้เห็นชัดขึ้น
+// เปลี่ยนชื่อ Tree1 Tree2... ให้เป็นชื่อต้นไม้
+// ทำให้ใสจำนวนเมล็ดที่ต้องเก็บในแต่ละรอบได้
+// ทำของคิตให้เป็น action มีกราฟทิ้งไว้
+
 
 model mainGAMAforesttrails
 
@@ -69,7 +77,7 @@ global{
 	list<string> player_id_list <- [];
 	
 	list<string> player_id_finish_tutorial_list <- [];
-	bool tutorial_finish <- true;
+	bool tutorial_finish <- false;
 	bool move_player_when_game_finish <- true;
 	
 	map<string, int> map_player_id ;
@@ -466,7 +474,7 @@ experiment init_exp type: gui {
 			camera 'default' locked:false distance:550 ;
 //			grid my_grid border: #darkgreen;
 			species road refresh: false;
-			species island;
+			species island refresh: false;
 			species tree;
 //			species player2;
 			species sign;
