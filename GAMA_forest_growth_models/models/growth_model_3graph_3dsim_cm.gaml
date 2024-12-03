@@ -5,12 +5,17 @@
 * Tags: 
 */
 
+// ใช้พื้นที่ 100*100 m
+// ถ้า overlap กันให้ต้นที่เล็กกว่าตาย
+// max height หน่วยเป็น เมตร
+// 
 
 model GROWTH_Model
 
 global{
-	float map_size <- 100#m;
-	geometry shape <- square(map_size);
+	
+	int map_size <- 100;
+	geometry shape <- square(map_size #m);
 	
 	int n_type <- 15;
 	int n_tree <- 100;
@@ -34,13 +39,14 @@ global{
 	list list_deathtree <- [];
 	list<list> avg_height_list <- [[],[],[],[],[],[],[],[],[],[],[],[],[],[],[]];
 	list<list> avg_RCD_list <- [[],[],[],[],[],[],[],[],[],[],[],[],[],[],[]];
-	list<int> count_tree_survi <- list_with(n_type,0); //[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0];
-	list<int> finaldeath_tree <- list_with(n_type,0);  //[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0];
+	list<int> count_tree_survi <- [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0];
+	list<int> finaldeath_tree <- [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0];
 	list<rgb> color_list <- [#red, #blue, #green, #teal, #cyan, #magenta, #orange, #purple, #pink, #brown, 
 								#lime, #crimson, #indigo, #gray, #coral];
 	
 	// Import Data
 	file my_csv_file <- csv_file( "../includes/RGR_GAMA_tree.csv");
+//	file my_csv_file <- csv_file( "../includes/data_RGR.csv");
 	
 	init{
 //		write avg_height_list;
@@ -49,32 +55,32 @@ global{
 //		write finaldeath_tree;
 		matrix data <- matrix(my_csv_file);
 
-		loop i from: 2 to: data.columns -1{
+		loop i from: 4 to: data.columns -1{
 			loop j from: 0 to: data.rows-1{
-				if i = 2{
+				if i = 4{
 					add int(data[i,j]) to:Max_DBH;
 				}
-				if i = 3{
+				if i = 5{
 					add int(data[i,j]) to:Max_Height;
 
 				}
-				if i = 4{
+				if i = 6{
 					add float(data[i,j]) to:survi_rate_y1;
 		
 				}
-				if i = 5{
+				if i = 7{
 					add float(data[i,j]) to:survi_rate_y2;
 						
 				} 
-				if i = 6{
+				if i = 8{
 					add float(data[i,j]) to:survi_rate_y3;
 				
 				} 
-				if i = 7{
+				if i = 9{
 					add float(data[i,j]) to:Height_growth_rate;
 			
 				} 
-				if i = 8{
+				if i = 10{
 					add float(data[i,j]) to:RCD_growth_rate;	
 				
 				} 
@@ -90,13 +96,14 @@ global{
 		ask tree {
 			add self to: list_survive_tree;
 //			write all_tree;
-//			write avg_height_list;
 		}
+		
+		write Max_DBH;
 	}
 
 	reflex inc_height_RCD {
-		count_tree_survi <- list_with(n_type,0);
-		finaldeath_tree <- list_with(n_type,0);
+		count_tree_survi <- [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0];
+		finaldeath_tree <- [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0];
 		
 		ask tree{
 			if self in list_survive_tree{
@@ -127,7 +134,6 @@ global{
 	}
 
 	reflex cal_avg{
-		
 		loop j from:1 to:n_type{
 			float sum_height <- 0.0;
 			float sum_RCD <- 0.0;
@@ -143,12 +149,9 @@ global{
 //				avg_tree_list[j-1] <- sum/count; 	
 				add with_precision(sum_height/count, 2)to: avg_height_list[j-1] ;
 				add with_precision(sum_RCD/count, 2)to: avg_RCD_list[j-1];
-//				write with_precision(sum_height/count, 2);
 			}
 		}
 //		write avg_tree_list; 
-		write avg_height_list;
-//		write avg_RCD_list;
 	}
 	
 	
@@ -161,7 +164,6 @@ species tree{
 	int tree_type;
 	float height <- 0.0;
 	float RCD <- 0.0;
-//	bool die <- false;
 
 	
 	// Logistic Growth Model
@@ -171,9 +173,9 @@ species tree{
 
 		float height_logist <- (init_height * max_height) / 
 								(init_height + (max_height - init_height) * exp (-(( growth_rate ) * (cycle - init_time) ))) ;
+								//max_height * (1 - exp(-(growth_rate * cycle)));
 								//write height_logist;
 								//write growth_rate;
-								
 		return height_logist;
 	}
 	
@@ -183,8 +185,6 @@ species tree{
 			if flip(1 - float(survi_rate_y1[tree_type - 1])){
 				remove self from: list_survive_tree;
 				add self to: list_deathtree;
-//				die <- true;
-				
 //				write "sur1" + flip(1 - float(survi_rate_y1[tree_type - 1]));
 //				write "sur1 " + (1 - float(survi_rate_y1[tree_type - 1])) +  flip(1 - float(survi_rate_y1[tree_type - 1]));
 			}
@@ -193,8 +193,6 @@ species tree{
 			if flip(1 - float(survi_rate_y2[tree_type - 1])){
 				remove self from: list_survive_tree;
 				add self to: list_deathtree;
-//				die <- true;
-				
 //				write "sur2 " + (1 - float(survi_rate_y2[tree_type - 1])) + flip(1 - float(survi_rate_y2[tree_type - 1]));
 //				write "sur2" + flip(1 - float(survi_rate_y2[tree_type - 1]));
 			}
@@ -203,14 +201,12 @@ species tree{
 			if flip(1 - survi_rate_y5){
 				remove self from: list_survive_tree;
 				add self to: list_deathtree;
-//				die <- true;
-				
 			}
 		}
 	}
 	
 	aspect base {
-//		draw cylinder(height#cm, RCD#cm) color:die?  color_list[tree_type - 1]:rgb(63, 64, 63);
+		
 		draw cylinder(RCD#cm, height#cm) color:color_list[tree_type - 1];
 	}
 }

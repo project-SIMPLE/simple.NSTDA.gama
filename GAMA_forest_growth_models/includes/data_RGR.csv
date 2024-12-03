@@ -1,0 +1,16 @@
+No,ScientificName,Habit,Pioneer/Climax,Max_DBH_m,max_height_m,Survival data year#1,Survival data year#2,Survival data year#3,RGR Height year#3,RGR RCD year#3
+1,Albizia odoratissima (L.f.) Benth.,Tree,Pioneer,0.5,30,95.83,79.58,26.67,19.93,23.59
+2,Dalbergia cultrata Grah. ex Bth.,Tree,Climax,0.36,25,75,75,34,35.24,71.04
+3,Erythrina stricta Roxb.,Tree,Pioneer,0.65,35,95.56,64.44,35.56,66.45,101.65
+4,Ficus altissima Bl.,Tree,Climax,2.5,30,94.44,94.44,94.44,22.42,151.51
+5,Magnolia garrettii (Craib) V.S.Kumar,Tree,Climax,0.41,25,93.3,65.71,55.69,75.43,122.95
+6,Prunus cerasoides D. Don,Tree,Pioneer,0.38,30,91.68,75.15,63.77,95.76,143.64
+7,Quercus semiserrata Roxb.,Tree,Climax,0.99,10,93.59,75.26,54.64,52.3,68.39
+8,Debregeasia longifolia (Burm.f.) Wedd.,Shrub,Pioneer,0.16,5,96.67,65,41.67,81.55,122.02
+9,Eurya acuminata DC.,Shrub/Shrubby Tree,Climax,0.67,5,94.79,76.04,42.71,32.48,96.53
+10,Ficus subulata Blume,Shrub/Tree,Climax,0.075,15,90,75,50,50,100
+11,Diospyros glandulosa Lace,Shrubby Tree,Climax,0.19,15,90.74,62.15,49.54,60.93,106.01
+12,Macaranga denticulata (Blume) Müll.Arg.,Shrubby Tree,Pioneer,0.40,10,79.07,34.68,25.09,125.31,190.72
+13,Litsea cubeba (Lour.) Pers.,Shrubby Tree,Climax,0.25,12,90,75,50,50,100
+14,Ostodes paniculata var. paniculata,Shrubby Tree,Climax,0.25,8,92.55,74.73,49,55,62.65
+15,Phyllanthus emblica L.,Shrubby Tree/ Tree,Pioneer,0.21,20,92.19,85.4,59.17,67.61,137.13
