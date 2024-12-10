@@ -5,10 +5,11 @@
 * Tags: 
 */
 
-// ใช้พื้นที่ 100*100 m
 // ถ้า overlap กันให้ต้นที่เล็กกว่าตาย
-// max height หน่วยเป็น เมตร
-// 
+// ทำเป็น multi-player 6 graph (6 teams) n_team
+// read matrix 
+
+
 
 model GROWTH_Model
 
@@ -21,7 +22,7 @@ global{
 	int n_tree <- 100;
 	int n_simulation <- 20;
 	
-	float init_height <- 1.0;
+	float init_height <- 50.0;
 	float init_time <- 0.0;
 	int num_of_survive_tree <- 0;
 	int num_of_dead_tree <- 0;
@@ -45,8 +46,8 @@ global{
 								#lime, #crimson, #indigo, #gray, #coral];
 	
 	// Import Data
-	file my_csv_file <- csv_file( "../includes/RGR_GAMA_tree.csv");
-//	file my_csv_file <- csv_file( "../includes/data_RGR.csv");
+	file my_csv_file <- csv_file( "../includes/RGR_GAMA_tree_cm.csv");
+
 	
 	init{
 //		write avg_height_list;
