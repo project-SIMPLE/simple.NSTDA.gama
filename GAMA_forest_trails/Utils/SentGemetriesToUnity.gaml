@@ -6,7 +6,7 @@
 */
 model sendGeometriesToUnity
 
-import "../models/main_GAMA_forest_trails.gaml"
+import "../models/optimize_GAMA_trails.gaml"
 
 
 global {
