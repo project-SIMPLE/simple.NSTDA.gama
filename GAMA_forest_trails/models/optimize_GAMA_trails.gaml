@@ -13,6 +13,9 @@ import "optimize_species.gaml"
 // ทำ แสดงผลการเล่น tutorial ว่าคนไหนเสร็จหรือยังไม่เสร็จ
 // ทำส่วนที่บอกว่าแว่นไหนคือ team ไหน
 
+// ไม่แสดงจุดบนต้นไม้เปลี่ยนเป็นไฮไลท์โซนแทน
+// ปุ่มกดตอน Tutorial ยังกดได้อยู่แล้วจะรีเซ็ต tutorial ใหม่
+
 global{
 	// Parameter
 	int n_team <- 6;
@@ -61,7 +64,7 @@ global{
 	list<string> player_id_list <- [];
 	
 	list<string> player_id_finish_tutorial_list <- [];
-	bool tutorial_finish <- false;
+	bool tutorial_finish <- true;
 	
 	map<string, int> map_player_id ;
 	
@@ -190,19 +193,25 @@ global{
 	action save_total_seeds_to_csv;
 	
 	reflex do_resume when: it_start and can_start{
-
-		ask sign{
-			icon <- stop;
+		if user_confirm("Confirmation","Do you want to start?"){
+			ask sign{
+				icon <- stop;
+			}
+			
+			if tutorial_finish{
+				count_start <- count_start + 1 ;
+				init_time <- gama.machine_time div 1000;
+				can_start <- false ;
+				do growth_up;
+			}
+			
+			do resume_game;
+		}
+		else{
+			do pause;
 		}
 		
-		if tutorial_finish{
-			count_start <- count_start + 1 ;
-			init_time <- gama.machine_time div 1000;
-			can_start <- false ;
-			do growth_up;
-		}
 		
-		do resume_game;
 	}
 	action resume_game;
 	
