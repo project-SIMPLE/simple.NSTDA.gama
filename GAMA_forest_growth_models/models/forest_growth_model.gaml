@@ -57,9 +57,13 @@ global{
 	file my_csv_file <- csv_file( "../includes/GAMA_RGR_16-12-24.csv");
 	
 	// Read seed data
-	file seeds_file <- csv_file( "../result/total_seeds.csv");
-	file alien_seeds_file <- csv_file( "../result/total_alien_seeds.csv");
+
+	file seeds_file <- csv_file("../../GAMA_forest_trails/results/total_seeds.csv");
+	file alien_seeds_file <- csv_file("../../GAMA_forest_trails/results/total_alien_seeds.csv");
 	
+	int cnt_row_in_file ;
+	
+
 	init{
 		
 		matrix seed_data <- matrix(seeds_file);
@@ -75,6 +79,8 @@ global{
 		
 		// tree data
 		matrix tree_data <- matrix(my_csv_file);
+		
+		cnt_row_in_file <- seed_data.rows;
 		
 		loop i from: 4  to: tree_data.columns-1{
 			loop j from: 1 to:tree_data.rows-1{
@@ -258,7 +264,8 @@ species old_tree{
 experiment visualize_tree_growth{
 	
 	init{
-		loop i from:2 to:6{
+		write "Here! " + cnt_row_in_file;
+		loop i from:2 to:cnt_row_in_file{
 			create simulation with:[player_ID:i];
 		}
 	}

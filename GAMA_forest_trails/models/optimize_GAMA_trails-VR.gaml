@@ -17,8 +17,10 @@ global {
 			add 'Team' + int(key_player + 1) to: temp2;
 			
 			loop i from:0 to:length(n_tree) - 1{
-				add container(seeds[key_player])[i] to: temp;
-				add container(alien_seeds[key_player])[i] to: temp2;
+				if i!=0 or i!=9{
+					add container(seeds[key_player])[i] to: temp;
+					add container(alien_seeds[key_player])[i] to: temp2;
+				}
 			}
 			
 			write temp;
