@@ -5,7 +5,29 @@
 * Tags: 
 */
 
+<<<<<<< Updated upstream
 model mainGAMAforesttrails2
+=======
+// เพิ่มระยะห่างต้นไม้ + ลดจำนวนต้นไม้
+// เอเลี่ยนรอบ 2
+// สัปดาห์หน้าทำ เอเลี่ยนให้เสร็จ
+
+// 14Nov2024
+// ให้ผู้เล่นเข้า zone tutorial ก่อน แล้วถ้าผู้เล่นเล่นเสร็จแล้ว พี่เติ้ลจะส่ง playerID ของคนที่เสร็จแล้วมาให้ done!
+// ถ้าส่งมาครบแล้วปุ่ม start ถึงจะกดได้ แล้ววาร์ปทุกคนไปที่ zone แรก done!
+// เล่นจบแล้ววาร์ปไป tutorial done!
+
+// 28Nov2024
+// ทำกราฟใหม่
+// แก้ tutorial ให้เห็นชัดขึ้น
+// เปลี่ยนชื่อ Tree1 Tree2... ให้เป็นชื่อต้นไม้
+// ทำให้ใสจำนวนเมล็ดที่ต้องเก็บในแต่ละรอบได้
+// ทำของคิตให้เป็น action มีกราฟทิ้งไว้
+
+// 7 กับ 9
+
+model mainGAMAforesttrails
+>>>>>>> Stashed changes
 
 import 'species.gaml'
 import "main_GAMA_forest_trails-VR.gaml"
@@ -20,7 +42,11 @@ import "main_GAMA_forest_trails-VR.gaml"
 
 global{
 	shape_file Trail_shape_file <- shape_file("../includes/Trail.shp");
+<<<<<<< Updated upstream
 	shape_file offtrail_shape_file <- shape_file("../includes/export/offtrail.shp");
+=======
+	csv_file my_csv_file <- csv_file("../includes/pheno_tz_3Dec2024.csv");
+>>>>>>> Stashed changes
 
 	geometry usable_area;
 	geometry usable_area_for_tree;
@@ -30,10 +56,20 @@ global{
 	float height <- shape.height;
 	
 	// Parameter
+<<<<<<< Updated upstream
 	int n_team <- 4;
 	list n_tree <- [50,50,50];
 	int collect_seeds_distance <- 5;
 	int stop_time <- 10; //second
+=======
+	int n_team <- 2;
+//	list n_tree <- [50,50,50,50,50,50,50,50,50,50,50,50];
+//	list n_tree <- [50,50,50];
+	list<list<int>> fruiting_stage <- list_with(12, list_with(6, 0));
+	list<list<int>> n_tree <- list_with(12, list_with(6, 0));
+	list<list<int>> alien_tree <- list_with(12, list_with(6, 0));
+	int stop_time <- 180; //second
+>>>>>>> Stashed changes
 	
 	// Variable
 	int n_turn <- 6;
@@ -101,6 +137,7 @@ global{
 			location <- {width/3 - 35, -45, 0};
 		}
 		
+<<<<<<< Updated upstream
 		loop i from:0 to:(length(n_tree)-1){		
 			loop j from:1 to:(n_tree[i] div 2){
 				create tree{
@@ -108,6 +145,128 @@ global{
 //					do initialize(usable_area);
 					ask tree {
 						usable_area_for_tree <- usable_area_for_tree - self.shape;
+=======
+		create island{
+			location <- {width/2 - 20, height/2 - 20, 0};
+		}
+		
+		bool still_do <- true;
+		loop while: still_do {
+			still_do <- false;
+			bool is_ok <- true;
+			ask tree {do die;}
+			usable_area <- union(road collect each.geom_visu) inter world.shape ;
+			usable_area_for_tree <- usable_area - 3 ;
+
+			road_midpoint <- split_geometry(usable_area_for_tree, {width/3, height/2});
+//			write road_midpoint;
+//			write length(road_midpoint);
+			
+//			create road from:road_midpoint;
+//			
+//			ask road[3]{
+//				color2 <- #red;
+//			}
+//			ask road[4]{
+//				color2 <- #blue;
+//			}
+//			ask road[5]{
+//				color2 <- #green;
+//			}
+//			ask road[6]{
+//				color2 <- #yellow;
+//			}
+//			ask road[7]{
+//				color2 <- #lime;
+//			}
+//			ask road[8]{
+//				color2 <- #purple;
+//			}
+//			
+//			ask road[2]{
+//				do die;
+//			}
+//			
+//			ask road[1]{
+//				do die;
+//			}
+//			
+//			ask road[0]{
+//				do die;
+//			}
+			
+			
+			int count_create_tree <- 0;
+			
+			loop i from:0 to:length(n_tree)-1{
+				loop j from:0 to:length(n_tree[i])-1{
+					if n_tree[i][j] > 0{
+						create tree number:n_tree[i][j]{
+							tree_type <- i+1;
+//							write 'create tree type ' + tree_type + ' number ' + n_tree[i][j] + ' from ' + i + ' ' + j;
+							
+//							if j = 0{
+//								color <- #red;
+//							}
+//							if j = 1{
+//								color <- #blue;
+//							}
+//							if j = 2{
+//								color <- #green;
+//							}
+//							if j = 3{
+//								color <- #yellow;
+//							}
+//							if j = 4{
+//								color <- #lime;
+//							}
+//							if j = 5{
+//								color <- #purple;
+//							}
+							
+							if count_create_tree > 0{
+								ask tree[count_create_tree-1] {
+									usable_area_for_tree <- usable_area_for_tree - self.shape;
+									usable_area <- usable_area + self.shape;
+									save usable_area_for_tree to:"../includes/export/usable_area_for_tree.shp" format:"shp";
+								}
+							}
+							
+							if (usable_area_for_tree = nil) {
+								is_ok <- false;
+							} 
+							
+							else {
+//								location <- (point(usable_area_for_tree closest_points_with(road_midpoint[j])));
+//								write point(usable_area_for_tree closest_points_with(road_midpoint[j]));
+
+//								geometry spawn_point <- one_of(usable_area_for_tree overlapping road_midpoint);
+//								location <- any_location_in(spawn_point);
+//								location <- any_location_in(usable_area_for_tree) when distance_between(location, road_midpoint[j].location) > 70;
+								
+//								spawn_point <- one_of(road_midpoint);
+//								location <- any_location_in(one_of(road_midpoint));
+								
+								location <- any_location_in(usable_area_for_tree);
+								loop while: location distance_to road_midpoint[map_zone[j]].location > 100{
+//									write "Again!" + count_create_tree + " norm: " + location distance_to road_midpoint[j].location;
+									location <- any_location_in(usable_area_for_tree);
+								}
+
+//								write my_grid(location);
+//								loop while: my_grid(location) != my_grid[j] {
+//									write "Again!" + count_create_tree;
+//									location <- any_location_in(usable_area_for_tree);
+//								}
+								
+								count_create_tree <- count_create_tree + 1;
+							}
+						}
+						
+						if (not is_ok) {
+							break;
+						}
+>>>>>>> Stashed changes
 					}
 					location <- any_location_in(usable_area_for_tree);
 //					location <- any_location_in(usable_area);
@@ -311,6 +470,7 @@ experiment First type: gui {
 			chart "Total seeds" type:histogram reverse_axes:true
 			y_range:[0, 20 + max_total_seed]
 			x_serie_labels: [""]
+			
 			style:"3d"
 			series_label_position: xaxis
 			{
