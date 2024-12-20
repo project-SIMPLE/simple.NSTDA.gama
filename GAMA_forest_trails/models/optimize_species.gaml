@@ -38,7 +38,7 @@ species tree{
 	}
 	
 	aspect for_plot{
-		draw circle(1#m) color:color;
+		draw circle(3#m) color:color;
 	}
 }
 

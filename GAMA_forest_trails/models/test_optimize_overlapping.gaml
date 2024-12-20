@@ -16,7 +16,15 @@ global{
 	geometry usable_area_for_tree;
 	geometry my_overlap;
 	
+	
+	map<string, int> map_player_id <- ["Player_101"::1, "Player_102"::2, "Player_103"::3, "Player_104"::4, "Player_105"::5, "Player_106"::6];
+	list<rgb> player_colors <- [#blue, #red, #green, #yellow, #black, #white];
 	init{
+		
+		write map_player_id;
+		write "" + "Player_106" + " is team " + map_player_id["Player_106"];
+		write " has color " + player_colors[map_player_id["Player_106"]-1];
+			
 		create road from: Trail_shape_file;
 		
 		usable_area <- union(road collect each.geom_visu) inter world.shape ;

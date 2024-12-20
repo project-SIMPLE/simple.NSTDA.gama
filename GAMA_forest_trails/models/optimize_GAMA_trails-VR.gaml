@@ -9,7 +9,7 @@ global {
 			add 'Type' + (i+1) to: header;
 		}
 		ask unity_player{
-			int key_player <- map_player_id[name];
+			int key_player <- team_id-1;
 			list temp <- [];
 			list temp2 <- [];
 			
@@ -17,13 +17,13 @@ global {
 			add 'Team' + int(key_player + 1) to: temp2;
 			
 			loop i from:0 to:length(n_tree) - 1{
-				if i!=0 or i!=9{
+				if not (i=0 or i=9){
 					add container(seeds[key_player])[i] to: temp;
 					add container(alien_seeds[key_player])[i] to: temp2;
 				}
 			}
 			
-			write temp;
+//			write temp;
 			if self = unity_player[0]{
 				save temp to: "../results/total_seeds.csv" header:false format:"csv" rewrite:true;
 			}
@@ -42,17 +42,21 @@ global {
 	}
 	
 	action resume_game {
-		write 'resume_game tutorial_finish2: ' + tutorial_finish; 
+//		write 'resume_game tutorial_finish2: ' + tutorial_finish; 
 		can_start <- false;
-		if not tutorial_finish and not alien_experimant{
+		
+		if alien_experimant{
+			tutorial_finish <- true;
+		}
+		if not tutorial_finish{
 			ask unity_linker {
 				do send_message players: unity_player as list mes: ["Head"::"Tutorial", "Body"::""];
 				write "send Tutorial";
 			}
 			ask unity_player{
-				color <- player_colors[map_player_id[name]-1];
 				location <- {180, 120, 0};
 				ask unity_linker {
+//					write new_player_position;
 					new_player_position[myself.name] <- [myself.location.x *precision,myself.location.y *precision,myself.location.z *precision];
 					move_player_event <- true;
 				}
@@ -81,23 +85,34 @@ global {
 
 			}
 		}
-		write 'before pause_game tutorial_finish' + tutorial_finish;
-		tutorial_finish <- false;
-		write 'after pause_game tutorial_finish' + tutorial_finish;
-		player_id_finish_tutorial_list <- [];
-		who_finish_tutorial <- [false,false,false,false,false,false];
+		
+		if not alien_experimant{
+	//		write 'before pause_game tutorial_finish' + tutorial_finish;
+			tutorial_finish <- false;
+	//		write 'after pause_game tutorial_finish' + tutorial_finish;
+			player_id_finish_tutorial_list <- [];
+			who_finish_tutorial <- [false,false,false,false,false,false];
+			
+		}
 	}
 	
 	reflex end_game when:time_now>=max_time{
 		time_now <- max_time;
 		can_start <- false;
+		it_end_game <- true;
 		do save_total_seeds_to_csv;
+		
+		ask sign{
+			self.icon <- stop;
+		}
 	}
 	
 	reflex update_player_zone when: it_start and tutorial_finish and not empty(unity_player){
 		loop i from:0 to:length(player_walk_in_zone)-1{
+//			write "i=" + i + " and max is " + (length(player_walk_in_zone)-1) ;
 			ask unity_player overlapping zone[i].shape {
-				player_walk_in_zone[map_player_id[name]] <- i+1;
+//				write "Update " + self ;
+				player_walk_in_zone[team_id-1] <- i+1;
 			} 
 		}
 	}
@@ -151,9 +166,14 @@ species unity_linker parent: abstract_unity_linker {
 	unity_property up_player_jam;
 	
 	
-	action tutorial_finish(string player_ID, string tutorial_status){
-		add player_ID to: player_id_finish_tutorial_list;
+	action tutorial_finish(string player_ID, string tutorial_status){		
+		if not (player_ID in player_id_finish_tutorial_list){
+			add player_ID to: player_id_finish_tutorial_list;
+		}
+		
 		write "Player " + player_ID + " (Team: " + map_player_id[player_ID] + ") finished tutorial.";
+		who_finish_tutorial[map_player_id[player_ID]-1] <- true;
+		
 		if length(player_id_finish_tutorial_list) >= length(unity_player){
 			ask world{
 				ask sign{
@@ -163,15 +183,14 @@ species unity_linker parent: abstract_unity_linker {
 				it_start <- false;
 				do pause_game;
 			}
-			who_finish_tutorial[map_player_id[player_ID]] <- true;
 			tutorial_finish <- true;
-			write 'tutorial_finish1: ' + tutorial_finish; 
+//			write 'tutorial_finish1: ' + tutorial_finish; 
 		}
 	}
 	
 	action collect_seeds(string player_ID, string tree_ID){
 		write "Player " + player_ID + " collect: " + tree_ID;
-		int key_player <- map_player_id[player_ID];
+		int key_player <- map_player_id[player_ID]-1;
 		int key_tree <- int(tree_ID);
 		write "TreeID: " + tree_ID;
 		write "Key Tree: " + key_tree;
@@ -459,12 +478,20 @@ species unity_linker parent: abstract_unity_linker {
 
 species unity_player parent: abstract_unity_player{
 	float player_size <- 20.0;
-	rgb color <- player_colors[map_player_id[name]-1];
-	float cone_distance <- 10.0;
+	rgb color ; //<- player_colors[team_id-1];
+	float cone_distance <- 50.0;
 	float cone_amplitude <- 90.0;
 	float player_rotation <- 90.0;
 	bool to_display <- true;
 	float z_offset <- 2.0;
+	
+	int team_id ;
+	
+	init{
+		team_id <- map_player_id[name];
+		color <- player_colors[team_id-1];		
+	}
+	
 	aspect default {
 		if to_display {
 			if selected {
@@ -502,10 +529,10 @@ experiment First_vr_xp parent:init_exp autorun: false type: unity {
 //			);
 		}
 		
-		if not(id in player_id_list){
-			add id to: player_id_list;
-			add id::length(unity_player)-1 to:map_player_id;
-		}
+//		if not(id in player_id_list){
+//			add id to: player_id_list;
+//			add id::length(unity_player)-1 to:map_player_id;
+//		}
 	}
 
 	action remove_player(string id_input) {
@@ -564,10 +591,10 @@ experiment Second_vr_xp parent:init_exp autorun: false type: unity {
 //			);
 		}
 		
-		if not(id in player_id_list){
-			add id to: player_id_list;
-			add id::length(unity_player)-1 to:map_player_id;
-		}
+//		if not(id in player_id_list){
+//			add id to: player_id_list;
+//			add id::length(unity_player)-1 to:map_player_id;
+//		}
 	}
 
 	action remove_player(string id_input) {

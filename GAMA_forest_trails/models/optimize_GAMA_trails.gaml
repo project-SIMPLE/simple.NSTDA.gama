@@ -21,7 +21,7 @@ import "optimize_species.gaml"
 global{
 	// Parameter
 	int n_team <- 6;
-	int stop_time <- 180; //second
+	int stop_time <- 10; //second
 	
 	// Variable
 	shape_file Trail_shape_file <- shape_file("../includes/Trail.shp");
@@ -66,20 +66,14 @@ global{
 	
 	list<string> player_id_finish_tutorial_list <- [];
 	bool tutorial_finish <- false;
+	bool it_end_game <- false;
 	
-	map<string, int> map_player_id <- ["Player_101"::1, 
-										"Player_102"::2, 
-										"Player_103"::3, 
-										"Player_104"::4, 
-										"Player_105"::5, 
-										"Player_106"::6];
+	map<string, int> map_player_id <- ["Player_101"::1, "Player_102"::2, "Player_103"::3, "Player_104"::4, "Player_105"::5, "Player_106"::6];
 										
 	list<bool> who_finish_tutorial <- [false,false,false,false,false,false];
-	list<int> player_walk_in_zone <- [0,0,0,0,0,0,0];
+	list<int> player_walk_in_zone <- [0,0,0,0,0,0];
 										
-	list<rgb> player_colors <- [#blue, #red, #green, #yellow, #black, #white];
-	
-	
+	list<rgb> player_colors <- [#blue, #red, #green, #yellow, #black, rgb(223,219,195)];
 	
 	init{
 		create road from: Trail_shape_file;
@@ -171,9 +165,6 @@ global{
 		save usable_area to:"../includes/export/usable_area.shp" format:"shp";
 		save usable_area_for_tree to:"../includes/export/usable_area_for_tree.shp" format:"shp";
 		save union(road_midpoint) to:"../includes/export/road_midpoint.shp" format:"shp";
-		
-//		list<tree> tree_type7 <- tree where (each.tree_type = 7);
-//		write 'tree_type7 ' + tree_type7;
 	}
 		
 	reflex update_time_and_bound when: it_start and tutorial_finish{
@@ -202,36 +193,53 @@ global{
 	action save_total_seeds_to_csv;
 	
 	reflex do_resume when: it_start and can_start{
-		if user_confirm("Confirmation","Do you want to start?"){
-			ask sign{
+		write "do_resume";
+		ask sign{
 				icon <- stop;
-			}
-			
-			if tutorial_finish{
-				count_start <- count_start + 1 ;
-				init_time <- gama.machine_time div 1000;
-				can_start <- false ;
-				do growth_up;
-			}
-			
-			do resume_game;
 		}
-		else{
-			it_start <- false;
-			do pause;
+			
+		if tutorial_finish{
+			count_start <- count_start + 1 ;
+			init_time <- gama.machine_time div 1000;
+			can_start <- false ;
+			do growth_up;
 		}
+		
+		do resume_game;
+			
+//		if user_confirm("Confirmation","Do you want to start?"){
+//			ask sign{
+//				icon <- stop;
+//			}
+//			
+//			if tutorial_finish{
+//				count_start <- count_start + 1 ;
+//				init_time <- gama.machine_time div 1000;
+//				do growth_up;
+//			}
+//			
+//			can_start <- false ;
+//			do resume;
+//			do resume_game;
+//		}
+//		else{
+//			it_start <- false;
+//			do pause;
+//		}
 		
 		
 	}
 	action resume_game;
 	
-	reflex do_pause when: (time_now >= stop_time*count_start) and (cycle != 0) and not can_start{
+	reflex do_pause when: (time_now >= stop_time*count_start) and (cycle != 0) and not can_start and tutorial_finish{
+		write "do_pause";
 		ask sign{
 			icon <- play;
 		}
 		
 		it_start <- false;
 		can_start <- true ;
+			
 		do pause_game;
 	}
 	
@@ -268,22 +276,17 @@ global{
 			tree_list <- tree where (each.tree_zone = count_start-1);
 			ask tree_list{
 				it_state <- 1 ;
-				if not it_alien{
-					self.color <- rgb(43, 150, 0);	
-				}
+				self.color <- rgb(43, 150, 0);	
+//				if not it_alien{
+//					self.color <- rgb(43, 150, 0);	
+//				}
 			}
-		}
-	}
-	reflex start_button when:cycle=0 and not paused{
-		if time_now<max_time{
-			do resume;
-			it_start <- true;
 		}
 	}
 }
 
 experiment init_exp type: gui {
-	list tree_name <- ['Qu','Sa','Ma','Ph','De','Di','Os','Ph','Ca','Gm'];
+	list tree_name <- ['Qu','Sa','Ma','Pho','De','Di','Os','Phy','Ca','Gm'];
 	
 	float seed <- 0.5;
 	
@@ -291,7 +294,7 @@ experiment init_exp type: gui {
 		layout vertical([horizontal([0::1, 1::1])::1, 2::1]) 
 		toolbars: false tabs: false parameters: false consoles: true navigator: false controls: false tray: false ;
 		display "Main" type: 3d background: rgb(50,50,50){
-			camera 'default' distance:700 locked:true;
+			camera 'default' distance:650 locked:true;
 //			species zone refresh: false;
 			species road refresh: false;
 			species island refresh: false;
@@ -313,11 +316,11 @@ experiment init_exp type: gui {
 			graphics Strings {
 				draw "Current Period: "+ count_start at:{width/3, -45} font:font("Times", 20, #bold+#italic) ; 
 				if tutorial_finish{
-					if time_now<max_time{
+					if not it_end_game{
 						draw "Remaining time: "+ ((stop_time*count_start - time_now) div 60) + " minutes " + ((stop_time*count_start - time_now) mod 60) + " seconds" at:{width/3, -20} font:font("Times", 20, #bold+#italic) ;
 					}
 					else{
-						draw "Finish!" at:{width/3, -20} font:font("Times", 20, #bold+#italic) ;
+						draw "Finished!" at:{width/3, -20} font:font("Times", 20, #bold+#italic) ;
 					}
 				}
 				else{
@@ -328,21 +331,26 @@ experiment init_exp type: gui {
 					if not tutorial_finish{
 						if who_finish_tutorial[i]{
 
-							draw "Team" + (i+1) + " Finish Tutorial!" at:{width+30, 20 + (40*i)} font:font("Times", 20, #bold+#italic) ;
+							draw "Team" + (i+1) + " Finished Tutorial!" at:{width+30, 20 + (40*i)} font:font("Times", 20, #bold+#italic) ;
 						}
 						else{
 							draw "Team" + (i+1) + " Not finish Tutorial..." at:{width+30, 20 + (40*i)} font:font("Times", 20, #bold+#italic) ;
 						}
 					}
 					else{
-						draw "Team" + (i+1) + " walk in zone " + player_walk_in_zone[i] at:{width+30, 20 + (40*i)} font:font("Times", 20, #bold+#italic) ;
+						if not it_end_game{
+							draw "Team" + (i+1) + " walk in zone " + player_walk_in_zone[i] at:{width+30, 20 + (40*i)} font:font("Times", 20, #bold+#italic) ;
+						}
+						else{
+							draw "Team" + (i+1) + " Finished Game" at:{width+30, 20 + (40*i)} font:font("Times", 20, #bold+#italic) ;							
+						}
+						
 					}
 				}
 			}
 		}
 		
-		display "Total seeds" type: 2d {
-			camera 'default' locked:true;
+		display "Total seeds" type: 2d locked:true{
 			chart "Total seeds" type:histogram reverse_axes:true
 			y_range:[0, 20 + max_total_seed]
 			x_serie_labels: [""]
@@ -358,19 +366,18 @@ experiment init_exp type: gui {
 			
 		}
 		
-		display "Summary" type: 2d { 		
-			camera 'default' locked:true;	
+		display "Summary" type: 2d locked:true{ 		
 			chart "Number of seeds by tree species and by team ID" type:histogram 
 			x_serie_labels: ["Species"] 				
 			y_range:[0, 10 + upper_bound] 		
 			style:"3d" 			  
 			series_label_position: xaxis {
 				loop i from:0 to:(n_team-1){
-					int temp <- 1 ;
+					int temp <- 0 ;
 					loop j from:0 to:((length(n_tree))-1){
-						if (j>0 and j<9) or (j>9){
-							write temp;
-							data "T"+ (i+1) + tree_name[temp-1] value: int(seeds[i][j] + alien_seeds[i][j]) 
+						if not (j=0 or j=9){
+							data "T"+ (i+1) + tree_name[temp] value: int(seeds[i][j] + alien_seeds[i][j]) 
+//							data "T"+ (i+1) + tree_name[temp] value: 50
 							color:player_colors[i]; 
 							temp <- temp + 1;
 						}
