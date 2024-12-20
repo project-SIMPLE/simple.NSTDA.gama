@@ -9,18 +9,19 @@ model optimizeGAMAtrails
 
 import "optimize_species.gaml"
 
-// สี player สี road
-// ทำ แสดงผลการเล่น tutorial ว่าคนไหนเสร็จหรือยังไม่เสร็จ
-// ทำส่วนที่บอกว่าแว่นไหนคือ team ไหน
+// ทำให้ start ด้วย mid ให้ได้
+// ทำเอเลี่ยนใหม่ done!
 
-// ไม่แสดงจุดบนต้นไม้เปลี่ยนเป็นไฮไลท์โซนแทน
-// ปุ่มกดตอน Tutorial ยังกดได้อยู่แล้วจะรีเซ็ต tutorial ใหม่
+//1. เปลี่ยนสีผู้เล่นตาม สีแว่น กับ ลดขนาดพัด done!
+//2. เช็คการเรียก model ต้นเบอร์ 7. Dios ใน period ที่ 5 done!
+//3.  ทำกราฟแท่งให้มีระยะห่างระหว่าง team & fix ไม่ให้กราฟเลื่อน done!
+//4. ปุ่ม start ตรง tutorial จะกดซ้ำไม่ได้ done!
+//5. จะบอกให้ครูรู้ว่า ให้ start game ได้ถ้าคนเล่น tutorial เสร๋จแล้ว done!
 
 global{
 	// Parameter
 	int n_team <- 6;
 	int stop_time <- 180; //second
-	list<rgb> player_colors <-[#green, #blue, #yellow, #orange, #lime, #purple];
 	
 	// Variable
 	shape_file Trail_shape_file <- shape_file("../includes/Trail.shp");
@@ -64,9 +65,21 @@ global{
 	list<string> player_id_list <- [];
 	
 	list<string> player_id_finish_tutorial_list <- [];
-	bool tutorial_finish <- true;
+	bool tutorial_finish <- false;
 	
-	map<string, int> map_player_id ;
+	map<string, int> map_player_id <- ["Player_101"::1, 
+										"Player_102"::2, 
+										"Player_103"::3, 
+										"Player_104"::4, 
+										"Player_105"::5, 
+										"Player_106"::6];
+										
+	list<bool> who_finish_tutorial <- [false,false,false,false,false,false];
+	list<int> player_walk_in_zone <- [0,0,0,0,0,0,0];
+										
+	list<rgb> player_colors <- [#blue, #red, #green, #yellow, #black, #white];
+	
+	
 	
 	init{
 		create road from: Trail_shape_file;
@@ -159,12 +172,8 @@ global{
 		save usable_area_for_tree to:"../includes/export/usable_area_for_tree.shp" format:"shp";
 		save union(road_midpoint) to:"../includes/export/road_midpoint.shp" format:"shp";
 		
-		ask tree {
-			list_of_state1 <- list<int>(assign_list_of_state(1, tree_type));
-			list_of_state2 <- list<int>(assign_list_of_state(2, tree_type));
-			list_of_state3 <- list<int>(assign_list_of_state(3, tree_type));
-			list_of_state4 <- list<int>(assign_list_of_state(4, tree_type));
-		}
+//		list<tree> tree_type7 <- tree where (each.tree_type = 7);
+//		write 'tree_type7 ' + tree_type7;
 	}
 		
 	reflex update_time_and_bound when: it_start and tutorial_finish{
@@ -208,6 +217,7 @@ global{
 			do resume_game;
 		}
 		else{
+			it_start <- false;
 			do pause;
 		}
 		
@@ -240,7 +250,7 @@ global{
 					loop j from:0 to: int(n_tree[i][count_start-1]*0.4)-1{
 						ask tree_list[j]{
 							write self;
-							color <- #red;
+							color <- #purple;
 							it_alien <- true;
 						}
 					}
@@ -264,6 +274,12 @@ global{
 			}
 		}
 	}
+	reflex start_button when:cycle=0 and not paused{
+		if time_now<max_time{
+			do resume;
+			it_start <- true;
+		}
+	}
 }
 
 experiment init_exp type: gui {
@@ -273,23 +289,22 @@ experiment init_exp type: gui {
 	
 	output{
 		layout vertical([horizontal([0::1, 1::1])::1, 2::1]) 
-		toolbars: false tabs: false parameters: false consoles: false navigator: false controls: false tray: false ;
+		toolbars: false tabs: false parameters: false consoles: true navigator: false controls: false tray: false ;
 		display "Main" type: 3d background: rgb(50,50,50){
-			camera 'default' locked:false distance:550 ;
+			camera 'default' distance:700 locked:true;
 //			species zone refresh: false;
 			species road refresh: false;
 			species island refresh: false;
-			species tree;
+			species tree aspect: for_plot;
 			species sign;
 			
 			event #mouse_down {
-				if ((#user_location distance_to sign[0]) < 25) {
+				if ((#user_location distance_to sign[0]) < 25) and can_start {
 					write 'click start!!!';
 					ask world {
 						if time_now<max_time{
 							do resume;
 							it_start <- true;
-//							tutorial_finish <- true;
 						}
 					}
 				}
@@ -309,10 +324,25 @@ experiment init_exp type: gui {
 					draw "Tutorial" at:{width/3, -20} font:font("Times", 20, #bold+#italic) ;
 				}
 				
+				loop i from:0 to:length(map_player_id)-1{
+					if not tutorial_finish{
+						if who_finish_tutorial[i]{
+
+							draw "Team" + (i+1) + " Finish Tutorial!" at:{width+30, 20 + (40*i)} font:font("Times", 20, #bold+#italic) ;
+						}
+						else{
+							draw "Team" + (i+1) + " Not finish Tutorial..." at:{width+30, 20 + (40*i)} font:font("Times", 20, #bold+#italic) ;
+						}
+					}
+					else{
+						draw "Team" + (i+1) + " walk in zone " + player_walk_in_zone[i] at:{width+30, 20 + (40*i)} font:font("Times", 20, #bold+#italic) ;
+					}
+				}
 			}
 		}
 		
 		display "Total seeds" type: 2d {
+			camera 'default' locked:true;
 			chart "Total seeds" type:histogram reverse_axes:true
 			y_range:[0, 20 + max_total_seed]
 			x_serie_labels: [""]
@@ -328,7 +358,8 @@ experiment init_exp type: gui {
 			
 		}
 		
-		display "Summary" type: 2d { 			
+		display "Summary" type: 2d { 		
+			camera 'default' locked:true;	
 			chart "Number of seeds by tree species and by team ID" type:histogram 
 			x_serie_labels: ["Species"] 				
 			y_range:[0, 10 + upper_bound] 		
@@ -345,6 +376,7 @@ experiment init_exp type: gui {
 						}
 						
 					}
+					data ""+ (i+1) value:0;
 				}
 			}
 		}	
