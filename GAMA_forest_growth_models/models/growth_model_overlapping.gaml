@@ -202,6 +202,8 @@ global{
 			}
 		}
 //		write avg_tree_list; 
+//		write list_survive_tree;
+		write count_tree_survi;
 	}
 	
 	reflex stop_simulation when: cycle >= n_simulation{
