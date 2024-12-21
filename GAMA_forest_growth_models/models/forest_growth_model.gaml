@@ -68,10 +68,14 @@ global{
 	file my_csv_file <- csv_file( "../includes/GAMA_RGR_16-12-24.csv");
 	
 	// Read seed data
-	file seeds_file <- csv_file( "../result/total_seeds.csv");
-	file alien_seeds_file <- csv_file( "../result/total_alien_seeds.csv");
+//	file seeds_file <- csv_file( "../result/total_seeds.csv");
+//	file alien_seeds_file <- csv_file( "../result/total_alien_seeds.csv");
 	file min_seed_file <- csv_file( "../result/min_collect_seed.csv");
 	
+	file seeds_file <- csv_file( "../../GAMA_forest_trails/results/total_seeds.csv");
+	file alien_seeds_file <- csv_file( "../../GAMA_forest_trails/results/total_alien_seeds.csv");
+
+
 	init{
 		// tree data
 		matrix tree_data <- matrix(my_csv_file);
@@ -338,13 +342,16 @@ species my_circles{
 
 
 experiment visualize_tree_growth{
-	float minimum_cycle_duration <- 0.1;
+	float minimum_cycle_duration <- 0.30;
 	
 	init{
 		type_of_scenario <- 3;
-		loop i from:2 to:6{
-			create simulation with:[player_ID:i];
+		if length(team_id) > 1{
+			loop i from:2 to:length(team_id){
+				create simulation with:[player_ID:i];
+			}
 		}
+		
 	}
 	
 	

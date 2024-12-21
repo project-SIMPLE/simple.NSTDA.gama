@@ -45,9 +45,10 @@ global {
 //		write 'resume_game tutorial_finish2: ' + tutorial_finish; 
 		can_start <- false;
 		
-		if alien_experimant{
-			tutorial_finish <- true;
-		}
+//		if alien_experimant{
+//			tutorial_finish <- true;
+//		}
+		
 		if not tutorial_finish{
 			ask unity_linker {
 				do send_message players: unity_player as list mes: ["Head"::"Tutorial", "Body"::""];
@@ -80,13 +81,15 @@ global {
 	action pause_game {
 		if tutorial_finish{
 			ask unity_linker {
+				write "remove here!!!!!!!!!!!!!!!!!!!!!!";
 				do send_message players: unity_player as list mes: ["Head"::"Stop", "Body"::""];
 				write "send Stop";
 
 			}
 		}
 		
-		if not alien_experimant{
+//		if not alien_experimant{
+		if true{	
 	//		write 'before pause_game tutorial_finish' + tutorial_finish;
 			tutorial_finish <- false;
 	//		write 'after pause_game tutorial_finish' + tutorial_finish;
@@ -100,6 +103,7 @@ global {
 		time_now <- max_time;
 		can_start <- false;
 		it_end_game <- true;
+		tutorial_finish <- true;
 		do save_total_seeds_to_csv;
 		
 		ask sign{
@@ -107,14 +111,30 @@ global {
 		}
 	}
 	
-	reflex update_player_zone when: it_start and tutorial_finish and not empty(unity_player){
-		loop i from:0 to:length(player_walk_in_zone)-1{
-//			write "i=" + i + " and max is " + (length(player_walk_in_zone)-1) ;
-			ask unity_player overlapping zone[i].shape {
-//				write "Update " + self ;
-				player_walk_in_zone[team_id-1] <- i+1;
-			} 
+	reflex update_connection{
+		who_connect <- [false,false,false,false,false,false];
+		ask unity_player{
+			who_connect[team_id-1] <- true;
 		}
+	}
+	
+	reflex update_player_zone when: it_start and tutorial_finish and not empty(unity_player){
+
+		player_walk_in_zone <- [false,false,false,false,false,false];
+		ask unity_player {
+			if self.shape overlaps zone[count_start-1].shape{
+				player_walk_in_zone[team_id-1] <- true;
+			}
+		} 
+		
+		//
+//		loop i from:0 to:length(player_walk_in_zone)-1{
+////			write "i=" + i + " and max is " + (length(player_walk_in_zone)-1) ;
+//			ask unity_player overlapping zone[i].shape {
+////				write "Update " + self ;
+//				player_walk_in_zone[team_id-1] <- i+1;
+//			} 
+//		}
 	}
 }
 
@@ -489,7 +509,7 @@ species unity_player parent: abstract_unity_player{
 	
 	init{
 		team_id <- map_player_id[name];
-		color <- player_colors[team_id-1];		
+		color <- rgb(player_colors[team_id-1]);		
 	}
 	
 	aspect default {
@@ -563,7 +583,7 @@ experiment Second_vr_xp parent:init_exp autorun: false type: unity {
 	
 	init{
 		alien_experimant <- true;
-		tutorial_finish <- true;
+//		tutorial_finish <- true;
 	}
 	
 	float minimum_cycle_duration <- 0.1;

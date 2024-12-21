@@ -36,10 +36,10 @@ global{
 		
 		ask my_circle{
 			my_overlap <- usable_area_for_tree inter self.shape ;
-			create road from:my_overlap{
-				buffer_size <- 0.0;
-				color <- #red;
-			}
+//			create road from:my_overlap{
+//				buffer_size <- 0.0;
+//				color <- #red;
+//			}
 		}
 		save usable_area to:"../includes/export/usable_area.shp" format:"shp";
 		save usable_area_for_tree to:"../includes/export/usable_area_for_tree.shp" format:"shp";

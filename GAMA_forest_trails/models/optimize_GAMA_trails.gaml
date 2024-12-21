@@ -69,9 +69,10 @@ global{
 	bool it_end_game <- false;
 	
 	map<string, int> map_player_id <- ["Player_101"::1, "Player_102"::2, "Player_103"::3, "Player_104"::4, "Player_105"::5, "Player_106"::6];
-										
+			
+	list<bool> who_connect <- [false,false,false,false,false,false];							
 	list<bool> who_finish_tutorial <- [false,false,false,false,false,false];
-	list<int> player_walk_in_zone <- [0,0,0,0,0,0];
+	list<bool> player_walk_in_zone <- [false,false,false,false,false,false];
 										
 	list<rgb> player_colors <- [#blue, #red, #green, #yellow, #black, rgb(223,219,195)];
 	
@@ -294,7 +295,11 @@ experiment init_exp type: gui {
 		layout vertical([horizontal([0::1, 1::1])::1, 2::1]) 
 		toolbars: false tabs: false parameters: false consoles: true navigator: false controls: false tray: false ;
 		display "Main" type: 3d background: rgb(50,50,50){
-			camera 'default' distance:650 locked:true;
+//			camera 'default' distance:650 locked:true;
+//			camera 'default' location: {385.6838,129.8469,554.5108} target: {385.6838,129.8373,0.0};
+//			camera 'default' location: {337.9959,88.8131,554.5108} target: {337.9959,88.8035,0.0};
+//			camera 'default' location: {339.1049,127.6289,554.5108} target: {339.1049,127.6193,0.0};
+			camera 'default' location: {379.0297,127.6289,554.5108} target: {379.0297,127.6193,0.0};
 //			species zone refresh: false;
 			species road refresh: false;
 			species island refresh: false;
@@ -328,23 +333,33 @@ experiment init_exp type: gui {
 				}
 				
 				loop i from:0 to:length(map_player_id)-1{
-					if not tutorial_finish{
-						if who_finish_tutorial[i]{
-
-							draw "Team" + (i+1) + " Finished Tutorial!" at:{width+30, 20 + (40*i)} font:font("Times", 20, #bold+#italic) ;
-						}
-						else{
-							draw "Team" + (i+1) + " Not finish Tutorial..." at:{width+30, 20 + (40*i)} font:font("Times", 20, #bold+#italic) ;
-						}
+					if not who_connect[i]{
+						draw "Team" + (i+1) + " - " at:{width+30, 20 + (40*i)} font:font("Times", 20, #bold+#italic) color:#yellow;
 					}
 					else{
-						if not it_end_game{
-							draw "Team" + (i+1) + " walk in zone " + player_walk_in_zone[i] at:{width+30, 20 + (40*i)} font:font("Times", 20, #bold+#italic) ;
+						if not tutorial_finish{
+							if who_finish_tutorial[i]{
+	
+								draw "Team" + (i+1) + " has finished the tutorial!" at:{width+30, 20 + (40*i)} font:font("Times", 20, #bold+#italic) color:#green;
+							}
+							else{
+								draw "Team" + (i+1) + " has not finished the tutorial..." at:{width+30, 20 + (40*i)} font:font("Times", 20, #bold+#italic) color:#red;
+							}
 						}
 						else{
-							draw "Team" + (i+1) + " Finished Game" at:{width+30, 20 + (40*i)} font:font("Times", 20, #bold+#italic) ;							
+							if not it_end_game{
+								if player_walk_in_zone[i]{
+									draw "Team" + (i+1) + " is inside zone " + count_start at:{width+30, 20 + (40*i)} font:font("Times", 20, #bold+#italic) color:#green;
+								}
+								else{
+									draw "Team" + (i+1) + " is outside zone " + count_start at:{width+30, 20 + (40*i)} font:font("Times", 20, #bold+#italic) color:#red;
+								}
+							}
+							else{
+								draw "Team" + (i+1) + " finished the game" at:{width+30, 20 + (40*i)} font:font("Times", 20, #bold+#italic) ;							
+							}
+							
 						}
-						
 					}
 				}
 			}
