@@ -293,7 +293,7 @@ experiment init_exp type: gui {
 	
 	output{
 		layout vertical([horizontal([0::1, 1::1])::1, 2::1]) 
-		toolbars: false tabs: false parameters: false consoles: true navigator: false controls: false tray: false ;
+		toolbars: false tabs: false parameters: false consoles: false navigator: false controls: false tray: false ;
 		display "Main" type: 3d background: rgb(50,50,50){
 //			camera 'default' distance:650 locked:true;
 //			camera 'default' location: {385.6838,129.8469,554.5108} target: {385.6838,129.8373,0.0};
@@ -376,9 +376,15 @@ experiment init_exp type: gui {
 				loop i from:0 to:(length(sum_total_seeds)-1){
 					data "Team" + (i+1) value:int(sum_total_seeds[i])
 					color:player_colors[i];
+//					legend: string(int(sum_total_seeds[i])) ;
 				}
 			}
-			
+			graphics Strings {
+				loop i from:0 to:(length(sum_total_seeds)-1){
+					draw "=> " + int(sum_total_seeds[i]) at:{420,65 + 36*i} font:font("Times", 16, #bold+#italic) 
+					border:#black color:player_colors[i];
+				}
+			}
 		}
 		
 		display "Summary" type: 2d locked:true{ 		
@@ -393,7 +399,8 @@ experiment init_exp type: gui {
 						if not (j=0 or j=9){
 							data "T"+ (i+1) + tree_name[temp] value: int(seeds[i][j] + alien_seeds[i][j]) 
 //							data "T"+ (i+1) + tree_name[temp] value: 50
-							color:player_colors[i]; 
+							color:player_colors[i] ;
+//							legend: string(int(seeds[i][j] + alien_seeds[i][j])) ;
 							temp <- temp + 1;
 						}
 						
@@ -401,6 +408,20 @@ experiment init_exp type: gui {
 					data ""+ (i+1) value:0;
 				}
 			}
+//			graphics Strings {
+//				loop i from:0 to:(n_team-1){
+//					int temp <- 0 ;
+//					loop j from:0 to:((length(n_tree))-1){
+//						if not (j=0 or j=9){
+//							draw "" + int(seeds[i][j] + alien_seeds[i][j])  at:{100+ 36*i ,100} font:font("Times", 16, #bold+#italic) 
+//							border:#black color:player_colors[i];
+//							temp <- temp + 1;
+//						}
+//						
+//					}
+//					data ""+ (i+1) value:0;
+//				}
+//			}
 		}	
 	}
 }
