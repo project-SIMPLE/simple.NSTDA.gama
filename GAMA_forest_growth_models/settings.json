@@ -1,0 +1,10 @@
+{
+  "type": "json_settings",
+  "name": "2. Forest Growth#1",
+  "splashscreen": "learning-packages/simple.NSTDA.gama/splashscreen/demoOne.png",
+  "model_file_path": "./models/forest_growth_model.gaml",
+  "experiment_name": "visualize_tree_growth", 
+  "minimal_players": "0", 
+  "maximal_players": "6", 
+  "selected_monitoring": "gama_screen"
+}

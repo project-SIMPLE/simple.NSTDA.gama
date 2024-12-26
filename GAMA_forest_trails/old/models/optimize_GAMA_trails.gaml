@@ -232,8 +232,7 @@ global{
 	}
 	action resume_game;
 	
-//	reflex do_pause when: (time_now >= stop_time*count_start) and (cycle != 0) and not can_start and tutorial_finish{
-	reflex do_pause when: (time_now >= stop_time*count_start) and (cycle != 0) and not can_start {
+	reflex do_pause when: (time_now >= stop_time*count_start) and (cycle != 0) and not can_start{
 		write "do_pause";
 		ask sign{
 			icon <- play;
@@ -295,7 +294,7 @@ experiment init_exp type: gui {
 	output{
 		layout vertical([horizontal([0::1, 1::1])::1, 2::1]) 
 		toolbars: false tabs: false parameters: false consoles: false navigator: false controls: false tray: false ;
-		display "Main" type: 3d background: rgb(50,50,50) locked:true{
+		display "Main" type: 3d background: rgb(50,50,50){
 //			camera 'default' distance:650 locked:true;
 //			camera 'default' location: {385.6838,129.8469,554.5108} target: {385.6838,129.8373,0.0};
 //			camera 'default' location: {337.9959,88.8131,554.5108} target: {337.9959,88.8035,0.0};
@@ -398,8 +397,8 @@ experiment init_exp type: gui {
 					int temp <- 0 ;
 					loop j from:0 to:((length(n_tree))-1){
 						if not (j=0 or j=9){
-							data "" + tree_name[temp] + (i+1) value: int(seeds[i][j] + alien_seeds[i][j]) 
-//							data "" + tree_name[temp] + (i+1) value: 50
+							data "T"+ (i+1) + tree_name[temp] value: int(seeds[i][j] + alien_seeds[i][j]) 
+//							data "T"+ (i+1) + tree_name[temp] value: 50
 							color:player_colors[i] ;
 //							legend: string(int(seeds[i][j] + alien_seeds[i][j])) ;
 							temp <- temp + 1;

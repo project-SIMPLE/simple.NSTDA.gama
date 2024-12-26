@@ -71,9 +71,9 @@ global{
 //	file seeds_file <- csv_file( "../result/total_seeds.csv");
 //	file alien_seeds_file <- csv_file( "../result/total_alien_seeds.csv");
 	file min_seed_file <- csv_file( "../result/min_collect_seed.csv");
-
-	file seeds_file <- csv_file( "../../1-GAMA_forest_trails/results/total_seeds.csv");
-	file alien_seeds_file <- csv_file( "../../1-GAMA_forest_trails/results/total_alien_seeds.csv");
+	
+	file seeds_file <- csv_file( "../../GAMA_forest_trails/results/total_seeds.csv");
+	file alien_seeds_file <- csv_file( "../../GAMA_forest_trails/results/total_alien_seeds.csv");
 
 
 	init{
@@ -152,7 +152,7 @@ global{
 				// multi-player & Check Alien 
 				loop i from: 1 to: alien_seed_data.columns-1{
 					if int(alien_seed_data[i,player_ID-1]) > 0{
-						add int(int(alien_seed_data[i,player_ID-1]) + int(seed_data[i,player_ID-1]))*3 to: n_tree;
+						add int(alien_seed_data[i,player_ID-1]) + int(seed_data[i,player_ID-1]) to: n_tree;
 						germination_rate[i-1]  <- alien_germination_rate;
 						survi_rate_y1[i-1] <- alien_survi_rate;
 						survi_rate_y2[i-1] <- alien_survi_rate;
@@ -359,15 +359,14 @@ experiment visualize_tree_growth{
 		
 
 		layout vertical([horizontal([0::1, 1::1, 2::1])::1, horizontal([3::1, 4::1, 5::1])::1])
-		toolbars: false tabs: false parameters: false consoles: false navigator: false controls: true tray: false;
+		toolbars: false tabs: false parameters: false consoles: true navigator: false controls: true tray: false;
 		
 		display 'Group' type:3d{
 //			camera 'default' location: {100,100,50};
 			camera 'default' location: {140.5357,139.5896,86.9179} target: {53.6178,52.6717,0.0};
 			overlay position: { 5, 5 } size: { 180 #px, 30 #px } background: # black transparency: 0.2 border: #black rounded: true
             {
-//            	draw "survival tree: " + with_precision(sum(count_tree_survi) / sum(initial_treeid),3)
-		draw "survival tree: " + sum(count_tree_survi) + " / " + sum(initial_treeid)
+            	draw "survival tree:" + with_precision(sum(count_tree_survi) / sum(initial_treeid),3) 
             	color: #black font: font("SansSerif", 15, #bold) at: { 10#px, 50#px };
 //				draw "Team: " + player_ID color: # white font: font("SansSerif", 20, #bold) at: { 10#px, 20#px };
  				draw team_id[player_ID-1] color: # white font: font("SansSerif", 20, #bold) at: { 10#px, 20#px };
@@ -375,7 +374,7 @@ experiment visualize_tree_growth{
             }    
 			species tree aspect: base;
 			species old_tree aspect: base;
-//			species my_circles aspect: default;
+			species my_circles aspect: default;
 		}
 	}
 }
