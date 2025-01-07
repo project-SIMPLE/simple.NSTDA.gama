@@ -164,7 +164,7 @@ species unity_linker parent: abstract_unity_linker {
 		write "Player " + player_ID + " (Team: " + map_player_id[player_ID] + ") finished tutorial.";
 		who_finish_tutorial[map_player_id[player_ID]-1] <- true;
 		
-		if length(player_id_finish_tutorial_list) >= length(unity_player) and user_confirm("Confirm","Please confirm"){
+		if length(player_id_finish_tutorial_list) >= length(unity_player){
 			write "Tutorial Finish!!!!";
 			ask world{
 				ask sign{
