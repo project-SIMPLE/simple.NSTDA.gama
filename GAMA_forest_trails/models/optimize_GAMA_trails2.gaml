@@ -176,14 +176,17 @@ global{
 	}
 	
 	reflex do_pause when: (time_now >= stop_time*count_start) and (cycle != 0) and not can_start and tutorial_finish{
-		write "do_pause";
-		ask sign{
-			icon <- play;
+		if user_confirm("Confirm","Please confirm"){
+			write "do_pause";
+			ask sign{
+				icon <- play;
+			}
+			do pause_game;
+			do pause;
+			
+			can_start <- true;
+			
 		}
-		do pause_game;
-		do pause;
-		
-		can_start <- true;
 	}
 	
 	reflex do_resume when: not paused and can_start{
