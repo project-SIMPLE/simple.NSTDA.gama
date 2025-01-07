@@ -77,8 +77,8 @@ global{
 //	file alien_seeds_file <- csv_file( "../result/total_alien_seeds.csv");
 	file min_seed_file <- csv_file( "../result/min_collect_seed.csv");
 
-	file seeds_file <- csv_file( "../../GAMA_forest_trails/results/total_seeds.csv");
-	file alien_seeds_file <- csv_file( "../../GAMA_forest_trails/results/total_alien_seeds.csv");
+	file seeds_file <- csv_file( "../../GAMA_forest_trails/results/22Dec_result/total_seeds.csv");
+	file alien_seeds_file <- csv_file( "../../GAMA_forest_trails/results/22Dec_result/total_alien_seeds.csv");
 
 
 	init{
