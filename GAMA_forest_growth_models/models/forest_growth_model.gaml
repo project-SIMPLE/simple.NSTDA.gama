@@ -70,13 +70,14 @@ global{
 	int cnt_created_tree <- 0;
 	
 	// Read Tree Data
-	file my_csv_file <- csv_file( "../includes/GAMA_RGR_16-12-24.csv");
+	file my_csv_file <- csv_file( "../includes/GAMA_RGR_07-01-25.csv");
 	
 	// Read seed data
 //	file seeds_file <- csv_file( "../result/total_seeds.csv");
 //	file alien_seeds_file <- csv_file( "../result/total_alien_seeds.csv");
 	file min_seed_file <- csv_file( "../result/min_collect_seed.csv");
 
+	// Read real seed data from multi-player
 	file seeds_file <- csv_file( "../../GAMA_forest_trails/results/22Dec_result/total_seeds.csv");
 	file alien_seeds_file <- csv_file( "../../GAMA_forest_trails/results/22Dec_result/total_alien_seeds.csv");
 
@@ -301,7 +302,7 @@ global{
 				int cnt <- 0 ;
 				int cnt_oldtree <- 0;
 				
-				ask tree overlapping my_circles[i]{
+				ask list_survive_tree overlapping my_circles[i] {
 					cnt <- cnt + 1;
 				}
 				
@@ -353,16 +354,16 @@ species tree{
 				RCD <- 5500.0  #cm;
 			}
 		}
-		if cycle < 5{
-			if flip(1 - float(survi_rate_y2[tree_type - 1])){
-				remove self from: list_survive_tree;
-				add self to: list_deathtree;
-				death <- true;
-				height <- 50.0  #cm;
-				RCD <- 5500.0  #cm;
-			}
-		}
-		if cycle >= 5 {
+//		if cycle < 5{
+//			if flip(1 - float(survi_rate_y2[tree_type - 1])){
+//				remove self from: list_survive_tree;
+//				add self to: list_deathtree;
+//				death <- true;
+//				height <- 50.0  #cm;
+//				RCD <- 5500.0  #cm;
+//			}
+//		}
+		if cycle >= 3 {
 			if flip(1 - survi_rate_y5){
 				remove self from: list_survive_tree;
 				add self to: list_deathtree;
@@ -432,7 +433,7 @@ experiment visualize_tree_growth{
 		
 
 		layout vertical([horizontal([0::1, 1::1, 2::1])::1, horizontal([3::1, 4::1, 5::1])::1])
-		toolbars: false tabs: false parameters: false consoles: true navigator: false controls: true tray: false;
+		toolbars: false tabs: false parameters: false consoles: false navigator: false controls: true tray: false;
 		
 		display 'TEAM' type:3d{
 //			camera 'default' location: {100,100,50};
@@ -446,8 +447,8 @@ experiment visualize_tree_growth{
  				draw team_id[player_ID-1] color: # white font: font("SansSerif", 20, #bold) at: { 10#px, 20#px };
  				
          
-//    	draw "RSA: " + int ((( sum(count_old_tree_in_circles) + sum(count_tree_in_circles) ) / 10) * 10000 / 78 )
-    	draw "RSA: " + int ((( sum(count_old_tree_in_circles)   ) / 10) * 10000 / 78 )
+    	draw "RSA: " + int ((( sum(count_old_tree_in_circles) + sum(count_tree_in_circles) ) / 10) * 10000 / 78 )
+//    	draw "RSA: " + int ((( sum(count_old_tree_in_circles)   ) / 10) * 10000 / 78 )
         	color: #black font: font("SansSerif", 15, #bold) at: { 10#px, 70#px };
         // 
 	    

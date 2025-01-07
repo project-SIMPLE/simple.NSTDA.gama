@@ -1,0 +1,11 @@
+tree_id,sci_name,habit,Pioneer_Climax,Max_DBH_cm,max_height_cm,survival_y1,survival_y2,survival_y3,RGR_height_y3,RGR_RCD_y3,canopy_width_y3,germination_rate,tree_name
+2,Quercus,Tree,Climax,99,1000,0.9359,0.7526,0.5464,0.523,0.6839,64.96,60,Qu
+3,Sapindus,Tree,Pioneer,100,3500,0.9084,0.7341,0.5069,0.798,0.9244,69.98,70,Sa
+4,Magnolia,Tree,Climax,41,2500,0.933,0.6571,0.5569,0.7543,1.2295,111.05,50,Ma
+5,Phoeba,Tree,Pioneer,40,1500,0.9792,0.7969,0.7656,0.4552,0.7859,59.69,55,Ph
+6,Debregeasia,Shrub,Pioneer,16,500,0.9667,0.65,0.4167,0.8155,1.2202,20,80,De
+7,Diospyros,Shrubby Tree,Climax,19,1500,0.9074,0.6215,0.4954,0.6093,1.0601,30,75,Di
+8,Ostodes,Shrubby Tree,Climax,25,800,0.9255,0.7473,0.49,0.55,0.6265,40,65,Os
+9,Phyllanthus,Shrubby Tree/ Tree,Pioneer,21,2000,0.9219,0.854,0.5917,0.6761,1.3713,50,50,Ph
+11,Castanopsis,Tree,Pioneer,90,2500,0.8884,0.665,0.3883,0.6761,0.8945,85.04,95,Ca
+12,Gmelina,Tree,Pioneer,60,2500,0.8984,0.6716,0.492,0.4537,1.174,97.97,80,Gm
