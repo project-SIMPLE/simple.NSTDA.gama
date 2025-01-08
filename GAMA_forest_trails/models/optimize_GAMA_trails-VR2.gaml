@@ -8,36 +8,76 @@ global {
 		loop i from:0 to:length(n_tree) - 1{
 			add 'Type' + (i+1) to: header;
 		}
+		
+		int min_team_id <- 6;
+		
 		ask unity_player{
-			int key_player <- team_id-1;
-			list temp <- [];
-			list temp2 <- [];
-			
-			add 'Team' + int(key_player + 1) to: temp;
-			add 'Team' + int(key_player + 1) to: temp2;
-			
-			loop i from:0 to:length(n_tree) - 1{
-				if not (i=0 or i=9){
+			if min_team_id > team_id {
+				min_team_id <- team_id;
+			}
+		}
+		
+		loop j from:1 to:6{
+			ask unity_player where (each.name = string("Player_10" + j)){
+				int key_player <- team_id - 1;
+				list temp <- [];
+				list temp2 <- [];
+				
+				add 'Team' + int(team_id) to: temp;
+				add 'Team' + int(team_id) to: temp2;
+				
+				loop i from:0 to:length(n_tree) - 1{
 					add container(seeds[key_player])[i] to: temp;
 					add container(alien_seeds[key_player])[i] to: temp2;
 				}
+				
+				if self.name = string("Player_10" + min_team_id){
+					save temp to: "../results/total_seeds.csv" header:false format:"csv" rewrite:true;
+				}
+				else{
+					save temp to: "../results/total_seeds.csv" header:false format:"csv" rewrite:false;
+				}
+				
+				if self.name = string("Player_10" + min_team_id){
+					save temp2 to: "../results/total_alien_seeds.csv" header:false format:"csv" rewrite:true;
+				}
+				else{
+					save temp2 to: "../results/total_alien_seeds.csv" header:false format:"csv" rewrite:false;
+				}
 			}
-			
-			if self = unity_player[0]{
-				save temp to: "../results/total_seeds.csv" header:false format:"csv" rewrite:true;
-			}
-			else{
-				save temp to: "../results/total_seeds.csv" header:false format:"csv" rewrite:false;
-			}
-			
-			write temp2;
-			if self = unity_player[0]{
-				save temp2 to: "../results/total_alien_seeds.csv" header:false format:"csv" rewrite:true;
-			}
-			else{
-				save temp2 to: "../results/total_alien_seeds.csv" header:false format:"csv" rewrite:false;
-			}
-		}	
+		}
+		
+		
+//		ask unity_player{
+//			int key_player <- team_id-1;
+//			list temp <- [];
+//			list temp2 <- [];
+//			
+//			add 'Team' + int(key_player + 1) to: temp;
+//			add 'Team' + int(key_player + 1) to: temp2;
+//			
+//			loop i from:0 to:length(n_tree) - 1{
+//				if not (i=0 or i=9){
+//					add container(seeds[key_player])[i] to: temp;
+//					add container(alien_seeds[key_player])[i] to: temp2;
+//				}
+//			}
+//			
+//			if self = unity_player[0]{
+//				save temp to: "../results/total_seeds.csv" header:false format:"csv" rewrite:true;
+//			}
+//			else{
+//				save temp to: "../results/total_seeds.csv" header:false format:"csv" rewrite:false;
+//			}
+//			
+//			write temp2;
+//			if self = unity_player[0]{
+//				save temp2 to: "../results/total_alien_seeds.csv" header:false format:"csv" rewrite:true;
+//			}
+//			else{
+//				save temp2 to: "../results/total_alien_seeds.csv" header:false format:"csv" rewrite:false;
+//			}
+//		}	
 	}
 	
 	action resume_game {	
@@ -77,8 +117,10 @@ global {
 
 			}
 		}
-			
-		tutorial_finish <- false;
+		
+		if not skip_tutorial{
+			tutorial_finish <- false;
+		}
 		player_id_finish_tutorial_list <- [];
 		who_finish_tutorial <- [false,false,false,false,false,false];
 	}
@@ -352,9 +394,9 @@ species unity_linker parent: abstract_unity_linker {
 	}
 	
 	reflex send_geometries {
-		list<tree> t1 <- tree where ((each.tree_type = 2) and (each.it_state <=3));
-		list<tree> t1f <- tree where ((each.tree_type = 2) and (each.it_state = 4) and (each.it_alien = false));
-		list<tree> t1a <- tree where ((each.tree_type = 2) and (each.it_state = 4) and (each.it_alien = true));
+		list<tree> t1 <- tree where ((each.tree_type = 1) and (each.it_state <=3));
+		list<tree> t1f <- tree where ((each.tree_type = 1) and (each.it_state = 4) and (each.it_alien = false));
+		list<tree> t1a <- tree where ((each.tree_type = 1) and (each.it_state = 4) and (each.it_alien = true));
 		if not empty(t1){
 			do add_geometries_to_send(t1,up_tree_1a);
 		}
@@ -365,9 +407,9 @@ species unity_linker parent: abstract_unity_linker {
 			do add_geometries_to_send(t1a,up_alien_tree_1);
 		}	
  
-		list<tree> t2 <- tree where ((each.tree_type = 3) and (each.it_state <=3));
-		list<tree> t2f <- tree where ((each.tree_type = 3) and (each.it_state = 4) and (each.it_alien = false));
-		list<tree> t2a <- tree where ((each.tree_type = 3) and (each.it_state = 4) and (each.it_alien = true));
+		list<tree> t2 <- tree where ((each.tree_type = 2) and (each.it_state <=3));
+		list<tree> t2f <- tree where ((each.tree_type = 2) and (each.it_state = 4) and (each.it_alien = false));
+		list<tree> t2a <- tree where ((each.tree_type = 2) and (each.it_state = 4) and (each.it_alien = true));
 		if not empty(t2){
 			do add_geometries_to_send(t2,up_tree_2a);
 		}
@@ -378,9 +420,9 @@ species unity_linker parent: abstract_unity_linker {
 			do add_geometries_to_send(t2a,up_alien_tree_2);
 		}	
  
-		list<tree> t3 <- tree where ((each.tree_type = 4) and (each.it_state <=3));
-		list<tree> t3f <- tree where ((each.tree_type = 4) and (each.it_state = 4) and (each.it_alien = false));
-		list<tree> t3a <- tree where ((each.tree_type = 4) and (each.it_state = 4) and (each.it_alien = true));
+		list<tree> t3 <- tree where ((each.tree_type = 3) and (each.it_state <=3));
+		list<tree> t3f <- tree where ((each.tree_type = 3) and (each.it_state = 4) and (each.it_alien = false));
+		list<tree> t3a <- tree where ((each.tree_type = 3) and (each.it_state = 4) and (each.it_alien = true));
 		if not empty(t3){
 			do add_geometries_to_send(t3,up_tree_3a);
 		}
@@ -391,9 +433,9 @@ species unity_linker parent: abstract_unity_linker {
 			do add_geometries_to_send(t3a,up_alien_tree_8);
 		}	
  
-		list<tree> t4 <- tree where ((each.tree_type = 5) and (each.it_state <=3));
-		list<tree> t4f <- tree where ((each.tree_type = 5) and (each.it_state = 4) and (each.it_alien = false));
-		list<tree> t4a <- tree where ((each.tree_type = 5) and (each.it_state = 4) and (each.it_alien = true));
+		list<tree> t4 <- tree where ((each.tree_type = 4) and (each.it_state <=3));
+		list<tree> t4f <- tree where ((each.tree_type = 4) and (each.it_state = 4) and (each.it_alien = false));
+		list<tree> t4a <- tree where ((each.tree_type = 4) and (each.it_state = 4) and (each.it_alien = true));
 		if not empty(t4){
 			do add_geometries_to_send(t4,up_tree_4a);
 		}
@@ -404,9 +446,9 @@ species unity_linker parent: abstract_unity_linker {
 			do add_geometries_to_send(t4a,up_alien_tree_8);
 		}	
  
-		list<tree> t5 <- tree where ((each.tree_type = 6) and (each.it_state <=3));
-		list<tree> t5f <- tree where ((each.tree_type = 6) and (each.it_state = 4) and (each.it_alien = false));
-		list<tree> t5a <- tree where ((each.tree_type = 6) and (each.it_state = 4) and (each.it_alien = true));
+		list<tree> t5 <- tree where ((each.tree_type = 5) and (each.it_state <=3));
+		list<tree> t5f <- tree where ((each.tree_type = 5) and (each.it_state = 4) and (each.it_alien = false));
+		list<tree> t5a <- tree where ((each.tree_type = 5) and (each.it_state = 4) and (each.it_alien = true));
 		if not empty(t5){
 			do add_geometries_to_send(t5,up_tree_5a);
 		}
@@ -417,9 +459,9 @@ species unity_linker parent: abstract_unity_linker {
 			do add_geometries_to_send(t5a,up_alien_tree_8);
 		}	
  
-		list<tree> t6 <- tree where ((each.tree_type = 7) and (each.it_state <=3));
-		list<tree> t6f <- tree where ((each.tree_type = 7) and (each.it_state = 4) and (each.it_alien = false));
-		list<tree> t6a <- tree where ((each.tree_type = 7) and (each.it_state = 4) and (each.it_alien = true));
+		list<tree> t6 <- tree where ((each.tree_type = 6) and (each.it_state <=3));
+		list<tree> t6f <- tree where ((each.tree_type = 6) and (each.it_state = 4) and (each.it_alien = false));
+		list<tree> t6a <- tree where ((each.tree_type = 6) and (each.it_state = 4) and (each.it_alien = true));
 		if not empty(t6){
 			do add_geometries_to_send(t6,up_tree_6a);
 		}
@@ -430,9 +472,9 @@ species unity_linker parent: abstract_unity_linker {
 			do add_geometries_to_send(t6a,up_alien_tree_8);
 		}	
  
-		list<tree> t7 <- tree where ((each.tree_type = 8) and (each.it_state <=3));
-		list<tree> t7f <- tree where ((each.tree_type = 8) and (each.it_state = 4) and (each.it_alien = false));
-		list<tree> t7a <- tree where ((each.tree_type = 8) and (each.it_state = 4) and (each.it_alien = true));
+		list<tree> t7 <- tree where ((each.tree_type = 7) and (each.it_state <=3));
+		list<tree> t7f <- tree where ((each.tree_type = 7) and (each.it_state = 4) and (each.it_alien = false));
+		list<tree> t7a <- tree where ((each.tree_type = 7) and (each.it_state = 4) and (each.it_alien = true));
 		if not empty(t7){
 			do add_geometries_to_send(t7,up_tree_7a);
 		}
@@ -443,9 +485,9 @@ species unity_linker parent: abstract_unity_linker {
 			do add_geometries_to_send(t7a,up_alien_tree_8);
 		}	
  
-		list<tree> t8 <- tree where ((each.tree_type = 9) and (each.it_state <=3));
-		list<tree> t8f <- tree where ((each.tree_type = 9) and (each.it_state = 4) and (each.it_alien = false));
-		list<tree> t8a <- tree where ((each.tree_type = 9) and (each.it_state = 4) and (each.it_alien = true));
+		list<tree> t8 <- tree where ((each.tree_type = 8) and (each.it_state <=3));
+		list<tree> t8f <- tree where ((each.tree_type = 8) and (each.it_state = 4) and (each.it_alien = false));
+		list<tree> t8a <- tree where ((each.tree_type = 8) and (each.it_state = 4) and (each.it_alien = true));
 		if not empty(t8){
 			do add_geometries_to_send(t8,up_tree_8a);
 		}
@@ -456,9 +498,9 @@ species unity_linker parent: abstract_unity_linker {
 			do add_geometries_to_send(t8a,up_alien_tree_8);
 		}	
  
-		list<tree> t9 <- tree where ((each.tree_type = 11) and (each.it_state <=3));
-		list<tree> t9f <- tree where ((each.tree_type = 11) and (each.it_state = 4) and (each.it_alien = false));
-		list<tree> t9a <- tree where ((each.tree_type = 11) and (each.it_state = 4) and (each.it_alien = true));
+		list<tree> t9 <- tree where ((each.tree_type = 9) and (each.it_state <=3));
+		list<tree> t9f <- tree where ((each.tree_type = 9) and (each.it_state = 4) and (each.it_alien = false));
+		list<tree> t9a <- tree where ((each.tree_type = 9) and (each.it_state = 4) and (each.it_alien = true));
 		if not empty(t9){
 			do add_geometries_to_send(t9,up_tree_9a);
 		}
@@ -469,9 +511,9 @@ species unity_linker parent: abstract_unity_linker {
 			do add_geometries_to_send(t9a,up_alien_tree_8);
 		}	
  
-		list<tree> t10 <- tree where ((each.tree_type = 12) and (each.it_state <=3));
-		list<tree> t10f <- tree where ((each.tree_type = 12) and (each.it_state = 4) and (each.it_alien = false));
-		list<tree> t10a <- tree where ((each.tree_type = 12) and (each.it_state = 4) and (each.it_alien = true));
+		list<tree> t10 <- tree where ((each.tree_type = 10) and (each.it_state <=3));
+		list<tree> t10f <- tree where ((each.tree_type = 10) and (each.it_state = 4) and (each.it_alien = false));
+		list<tree> t10a <- tree where ((each.tree_type = 10) and (each.it_state = 4) and (each.it_alien = true));
 		if not empty(t10){
 			do add_geometries_to_send(t10,up_tree_10a);
 		}
@@ -514,7 +556,7 @@ species unity_player parent: abstract_unity_player{
 }
 
 experiment First_vr_xp parent:init_exp autorun: false type: unity {
-	float minimum_cycle_duration <- 0.30;
+	float minimum_cycle_duration <- 0.50;
 	string unity_linker_species <- string(unity_linker);
 	list<string> displays_to_hide <- ["Main"];
 	float t_ref;
@@ -563,7 +605,7 @@ experiment Second_vr_xp parent:init_exp autorun: false type: unity {
 		alien_experimant <- true;
 	}
 	
-	float minimum_cycle_duration <- 0.1;
+	float minimum_cycle_duration <- 0.50;
 	string unity_linker_species <- string(unity_linker);
 	list<string> displays_to_hide <- ["Main"];
 	float t_ref;

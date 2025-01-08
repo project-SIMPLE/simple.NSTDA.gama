@@ -12,11 +12,11 @@ import "optimize_species.gaml"
 global{
 	// Parameter
 	int n_team <- 6;
-	int stop_time <- 20; //second
+	int stop_time <- 180; //second
 	
 	// Variable
 	shape_file Trail_shape_file <- shape_file("../includes/Trail.shp");
-	csv_file my_csv_file <- csv_file("../includes/pheno_tz_16Dec2024.csv");
+	csv_file my_csv_file <- csv_file("../includes/pheno_tz_7Jan2025.csv");
 	
 	geometry shape <- (envelope(Trail_shape_file));
 	float width <- shape.width;
@@ -62,8 +62,13 @@ global{
 	bool can_start <- true;
 	bool tutorial_finish <- false;
 	bool it_end_game <- false;
+	bool skip_tutorial <- false;
 	
 	init{
+		if skip_tutorial{
+			tutorial_finish <- true;
+		}
+		
 		create road from: Trail_shape_file;
 		
 		matrix data <- matrix(my_csv_file);
@@ -250,7 +255,6 @@ global{
 			self.icon <- stop;
 		}
 	}
-	
 }
 
 experiment init_exp type: gui {
@@ -270,20 +274,27 @@ experiment init_exp type: gui {
 			species tree aspect: for_plot;
 			species sign;
 			
+			// ---------------------------------------------------------------------------------------------------------
 			graphics Strings {
 				if tutorial_finish and not paused {
 					draw "Current Period: "+ count_start at:{width/3, -50} font:font("Times", 20, #bold+#italic) ; 
+					draw "Remaining time: "+ ((stop_time*count_start - time_now) div 60) + " minutes " + ((stop_time*count_start - time_now) mod 60) + " seconds" at:{width/3, -25} font:font("Times", 20, #bold+#italic) ;
+				}
+				else if not skip_tutorial{
 					if not it_end_game{
-						draw "Remaining time: "+ ((stop_time*count_start - time_now) div 60) + " minutes " + ((stop_time*count_start - time_now) mod 60) + " seconds" at:{width/3, -25} font:font("Times", 20, #bold+#italic) ;
+						draw "Current Period: "+ (count_start+1) at:{width/3, -50} font:font("Times", 20, #bold+#italic) ;
+						draw "Tutorial" at:{width/3, -25} font:font("Times", 20, #bold+#italic) ;
 					}
 					else{
+						draw "Current Period: 6" at:{width/3, -50} font:font("Times", 20, #bold+#italic) ;
 						draw "Finished!" at:{width/3, -25} font:font("Times", 20, #bold+#italic) ;
 					}
 				}
-				else{
-					draw "Current Period: "+ (count_start+1) at:{width/3, -50} font:font("Times", 20, #bold+#italic) ; 
-					draw "Tutorial" at:{width/3, -25} font:font("Times", 20, #bold+#italic) ;
+				else {
+					draw "Current Period: "+ count_start at:{width/3, -50} font:font("Times", 20, #bold+#italic) ; 
+					draw "Remaining time: "+ ((stop_time*count_start - time_now) div 60) + " minutes " + ((stop_time*count_start - time_now) mod 60) + " seconds" at:{width/3, -25} font:font("Times", 20, #bold+#italic) ;
 				}
+			// ---------------------------------------------------------------------------------------------------------
 				
 				loop i from:0 to:length(map_player_id)-1{
 					if not who_connect[i]{
@@ -309,7 +320,7 @@ experiment init_exp type: gui {
 								}
 							}
 							else{
-								draw "Team" + (i+1) + " finished the game" at:{width+30, 20 + (40*i)} font:font("Times", 20, #bold+#italic) ;							
+								draw "Team" + (i+1) + " finished the game" at:{width+30, 20 + (40*i)} font:font("Times", 20, #bold+#italic) color:player_colors[i];							
 							}
 							
 						}
