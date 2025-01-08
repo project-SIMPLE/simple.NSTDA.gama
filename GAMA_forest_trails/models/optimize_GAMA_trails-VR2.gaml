@@ -89,7 +89,7 @@ global {
 				write "send Tutorial";
 			}
 			ask unity_player{
-				location <- {180, 120, 0};
+				location <- {180, 120, 0} + {0, 0, 3};
 				ask unity_linker {
 					new_player_position[myself.name] <- [myself.location.x *precision,myself.location.y *precision,myself.location.z *precision];
 					move_player_event <- true;
@@ -98,7 +98,7 @@ global {
 		}
 		else {
 			ask unity_player{
-				location <- any_location_in(road_midpoint[map_zone[count_start-1]] - 3) + {0, 0, 0};
+				location <- any_location_in(road_midpoint[map_zone[count_start-1]] - 3) + {0, 0, 3};
 				ask unity_linker {
 					new_player_position[myself.name] <- [myself.location.x *precision,myself.location.y *precision,myself.location.z *precision];
 					move_player_event <- true;
@@ -266,7 +266,7 @@ species unity_linker parent: abstract_unity_linker {
 	list<point> define_init_locations {
 		list<point> init_pos;
 		loop times: num_players {
-			init_pos << {180, 120, 0};
+			init_pos << {180, 120, 0} + {0, 0, 3};
 			write "init_pos " + init_pos;
 		}
 		return init_pos;

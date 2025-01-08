@@ -12,7 +12,7 @@ import "optimize_species.gaml"
 global{
 	// Parameter
 	int n_team <- 6;
-	int stop_time <- 180; //second
+	int stop_time <- 60; //second
 	
 	// Variable
 	shape_file Trail_shape_file <- shape_file("../includes/Trail.shp");
@@ -54,6 +54,7 @@ global{
 	
 	map<string, int> map_player_id <- ["Player_101"::1, "Player_102"::2, "Player_103"::3, "Player_104"::4, "Player_105"::5, "Player_106"::6];
 	list<rgb> player_colors <- [rgb(66, 72, 255), #red, #green, rgb(255, 196, 0), #black, rgb(156, 152, 142)];
+	list<string> color_list <- ["Blue", "Red", 'Green', "Yellow", "Black", "White"];
 	list<string> player_id_finish_tutorial_list <- [];
 	list<bool> who_connect <- [false,false,false,false,false,false];
 	list<bool> who_finish_tutorial <- [false,false,false,false,false,false];
@@ -304,29 +305,29 @@ experiment init_exp type: gui {
 				
 				loop i from:0 to:length(map_player_id)-1{
 					if not who_connect[i]{
-						draw "Team" + (i+1) + " - " at:{width+30, 20 + (40*i)} font:font("Times", 20, #bold+#italic) color:player_colors[i];
+						draw "Team" + (i+1) + " " + color_list[i] +  " - " at:{width+30, 20 + (40*i)} font:font("Times", 20, #bold+#italic) color:player_colors[i];
 					}
 					else{
 						if not tutorial_finish{
 							if who_finish_tutorial[i]{
 	
-								draw "Team" + (i+1) + " has finished the tutorial!" at:{width+30, 20 + (40*i)} font:font("Times", 20, #bold+#italic) color:player_colors[i];
+								draw "Team" + (i+1) + " " + color_list[i] + " has finished the tutorial!" at:{width+30, 20 + (40*i)} font:font("Times", 20, #bold+#italic) color:player_colors[i];
 							}
 							else{
-								draw "Team" + (i+1) + " has not finished the tutorial..." at:{width+30, 20 + (40*i)} font:font("Times", 20, #bold+#italic) color:player_colors[i];
+								draw "Team" + (i+1) + " " + color_list[i] +  " has not finished the tutorial..." at:{width+30, 20 + (40*i)} font:font("Times", 20, #bold+#italic) color:player_colors[i];
 							}
 						}
 						else{
 							if not it_end_game{
 								if player_walk_in_zone[i]{
-									draw "Team" + (i+1) + " is inside zone " + count_start at:{width+30, 20 + (40*i)} font:font("Times", 20, #bold+#italic) color:player_colors[i];
+									draw "Team" + (i+1) + " " + color_list[i] +  " is inside zone " + count_start at:{width+30, 20 + (40*i)} font:font("Times", 20, #bold+#italic) color:player_colors[i];
 								}
 								else{
-									draw "Team" + (i+1) + " is outside zone " + count_start at:{width+30, 20 + (40*i)} font:font("Times", 20, #bold+#italic) color:player_colors[i];
+									draw "Team" + (i+1) + " " + color_list[i] +  " is outside zone " + count_start at:{width+30, 20 + (40*i)} font:font("Times", 20, #bold+#italic) color:player_colors[i];
 								}
 							}
 							else{
-								draw "Team" + (i+1) + " finished the game" at:{width+30, 20 + (40*i)} font:font("Times", 20, #bold+#italic) color:player_colors[i];							
+								draw "Team" + (i+1) + " " + color_list[i] +  " finished the game" at:{width+30, 20 + (40*i)} font:font("Times", 20, #bold+#italic) color:player_colors[i];							
 							}
 							
 						}
