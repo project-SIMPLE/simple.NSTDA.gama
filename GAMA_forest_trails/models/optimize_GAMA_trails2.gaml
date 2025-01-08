@@ -291,8 +291,14 @@ experiment init_exp type: gui {
 					}
 				}
 				else {
-					draw "Current Period: "+ count_start at:{width/3, -50} font:font("Times", 20, #bold+#italic) ; 
-					draw "Remaining time: "+ ((stop_time*count_start - time_now) div 60) + " minutes " + ((stop_time*count_start - time_now) mod 60) + " seconds" at:{width/3, -25} font:font("Times", 20, #bold+#italic) ;
+					if not it_end_game{
+						draw "Current Period: "+ count_start at:{width/3, -50} font:font("Times", 20, #bold+#italic) ; 
+						draw "Remaining time: "+ ((stop_time*count_start - time_now) div 60) + " minutes " + ((stop_time*count_start - time_now) mod 60) + " seconds" at:{width/3, -25} font:font("Times", 20, #bold+#italic) ;
+					}
+					else{
+						draw "Current Period: 6" at:{width/3, -50} font:font("Times", 20, #bold+#italic) ;
+						draw "Finished!" at:{width/3, -25} font:font("Times", 20, #bold+#italic) ;
+					}
 				}
 			// ---------------------------------------------------------------------------------------------------------
 				

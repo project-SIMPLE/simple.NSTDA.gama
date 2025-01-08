@@ -18,6 +18,8 @@ global {
 		}
 		
 		loop j from:1 to:6{
+			write string("Player_10" + j);
+			
 			ask unity_player where (each.name = string("Player_10" + j)){
 				int key_player <- team_id - 1;
 				list temp <- [];
@@ -223,6 +225,24 @@ species unity_linker parent: abstract_unity_linker {
 		write "Player " + player_ID + " collect: " + tree_ID;
 		int key_player <- map_player_id[player_ID]-1;
 		int key_tree <- int(tree_ID);
+		
+		if key_tree < 0{
+			if (key_tree <= -2) and (key_tree >= -9){
+				key_tree <- key_tree + 1;
+			}
+			else if (key_tree <= -11) and (key_tree >= -12){
+				key_tree <- key_tree + 2;
+			}
+		}
+		else{
+			if (key_tree >= 2) and (key_tree <= 9){
+				key_tree <- key_tree - 1;
+			}
+			else if (key_tree >= 11) and (key_tree <= 12){
+				key_tree <- key_tree - 2;
+			}
+		}
+		
 		write "TreeID: " + tree_ID;
 		write "Key Tree: " + key_tree;
 		write "abs Key Tree: " + abs(key_tree);
