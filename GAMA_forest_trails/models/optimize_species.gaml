@@ -11,13 +11,31 @@ model optimizespecies
 global {
 	image_file play <- image_file("../images/play.png");
 	image_file stop <- image_file("../images/stop.png");
-	
+	image_file static_map <- image_file("../includes/Ground_V3.jpg");
+	image_file reset_image <- image_file("../includes/reset.png");
+
+}
+
+species support {
+	image_file img <- static_map;
+//	int size_value <- 950;
+	aspect default {
+//		draw img size:{size_value,size_value/2};
+		draw img size:{520,312};
+	}
+}
+
+species reset {
+	image_file img <- reset_image;
+	aspect default {
+		draw img size:{50,30};
+	}
 }
 
 species sign {
 	image_file icon <- play;
 	aspect default {
-		draw icon size: {50, 50};
+		draw icon size:{50, 50};
 	}
 }
 
@@ -54,6 +72,9 @@ species road{
 species island{
 	rgb color <- #grey;
 	geometry shape <- square(80);
+	aspect default {
+		draw shape color: color border:#green;	
+	}
 }
 
 species zone{

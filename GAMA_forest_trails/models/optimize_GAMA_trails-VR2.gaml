@@ -18,7 +18,7 @@ global {
 		}
 		
 		loop j from:1 to:6{
-			write string("Player_10" + j);
+			write string("Save data for Player_10" + j);
 			
 			ask unity_player where (each.name = string("Player_10" + j)){
 				int key_player <- team_id - 1;
@@ -47,7 +47,52 @@ global {
 					save temp2 to: "../results/total_alien_seeds.csv" header:false format:"csv" rewrite:false;
 				}
 			}
+			write string("Save data for Player_10" + j + " Completed!");
 		}
+	}
+	action resend_command_to_unity (string player_name_ID){
+		int player_ID <- -1;
+		loop i from:0 to:length(unity_player) - 1{
+			ask unity_player[i] {
+				if self.name = player_name_ID{
+					player_ID <- i;
+					write "Found " + player_name_ID + " ID= " + player_ID ;
+				}
+			}
+		}
+		if player_ID < 0{
+			write "Now Found ID " + player_name_ID + " ID= " + player_ID ;
+		}
+		
+		if not empty(unity_player) and player_ID >= 0{
+			if not tutorial_finish{
+				ask unity_linker {
+					do send_message players: unity_player[player_ID] as list mes: ["Head"::"Tutorial", "Body"::""];
+					write "Resend command for Player: " + unity_player.name + " to Tutorial";
+				}
+				ask unity_player[player_ID]{
+					location <- {180, 120, 0} + {0, 0, 3};
+					ask unity_linker {
+						new_player_position[myself.name] <- [myself.location.x *precision,myself.location.y *precision,myself.location.z *precision];
+						move_player_event <- true;
+					}
+				}
+			}
+			else {
+				ask unity_player[player_ID]{
+					location <- any_location_in(road_midpoint[map_zone[count_start-1]] - 3) + {0, 0, 3};
+					ask unity_linker {
+						new_player_position[myself.name] <- [myself.location.x *precision,myself.location.y *precision,myself.location.z *precision];
+						move_player_event <- true;
+					}
+				}
+		
+				ask unity_linker {
+					do send_message players: unity_player[player_ID] as list mes: ["Head"::"Start", "Body"::""];
+					write "Resend command for Player: " + unity_player.name + " to Trial zone " + count_start;
+				}
+			}	
+		}	
 	}
 	
 	action resume_game {	
@@ -179,8 +224,10 @@ species unity_linker parent: abstract_unity_linker {
 		if length(player_id_finish_tutorial_list) >= length(unity_player){
 			write "Tutorial Finish!!!!";
 			ask world{
+				
 				ask sign{
 					self.icon <- play;
+					write "do_pause Tutorial (Change Icon!)";
 				}
 				do pause;
 				can_start <- true;
@@ -544,7 +591,7 @@ species unity_player parent: abstract_unity_player{
 }
 
 experiment First_vr_xp parent:init_exp autorun: false type: unity {
-	float minimum_cycle_duration <- 0.10;
+	float minimum_cycle_duration <- 0.20;
 	string unity_linker_species <- string(unity_linker);
 	list<string> displays_to_hide <- ["Main"];
 	float t_ref;
@@ -593,7 +640,7 @@ experiment Second_vr_xp parent:init_exp autorun: false type: unity {
 		alien_experimant <- true;
 	}
 	
-	float minimum_cycle_duration <- 0.10;
+	float minimum_cycle_duration <- 0.20;
 	string unity_linker_species <- string(unity_linker);
 	list<string> displays_to_hide <- ["Main"];
 	float t_ref;

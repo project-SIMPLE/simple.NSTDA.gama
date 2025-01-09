@@ -12,11 +12,12 @@ import "optimize_species.gaml"
 global{
 	// Parameter
 	int n_team <- 6;
-	int stop_time <- 60; //second
+	int stop_time <- 90; //second
 	
 	// Variable
 	shape_file Trail_shape_file <- shape_file("../includes/Trail.shp");
 	csv_file my_csv_file <- csv_file("../includes/pheno_tz_7Jan2025.csv");
+
 	
 	geometry shape <- (envelope(Trail_shape_file));
 	float width <- shape.width;
@@ -46,6 +47,7 @@ global{
 	action save_total_seeds_to_csv;
 	action resume_game;
 	action pause_game;
+	action resend_command_to_unity (string player_name_ID);
 	
 	list<tree> tree_list <- [];
 	rgb color_state4 <- rgb(198, 76, 54);
@@ -68,6 +70,16 @@ global{
 	init{
 		if skip_tutorial{
 			tutorial_finish <- true;
+		}
+		
+		create support{
+			location <- {width/2, height/2, -1};
+		}
+		
+		loop i from:0 to:length(map_player_id)-1{
+			create reset{
+				location <- {width+50, 12 + (40*i)};
+			}
 		}
 		
 		create road from: Trail_shape_file;
@@ -261,7 +273,7 @@ global{
 experiment init_exp type: gui {
 	list tree_name <- ['Qu','Sa','Ma','Pho','De','Di','Os','Phy','Ca','Gm'];
 	
-	float seed <- 0.5;
+//	float seed <- 0.5;
 	
 	output{
 		layout vertical([horizontal([0::1, 1::1])::1, horizontal([2::1, 3::1, 4::1, 5::1, 6::1, 7::1])::1]) 
@@ -270,10 +282,51 @@ experiment init_exp type: gui {
 		
 		display "Main" type: 3d background: rgb(50,50,50) locked:true antialias:true {
 			camera 'default' location: {379.0297,127.6289,554.5108} target: {379.0297,127.6193,0.0};
-			species road refresh: false;
+			species support refresh: true;
+			species road refresh: false ;
 			species island refresh: false;
 			species tree aspect: for_plot;
-			species sign;
+			species sign refresh:true;
+			species reset;
+			
+			event #mouse_down {
+				if (#user_location distance_to reset[0] < 15) and not paused{
+					ask world{
+						write "Reset Player_101" ;
+						do resend_command_to_unity("Player_101");
+					}
+				}
+				else if (#user_location distance_to reset[1] < 15) and not paused{
+					ask world{
+						write "Reset Player_102" ;
+						do resend_command_to_unity("Player_102");
+					}
+				}
+				else if (#user_location distance_to reset[2] < 15) and not paused{
+					ask world{
+						write "Reset Player_103" ;
+						do resend_command_to_unity("Player_103");
+					}
+				}
+				else if (#user_location distance_to reset[3] < 15) and not paused{
+					ask world{
+						write "Reset Player_104" ;
+						do resend_command_to_unity("Player_104");
+					}
+				}
+				else if (#user_location distance_to reset[4] < 15) and not paused{
+					ask world{
+						write "Reset Player_105" ;
+						do resend_command_to_unity("Player_105");
+					}
+				}
+				else if (#user_location distance_to reset[5] < 15) and not paused{
+					ask world{
+						write "Reset Player_106" ;
+						do resend_command_to_unity("Player_106");
+					}
+				}
+			}
 			
 			// ---------------------------------------------------------------------------------------------------------
 			graphics Strings {
@@ -305,29 +358,29 @@ experiment init_exp type: gui {
 				
 				loop i from:0 to:length(map_player_id)-1{
 					if not who_connect[i]{
-						draw "Team" + (i+1) + " " + color_list[i] +  " - " at:{width+30, 20 + (40*i)} font:font("Times", 20, #bold+#italic) color:player_colors[i];
+						draw "Team" + (i+1) + " " + color_list[i] +  " - " at:{width+70, 20 + (40*i)} font:font("Times", 20, #bold+#italic) color:player_colors[i];
 					}
 					else{
 						if not tutorial_finish{
 							if who_finish_tutorial[i]{
 	
-								draw "Team" + (i+1) + " " + color_list[i] + " has finished the tutorial!" at:{width+30, 20 + (40*i)} font:font("Times", 20, #bold+#italic) color:player_colors[i];
+								draw "Team" + (i+1) + " " + color_list[i] + " has finished the tutorial!" at:{width+70, 20 + (40*i)} font:font("Times", 20, #bold+#italic) color:player_colors[i];
 							}
 							else{
-								draw "Team" + (i+1) + " " + color_list[i] +  " has not finished the tutorial..." at:{width+30, 20 + (40*i)} font:font("Times", 20, #bold+#italic) color:player_colors[i];
+								draw "Team" + (i+1) + " " + color_list[i] +  " has not finished the tutorial..." at:{width+70, 20 + (40*i)} font:font("Times", 20, #bold+#italic) color:player_colors[i];
 							}
 						}
 						else{
 							if not it_end_game{
 								if player_walk_in_zone[i]{
-									draw "Team" + (i+1) + " " + color_list[i] +  " is inside zone " + count_start at:{width+30, 20 + (40*i)} font:font("Times", 20, #bold+#italic) color:player_colors[i];
+									draw "Team" + (i+1) + " " + color_list[i] +  " is inside zone " + count_start at:{width+70, 20 + (40*i)} font:font("Times", 20, #bold+#italic) color:player_colors[i];
 								}
 								else{
-									draw "Team" + (i+1) + " " + color_list[i] +  " is outside zone " + count_start at:{width+30, 20 + (40*i)} font:font("Times", 20, #bold+#italic) color:player_colors[i];
+									draw "Team" + (i+1) + " " + color_list[i] +  " is outside zone " + count_start at:{width+70, 20 + (40*i)} font:font("Times", 20, #bold+#italic) color:player_colors[i];
 								}
 							}
 							else{
-								draw "Team" + (i+1) + " " + color_list[i] +  " finished the game" at:{width+30, 20 + (40*i)} font:font("Times", 20, #bold+#italic) color:player_colors[i];							
+								draw "Team" + (i+1) + " " + color_list[i] +  " finished the game" at:{width+70, 20 + (40*i)} font:font("Times", 20, #bold+#italic) color:player_colors[i];							
 							}
 							
 						}
