@@ -30,9 +30,9 @@ global{
 	list<int> sum_total_seeds <- list_with(n_team, 0);
 	
 	int init_time <- 0;
-	int time_now <- 0;
 	int count_start <- 0 ;
 	int current_time <- 1 ;
+	int time_now <- stop_time*count_start ;
 	int upper_bound;
 	int max_total_seed;
 	

@@ -48,38 +48,6 @@ global {
 				}
 			}
 		}
-		
-		
-//		ask unity_player{
-//			int key_player <- team_id-1;
-//			list temp <- [];
-//			list temp2 <- [];
-//			
-//			add 'Team' + int(key_player + 1) to: temp;
-//			add 'Team' + int(key_player + 1) to: temp2;
-//			
-//			loop i from:0 to:length(n_tree) - 1{
-//				if not (i=0 or i=9){
-//					add container(seeds[key_player])[i] to: temp;
-//					add container(alien_seeds[key_player])[i] to: temp2;
-//				}
-//			}
-//			
-//			if self = unity_player[0]{
-//				save temp to: "../results/total_seeds.csv" header:false format:"csv" rewrite:true;
-//			}
-//			else{
-//				save temp to: "../results/total_seeds.csv" header:false format:"csv" rewrite:false;
-//			}
-//			
-//			write temp2;
-//			if self = unity_player[0]{
-//				save temp2 to: "../results/total_alien_seeds.csv" header:false format:"csv" rewrite:true;
-//			}
-//			else{
-//				save temp2 to: "../results/total_alien_seeds.csv" header:false format:"csv" rewrite:false;
-//			}
-//		}	
 	}
 	
 	action resume_game {	
@@ -576,7 +544,7 @@ species unity_player parent: abstract_unity_player{
 }
 
 experiment First_vr_xp parent:init_exp autorun: false type: unity {
-	float minimum_cycle_duration <- 0.50;
+	float minimum_cycle_duration <- 0.10;
 	string unity_linker_species <- string(unity_linker);
 	list<string> displays_to_hide <- ["Main"];
 	float t_ref;
@@ -625,7 +593,7 @@ experiment Second_vr_xp parent:init_exp autorun: false type: unity {
 		alien_experimant <- true;
 	}
 	
-	float minimum_cycle_duration <- 0.50;
+	float minimum_cycle_duration <- 0.10;
 	string unity_linker_species <- string(unity_linker);
 	list<string> displays_to_hide <- ["Main"];
 	float t_ref;
