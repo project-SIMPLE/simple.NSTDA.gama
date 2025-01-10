@@ -21,6 +21,7 @@ global{
 	float init_RCD <- 2.0 #cm;
 	float init_time <- 0.0;
 	int num_of_oldtree <- 2859; 
+	int n_circles <- 10;
 	
 	int num_of_survive_tree <- 0;
 	int num_of_dead_tree <- 0;
@@ -56,10 +57,14 @@ global{
 	
 	int type_of_scenario <- 3;	
 	
- 	list<rgb> color_list <- [#magenta, #tan, #yellow, #blue, #gray, #coral, #gold, #pink, #olive, #green];
+ 	list<rgb> color_list <- [#magenta, #green, #tan, #yellow, #pink, #gray, #coral, #gold,#blue , #olive];
 //	list<rgb> color_list <- [#red, #blue, #green, #teal, #cyan, #magenta, #orange, #purple, #pink, #brown, 
 //								#lime, #crimson, #indigo, #gray, #coral];
 								
+	map<string, string> map_player_id <- ["Team1"::"Blue", "Team2"::"Red", "Team3"::"Green", "Team4"::"Yellow", "Team5"::"Black", "Team6"::"White"];
+	map<string, rgb> map_player_color <- ["Team1"::rgb(66, 72, 255), "Team2"::#red, "Team3"::#green, "Team4"::rgb(255, 196, 0), "Team5"::#black, "Team6"::rgb(156, 152, 142)];
+	
+	
 	rgb color_oldtree <- rgb(163, 191, 172);
 	
 	list<string> team_id <- [];
@@ -127,7 +132,7 @@ global{
 		}
 		
 		
-		loop i from: 1 to:10{
+		loop i from: 1 to:n_circles{
 				create my_circles {
 					if cnt_created_circles > 0{
 						ask my_circles[cnt_created_circles - 1]{
@@ -438,13 +443,13 @@ experiment visualize_tree_growth{
 		display 'TEAM' type:3d{
 //			camera 'default' location: {100,100,50};
 			camera 'default' location: {140.5357,139.5896,86.9179} target: {53.6178,52.6717,0.0};
-			overlay position: { 5, 5 } size: { 180 #px, 30 #px } background: # black transparency: 0.2 border: #black rounded: true
+			overlay position: { 5, 5 } size: { 180 #px, 30 #px } background: rgb(map_player_color[team_id[player_ID-1]]) transparency: 0.2 border: #black rounded: true
         {
 //            	draw "survival tree: " + with_precision(sum(count_tree_survi) / sum(initial_treeid),3)
 		draw "survival tree: " + sum(count_tree_survi) + " / " + sum(initial_treeid)
             	color: #black font: font("SansSerif", 15, #bold) at: { 10#px, 50#px };
 //				draw "Team: " + player_ID color: # white font: font("SansSerif", 20, #bold) at: { 10#px, 20#px };
- 				draw team_id[player_ID-1] color: # white font: font("SansSerif", 20, #bold) at: { 10#px, 20#px };
+ 				draw "" + team_id[player_ID-1] + " " + string(map_player_id[team_id[player_ID-1]]) color: # white font: font("SansSerif", 20, #bold) at: { 10#px, 20#px };
  				
          
     	draw "RSA: " + int ((( sum(count_old_tree_in_circles) + sum(count_tree_in_circles) ) / 10) * 10000 / 78 )
