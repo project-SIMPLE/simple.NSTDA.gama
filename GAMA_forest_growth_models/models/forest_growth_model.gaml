@@ -83,8 +83,12 @@ global{
 	file min_seed_file <- csv_file( "../result/min_collect_seed.csv");
 
 	// Read real seed data from multi-player
-	file seeds_file <- csv_file( "../../GAMA_forest_trails/results/22Dec_result/total_seeds.csv");
-	file alien_seeds_file <- csv_file( "../../GAMA_forest_trails/results/22Dec_result/total_alien_seeds.csv");
+//	file seeds_file <- csv_file( "../../GAMA_forest_trails/results/22Dec_result/total_seeds.csv");
+//	file alien_seeds_file <- csv_file( "../../GAMA_forest_trails/results/22Dec_result/total_alien_seeds.csv");
+
+	// Read real seed data in m2l2 
+	file seeds_file <- csv_file( "../../1-GAMA_forest_trails/results/total_seeds.csv");
+	file alien_seeds_file <- csv_file( "../../1-GAMA_forest_trails/results/total_alien_seeds.csv");
 
 
 	init{
