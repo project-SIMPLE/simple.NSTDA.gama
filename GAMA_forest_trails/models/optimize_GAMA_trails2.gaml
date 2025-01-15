@@ -12,7 +12,7 @@ import "optimize_species.gaml"
 global{
 	// Parameter
 	int n_team <- 6;
-	int stop_time <- 90; //second
+	int stop_time <- 30; //second
 	
 	// Variable
 	shape_file Trail_shape_file <- shape_file("../includes/Trail.shp");
@@ -100,10 +100,10 @@ global{
 		}
 		
 		loop j from:0 to:length(n_tree)-1{
-			write "fruiting_stage type" + (j+1) + " is \t" + fruiting_stage[j];
-			write "n_tree type" + (j+1) + " is \t\t\t" + n_tree[j];
-			write "alien_tree type" + (j+1) + " is \t\t" + alien_tree[j];
-			write " ";
+			//write "fruiting_stage type" + (j+1) + " is \t" + fruiting_stage[j];
+			//write "n_tree type" + (j+1) + " is \t\t\t" + n_tree[j];
+			//write "alien_tree type" + (j+1) + " is \t\t" + alien_tree[j];
+			//write " ";
 		}
 		
 		create sign{
@@ -159,7 +159,7 @@ global{
 							}
 						}						
 						if (not is_ok) {
-							write 'Geometry not enough';
+							//write 'Geometry not enough';
 							break;
 						}
 					}
@@ -194,7 +194,7 @@ global{
 	}
 	
 	reflex do_pause when: (time_now >= stop_time*count_start) and (cycle != 0) and not can_start and tutorial_finish{
-		write "do_pause";
+		//write "do_pause";
 		ask sign{
 			icon <- play;
 		}
@@ -205,7 +205,7 @@ global{
 	}
 	
 	reflex do_resume when: not paused and can_start{
-		write "do_resume";
+		//write "do_resume";
 		ask sign{
 			icon <- stop;
 		}
@@ -223,7 +223,7 @@ global{
 	action growth_up {
 		loop i from:0 to:length(n_tree)-1{
 			if alien_tree[i][count_start-1] = 1{
-				write "Alien at i= " + i + " j= " + (count_start-1) + " num= "+ n_tree[i][count_start-1] + " num0.2= " + int(n_tree[i][count_start-1]*0.2);
+				//write "Alien at i= " + i + " j= " + (count_start-1) + " num= "+ n_tree[i][count_start-1] + " num0.2= " + int(n_tree[i][count_start-1]*0.2);
 			}
 			
 			if fruiting_stage[i][count_start-1] = 1{
@@ -232,7 +232,7 @@ global{
 				if alien_experimant and alien_tree[i][count_start-1] = 1{
 					loop j from:0 to: int(n_tree[i][count_start-1]*0.4)-1{
 						ask tree_list[j]{
-							write self;
+							//write self;
 							color <- #purple;
 							it_alien <- true;
 						}
@@ -240,7 +240,7 @@ global{
 				}
 				
 				ask tree_list{
-					it_state <- 4 ;
+					it_state <- 2 ;
 					if not it_alien{
 						self.color <- color_state4 ;
 					}
@@ -292,37 +292,37 @@ experiment init_exp type: gui {
 			event #mouse_down {
 				if (#user_location distance_to reset[0] < 15) and not paused{
 					ask world{
-						write "Reset Player_101" ;
+						//write "Reset Player_101" ;
 						do resend_command_to_unity("Player_101");
 					}
 				}
 				else if (#user_location distance_to reset[1] < 15) and not paused{
 					ask world{
-						write "Reset Player_102" ;
+						//write "Reset Player_102" ;
 						do resend_command_to_unity("Player_102");
 					}
 				}
 				else if (#user_location distance_to reset[2] < 15) and not paused{
 					ask world{
-						write "Reset Player_103" ;
+						//write "Reset Player_103" ;
 						do resend_command_to_unity("Player_103");
 					}
 				}
 				else if (#user_location distance_to reset[3] < 15) and not paused{
 					ask world{
-						write "Reset Player_104" ;
+						//write "Reset Player_104" ;
 						do resend_command_to_unity("Player_104");
 					}
 				}
 				else if (#user_location distance_to reset[4] < 15) and not paused{
 					ask world{
-						write "Reset Player_105" ;
+						//write "Reset Player_105" ;
 						do resend_command_to_unity("Player_105");
 					}
 				}
 				else if (#user_location distance_to reset[5] < 15) and not paused{
 					ask world{
-						write "Reset Player_106" ;
+						//write "Reset Player_106" ;
 						do resend_command_to_unity("Player_106");
 					}
 				}

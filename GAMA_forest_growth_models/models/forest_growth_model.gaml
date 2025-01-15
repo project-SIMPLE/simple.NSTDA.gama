@@ -255,10 +255,10 @@ global{
 		loop i from: 1 to: alien_seed_data.columns-1{
 			if int(alien_seed_data[i,player_ID-1]) > 0{
 				list<tree> list_alien_tree <- tree where (each.tree_type = i);
-				write "Alien tree is " + list_alien_tree;
+				//write "Alien tree is " + list_alien_tree;
 				ask list_alien_tree{
 					is_alien <- true;
-					write "alien is" + self;
+					//write "alien is" + self;
 				}
 			}
 		}
@@ -329,7 +329,7 @@ global{
 			
 //			write int((( sum(count_old_tree_in_circles) + sum(count_tree_in_circles)) / 10) * 10000 / 78 );
 	//		write count_tree_in_circles;
-			write count_old_tree_in_circles;
+			//write count_old_tree_in_circles;
 		}
 	}
 }
