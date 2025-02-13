@@ -3,6 +3,7 @@ model optimizeGAMAtrails_model_VR
 import "optimize_GAMA_trails2.gaml"
 
 global {	
+	int adjust_zone <- 10;
 	action save_total_seeds_to_csv{
 		list header <- [];
 		loop i from:0 to:length(n_tree) - 1{
@@ -80,7 +81,7 @@ global {
 			}
 			else {
 				ask unity_player[player_ID]{
-					location <- any_location_in(road_midpoint[map_zone[count_start-1]] - 3) + {0, 0, 3};
+					location <- any_location_in(road_midpoint[map_zone[count_start-1]] - adjust_zone) + {0, 0, 3};
 					ask unity_linker {
 						new_player_position[myself.name] <- [myself.location.x *precision,myself.location.y *precision,myself.location.z *precision];
 						move_player_event <- true;
@@ -111,7 +112,7 @@ global {
 		}
 		else {
 			ask unity_player{
-				location <- any_location_in(road_midpoint[map_zone[count_start-1]] - 3) + {0, 0, 3};
+				location <- any_location_in(road_midpoint[map_zone[count_start-1]] - adjust_zone) + {0, 0, 3};
 				ask unity_linker {
 					new_player_position[myself.name] <- [myself.location.x *precision,myself.location.y *precision,myself.location.z *precision];
 					move_player_event <- true;
@@ -289,7 +290,8 @@ species unity_linker parent: abstract_unity_linker {
 
 	init {
 		do define_properties;
-		player_unity_properties <- [up_player_1, up_player_2, up_player_3, up_player_4, up_player_5, up_player_6];
+//		player_unity_properties <- [up_player_1, up_player_2, up_player_3, up_player_4, up_player_5, up_player_6];
+
 //		do add_background_geometries(road collect (each.geom_visu), up_road);
 //		do add_background_geometries(island, up_island);
 		

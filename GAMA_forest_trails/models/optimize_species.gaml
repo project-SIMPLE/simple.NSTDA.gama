@@ -11,9 +11,21 @@ model optimizespecies
 global {
 	image_file play <- image_file("../images/play.png");
 	image_file stop <- image_file("../images/stop.png");
-	image_file static_map <- image_file("../includes/Ground_V3.jpg");
-	image_file reset_image <- image_file("../includes/reset.png");
+	image_file static_map <- image_file("../images/Ground_V3.jpg");
+	image_file reset_image <- image_file("../images/reset.png");
+	image_file correct_image <- image_file("../images/correct_icon.png");
+	image_file incorrect_image <- image_file("../images/incorrect_icon.png");
+	image_file alert_image <- image_file("../images/alert_icon.png");
+	image_file no_signal_image <- image_file("../images/no_signal_icon.png");
+	image_file blank_image <- image_file("../images/blank.png");
 
+}
+
+species player_status{
+	image_file status_icon <- no_signal_image;
+	aspect default {
+		draw status_icon size:{40,40};
+	}
 }
 
 species support {

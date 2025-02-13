@@ -5,6 +5,15 @@
 * Tags: 
 */
 
+// 6 Feb 
+// การ random จุดเกิดให้อยู่กลางโซนของทุกทีม done!
+// จะไม่เรียก prefab ของเพื่อน ๆ ผู้เล่น (ไม่ส่งใครเลย) done!
+// text ของ team ให้เป็นสี แต่ text ตามท้ายเป็นเขียวกะแดงไปเลย done!
+// เพิ่มจำนวนก่อเดือยให้มากขึ้น เพราะเด็กเก็บไม่ทัน
+
+// เปลี่ยน visible walls บังไม่ให้เห็นฝั่งตรงข้าม
+// Invisible ระหว่างโซน ถ้าไม่ได้ มปร.
+
 model optimizeGAMAtrails
 
 import "optimize_species.gaml"
@@ -78,7 +87,11 @@ global{
 		
 		loop i from:0 to:length(map_player_id)-1{
 			create reset{
-				location <- {width+50, 12 + (40*i)};
+				location <- {width + 50, 12 + (40*i)};
+			}
+			
+			create player_status{
+				location <- {width + 210, 12 + (40*i)};
 			}
 		}
 		
@@ -172,6 +185,50 @@ global{
 		save union(road_midpoint) to:"../includes/export/road_midpoint.shp" format:"shp";
 	}
 	
+	reflex update_status {
+		loop i from:0 to:length(map_player_id)-1{
+			if not who_connect[i]{
+				ask player_status[i]{
+					status_icon <- no_signal_image;
+				}
+			}
+			else{						
+				if not tutorial_finish{
+					if who_finish_tutorial[i]{
+						ask player_status[i]{
+							status_icon <- correct_image;
+						}
+					}
+					else{
+						ask player_status[i]{
+							status_icon <- incorrect_image;
+						}
+					}
+				}
+				else{
+					if not it_end_game{
+						if player_walk_in_zone[i]{
+							ask player_status[i]{
+								status_icon <- blank_image;
+							}
+						}
+						else{
+							ask player_status[i]{
+								status_icon <- alert_image;
+							}
+						}
+					}
+					else{
+						ask player_status[i]{
+							status_icon <- correct_image;
+						}
+					}
+					
+				}
+			}
+		}
+	}
+	
 	reflex update_time_and_bound when: not paused and tutorial_finish{
 		if (gama.machine_time div 1000) - init_time >= 1{
 			init_time <- gama.machine_time div 1000;
@@ -202,6 +259,8 @@ global{
 		do pause;
 		
 		can_start <- true;
+		
+		do save_total_seeds_to_csv;
 	}
 	
 	reflex do_resume when: not paused and can_start{
@@ -287,7 +346,8 @@ experiment init_exp type: gui {
 			species island refresh: false;
 			species tree aspect: for_plot;
 			species sign refresh:true;
-			species reset;
+			species reset refresh: false ;
+			species player_status refresh:true;
 			
 			event #mouse_down {
 				if (#user_location distance_to reset[0] < 15) and not paused{
@@ -357,34 +417,41 @@ experiment init_exp type: gui {
 			// ---------------------------------------------------------------------------------------------------------
 				
 				loop i from:0 to:length(map_player_id)-1{
-					if not who_connect[i]{
-						draw "Team" + (i+1) + " " + color_list[i] +  " - " at:{width+70, 20 + (40*i)} font:font("Times", 20, #bold+#italic) color:player_colors[i];
-					}
-					else{
-						if not tutorial_finish{
-							if who_finish_tutorial[i]{
-	
-								draw "Team" + (i+1) + " " + color_list[i] + " has finished the tutorial!" at:{width+70, 20 + (40*i)} font:font("Times", 20, #bold+#italic) color:player_colors[i];
-							}
-							else{
-								draw "Team" + (i+1) + " " + color_list[i] +  " has not finished the tutorial..." at:{width+70, 20 + (40*i)} font:font("Times", 20, #bold+#italic) color:player_colors[i];
-							}
-						}
-						else{
-							if not it_end_game{
-								if player_walk_in_zone[i]{
-									draw "Team" + (i+1) + " " + color_list[i] +  " is inside zone " + count_start at:{width+70, 20 + (40*i)} font:font("Times", 20, #bold+#italic) color:player_colors[i];
-								}
-								else{
-									draw "Team" + (i+1) + " " + color_list[i] +  " is outside zone " + count_start at:{width+70, 20 + (40*i)} font:font("Times", 20, #bold+#italic) color:player_colors[i];
-								}
-							}
-							else{
-								draw "Team" + (i+1) + " " + color_list[i] +  " finished the game" at:{width+70, 20 + (40*i)} font:font("Times", 20, #bold+#italic) color:player_colors[i];							
-							}
-							
-						}
-					}
+					draw "Team" + (i+1) + " " + color_list[i] +  ": " 
+						at:{width+70, 20 + (40*i)} 
+						font:font("Times", 20, #bold+#italic) 
+						color:player_colors[i];
+						
+//					if not who_connect[i]{
+//						draw "Team" + (i+1) + " " + color_list[i] +  ": - " 
+//						at:{width+70, 20 + (40*i)} 
+//						font:font("Times", 20, #bold+#italic) 
+//						color:player_colors[i];
+//					}
+//					else{						
+//						if not tutorial_finish{
+//							if who_finish_tutorial[i]{
+//								draw "Team" + (i+1) + " " + color_list[i] + " has finished the tutorial!" at:{width+70, 20 + (40*i)} font:font("Times", 20, #bold+#italic) color:player_colors[i];
+//							}
+//							else{
+//								draw "Team" + (i+1) + " " + color_list[i] +  " has not finished the tutorial..." at:{width+70, 20 + (40*i)} font:font("Times", 20, #bold+#italic) color:player_colors[i];
+//							}
+//						}
+//						else{
+//							if not it_end_game{
+//								if player_walk_in_zone[i]{
+//									draw "Team" + (i+1) + " " + color_list[i] +  " is inside zone " + count_start at:{width+70, 20 + (40*i)} font:font("Times", 20, #bold+#italic) color:player_colors[i];
+//								}
+//								else{
+//									draw "Team" + (i+1) + " " + color_list[i] +  " is outside zone " + count_start at:{width+70, 20 + (40*i)} font:font("Times", 20, #bold+#italic) color:player_colors[i];
+//								}
+//							}
+//							else{
+//								draw "Team" + (i+1) + " " + color_list[i] +  " finished the game" at:{width+70, 20 + (40*i)} font:font("Times", 20, #bold+#italic) color:player_colors[i];							
+//							}
+//							
+//						}
+//					}
 				}
 			}
 		}
