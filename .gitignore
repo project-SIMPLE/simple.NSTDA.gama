@@ -16,3 +16,6 @@ GAMA_forest_growth_models/includes/RGR_GAMA_tree_cm copy.csv
 GAMA_forest_trails/results/result_cut.zip
 GAMA_forest_trails/results/result.zip
 GAMA_forest_growth_models.zip
+GAMA_forest_growth_models/models/pre_forest_growth.gaml
+GAMA_forest_growth_models/models/growth_model_3graph_3dsim_cm.gaml
+GAMA_forest_growth_models/models/test-radar Model.gaml

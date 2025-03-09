@@ -72,8 +72,8 @@ global{
 //	file alien_seeds_file <- csv_file( "../result/total_alien_seeds.csv");
 	file min_seed_file <- csv_file( "../result/min_collect_seed.csv");
 	
-	file seeds_file <- csv_file( "../../GAMA_forest_trails/results/total_seeds.csv");
-	file alien_seeds_file <- csv_file( "../../GAMA_forest_trails/results/total_alien_seeds.csv");
+	file seeds_file <- csv_file( "../result/total_seeds.csv");
+	file alien_seeds_file <- csv_file( "../result/total_alien_seeds.csv");
 
 
 	init{
@@ -345,12 +345,12 @@ experiment visualize_tree_growth{
 	float minimum_cycle_duration <- 0.30;
 	
 	init{
-		type_of_scenario <- 3;
-		if length(team_id) > 1{
-			loop i from:2 to:length(team_id){
-				create simulation with:[player_ID:i];
-			}
-		}
+//		type_of_scenario <- 3;
+//		if length(team_id) > 1{
+//			loop i from:2 to:length(team_id){
+//				create simulation with:[player_ID:i];
+//			}
+//		}
 		
 	}
 	
@@ -358,12 +358,12 @@ experiment visualize_tree_growth{
 	output{
 		
 
-		layout vertical([horizontal([0::1, 1::1, 2::1])::1, horizontal([3::1, 4::1, 5::1])::1])
-		toolbars: false tabs: false parameters: false consoles: true navigator: false controls: true tray: false;
+//		layout vertical([horizontal([0::1, 1::1, 2::1])::1, horizontal([3::1, 4::1, 5::1])::1])
+//		toolbars: false tabs: false parameters: false consoles: false navigator: false controls: true tray: false;
 		
 		display 'Group' type:3d{
-//			camera 'default' location: {100,100,50};
-			camera 'default' location: {140.5357,139.5896,86.9179} target: {53.6178,52.6717,0.0};
+			camera 'default' location: {100,100,50};
+//			camera 'default' location: {140.5357,139.5896,86.9179} target: {53.6178,52.6717,0.0};
 			overlay position: { 5, 5 } size: { 180 #px, 30 #px } background: # black transparency: 0.2 border: #black rounded: true
             {
             	draw "survival tree:" + with_precision(sum(count_tree_survi) / sum(initial_treeid),3) 

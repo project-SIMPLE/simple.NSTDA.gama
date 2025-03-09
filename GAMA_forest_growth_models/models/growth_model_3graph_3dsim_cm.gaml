@@ -204,6 +204,7 @@ species tree{
 				add self to: list_deathtree;
 			}
 		}
+		
 	}
 	
 	aspect base {
