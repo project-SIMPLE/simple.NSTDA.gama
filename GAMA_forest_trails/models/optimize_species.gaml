@@ -16,15 +16,17 @@ global {
 	image_file correct_image <- image_file("../images/correct_icon.png");
 	image_file incorrect_image <- image_file("../images/incorrect_icon.png");
 	image_file alert_image <- image_file("../images/alert_icon.png");
-	image_file no_signal_image <- image_file("../images/no_signal_icon.png");
+//	image_file no_signal_image <- image_file("../images/no_signal_icon.png");
 	image_file blank_image <- image_file("../images/blank.png");
 
 }
 
 species player_status{
-	image_file status_icon <- no_signal_image;
+//	image_file status_icon <- no_signal_image;
+//	image_file status_icon <- incorrect_image;
+	image_file status_icon <- blank_image;
 	aspect default {
-		draw status_icon size:{40,40};
+		draw status_icon size:{30,30};
 	}
 }
 
@@ -56,7 +58,7 @@ species tree{
 	int tree_zone <- 0;
 	bool it_alien <- false;
 	rgb color <- rgb(43, 150, 0);
-	int it_state ;
+	int it_state <- 1;
 	list<int> list_of_state1;
 	list<int> list_of_state2;
 	list<int> list_of_state3;
@@ -92,6 +94,14 @@ species island{
 species zone{
 	rgb color <- rnd_color(255);
 	geometry shape <- circle(100#m);
+	aspect default {
+		draw shape color: color ;	
+	}
+}
+
+species zone_for_player_warp{
+	rgb color ; //<- rnd_color(255);
+	geometry shape <- circle(40#m);
 	aspect default {
 		draw shape color: color ;	
 	}

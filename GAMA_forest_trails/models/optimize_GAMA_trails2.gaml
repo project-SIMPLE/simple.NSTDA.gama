@@ -64,6 +64,7 @@ global{
 	bool alien_experimant <- false;
 	
 	map<string, int> map_player_id <- ["Player_101"::1, "Player_102"::2, "Player_103"::3, "Player_104"::4, "Player_105"::5, "Player_106"::6];
+//	map<string, int> map_player_id <- ["Player_51"::1, "Player_102"::2, "Player_103"::3, "Player_104"::4, "Player_105"::5, "Player_106"::6];
 	list<rgb> player_colors <- [rgb(66, 72, 255), #red, #green, rgb(255, 196, 0), #black, rgb(156, 152, 142)];
 	list<string> color_list <- ["Blue", "Red", 'Green', "Yellow", "Black", "White"];
 	list<string> player_id_finish_tutorial_list <- [];
@@ -91,7 +92,13 @@ global{
 			}
 			
 			create player_status{
-				location <- {width + 210, 12 + (40*i)};
+				location <- {width + 260, 16 + (40*i)};
+			}
+		}
+		
+		loop i from:0 to:length(map_player_id)-1{			
+			create player_status{
+				location <- {width + 360, 16 + (40*i)};
 			}
 		}
 		
@@ -113,10 +120,10 @@ global{
 		}
 		
 		loop j from:0 to:length(n_tree)-1{
-			//write "fruiting_stage type" + (j+1) + " is \t" + fruiting_stage[j];
-			//write "n_tree type" + (j+1) + " is \t\t\t" + n_tree[j];
-			//write "alien_tree type" + (j+1) + " is \t\t" + alien_tree[j];
-			//write " ";
+//			write "fruiting_stage type" + (j+1) + " is \t" + fruiting_stage[j];
+//			write "n_tree type" + (j+1) + " is \t\t\t" + n_tree[j];
+//			write "alien_tree type" + (j+1) + " is \t\t" + alien_tree[j];
+//			write " ";
 		}
 		
 		create sign{
@@ -141,6 +148,10 @@ global{
 			loop j from:0 to:length(n_tree[0])-1{
 				create zone {
 					location <- road_midpoint[map_zone[j]].location;
+				}
+				create zone_for_player_warp {
+					location <- road_midpoint[map_zone[j]].location;
+					color <- player_colors[j];
 				}
 			}
 			
@@ -188,9 +199,10 @@ global{
 	reflex update_status {
 		loop i from:0 to:length(map_player_id)-1{
 			if not who_connect[i]{
-				ask player_status[i]{
-					status_icon <- no_signal_image;
-				}
+//				ask player_status[i]{
+////					status_icon <- no_signal_image;
+//					status_icon <- incorrect_image;
+//				}
 			}
 			else{						
 				if not tutorial_finish{
@@ -206,21 +218,25 @@ global{
 					}
 				}
 				else{
+					ask player_status[i]{
+						status_icon <- correct_image;
+					}
 					if not it_end_game{
 						if player_walk_in_zone[i]{
-							ask player_status[i]{
+							ask player_status[i+6]{
 								status_icon <- blank_image;
 							}
 						}
 						else{
-							ask player_status[i]{
+							ask player_status[i+6]{
 								status_icon <- alert_image;
 							}
 						}
 					}
 					else{
-						ask player_status[i]{
+						ask player_status[i+6]{
 							status_icon <- correct_image;
+							status_icon <- blank_image;
 						}
 					}
 					
@@ -264,6 +280,7 @@ global{
 	}
 	
 	reflex do_resume when: not paused and can_start{
+		bool  result <- user_confirm("Simulation Start Confirmation","Do you want to start the simulation?");
 		//write "do_resume";
 		ask sign{
 			icon <- stop;
@@ -313,6 +330,9 @@ global{
 				self.color <- rgb(43, 150, 0);	
 			}
 		}
+//		ask tree{
+//			write "" + self + " Type: " + tree_type + " State: " + it_state;
+//		}
 	}
 	
 	reflex end_game when:time_now >= (stop_time*6){
@@ -340,7 +360,8 @@ experiment init_exp type: gui {
 		toolbars: false tabs: false parameters: false consoles: false navigator: false controls: true tray: false ;
 		
 		display "Main" type: 3d background: rgb(50,50,50) locked:true antialias:true {
-			camera 'default' location: {379.0297,127.6289,554.5108} target: {379.0297,127.6193,0.0};
+//			camera 'default' location: {379.0297,127.6289,554.5108} target: {379.0297,127.6193,0.0};
+			camera 'default' location: {428.9357,127.6299,611.3482} target: {428.9357,127.6193,0.0};
 			species support refresh: true;
 			species road refresh: false ;
 			species island refresh: false;
@@ -348,12 +369,17 @@ experiment init_exp type: gui {
 			species sign refresh:true;
 			species reset refresh: false ;
 			species player_status refresh:true;
+//			species zone;
+//			species zone_for_player_warp;
 			
 			event #mouse_down {
 				if (#user_location distance_to reset[0] < 15) and not paused{
 					ask world{
 						//write "Reset Player_101" ;
 						do resend_command_to_unity("Player_101");
+						
+//						//write "Reset Player_51" ;
+//						do resend_command_to_unity("Player_51");
 					}
 				}
 				else if (#user_location distance_to reset[1] < 15) and not paused{
@@ -421,6 +447,9 @@ experiment init_exp type: gui {
 						at:{width+70, 20 + (40*i)} 
 						font:font("Times", 20, #bold+#italic) 
 						color:player_colors[i];
+						
+				draw "Tutorial\nCompleted" at:{width+260, -40} font:font("Times", 20, #bold) anchor:#center; 
+				draw "Out of\nBounds" at:{width+360, -40} font:font("Times", 20, #bold) anchor:#center; 
 						
 //					if not who_connect[i]{
 //						draw "Team" + (i+1) + " " + color_list[i] +  ": - " 

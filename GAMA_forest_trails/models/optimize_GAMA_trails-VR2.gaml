@@ -3,7 +3,7 @@ model optimizeGAMAtrails_model_VR
 import "optimize_GAMA_trails2.gaml"
 
 global {	
-	int adjust_zone <- 10;
+	int adjust_location <- 3;
 	action save_total_seeds_to_csv{
 		list header <- [];
 		loop i from:0 to:length(n_tree) - 1{
@@ -81,7 +81,12 @@ global {
 			}
 			else {
 				ask unity_player[player_ID]{
-					location <- any_location_in(road_midpoint[map_zone[count_start-1]] - adjust_zone) + {0, 0, 3};
+//					location <- any_location_in(road_midpoint[map_zone[count_start-1]] - adjust_location) + {0, 0, 3};
+//					location <- road_midpoint[map_zone[count_start-1]].location + 
+//						{rnd(-adjust_location,adjust_location), rnd(-adjust_location,adjust_location), 3};
+					location <- any_location_in(road_midpoint[map_zone[count_start-1]] inter 
+						zone_for_player_warp[count_start-1].shape);
+					
 					ask unity_linker {
 						new_player_position[myself.name] <- [myself.location.x *precision,myself.location.y *precision,myself.location.z *precision];
 						move_player_event <- true;
@@ -112,7 +117,12 @@ global {
 		}
 		else {
 			ask unity_player{
-				location <- any_location_in(road_midpoint[map_zone[count_start-1]] - adjust_zone) + {0, 0, 3};
+//				location <- any_location_in(road_midpoint[map_zone[count_start-1]] - adjust_location) + {0, 0, 3};
+//				location <- road_midpoint[map_zone[count_start-1]].location + 
+//						{rnd(-adjust_location,adjust_location), rnd(-adjust_location,adjust_location), 3};
+				location <- any_location_in(road_midpoint[map_zone[count_start-1]] inter 
+						zone_for_player_warp[count_start-1].shape);
+						
 				ask unity_linker {
 					new_player_position[myself.name] <- [myself.location.x *precision,myself.location.y *precision,myself.location.z *precision];
 					move_player_event <- true;
@@ -206,12 +216,12 @@ species unity_linker parent: abstract_unity_linker {
 	unity_property up_alien_tree_11;
 	unity_property up_alien_tree_12;
 	
-	unity_property up_player_1;
-	unity_property up_player_2;
-	unity_property up_player_3;
-	unity_property up_player_4;
-	unity_property up_player_5;
-	unity_property up_player_6;
+//	unity_property up_player_1;
+//	unity_property up_player_2;
+//	unity_property up_player_3;
+//	unity_property up_player_4;
+//	unity_property up_player_5;
+//	unity_property up_player_6;
 	
 	
 	action tutorial_finish(string player_ID, string tutorial_status){		
@@ -225,11 +235,18 @@ species unity_linker parent: abstract_unity_linker {
 		if length(player_id_finish_tutorial_list) >= length(unity_player){
 			//write "Tutorial Finish!!!!";
 			ask world{
-				
 				ask sign{
 					self.icon <- play;
 					//write "do_pause Tutorial (Change Icon!)";
 				}
+				loop i from:0 to:length(map_player_id)-1{
+					if who_connect[i]{
+						ask player_status[i]{
+							status_icon <- correct_image;
+						}
+					}
+				}
+				
 				do pause;
 				can_start <- true;
 			}
@@ -405,43 +422,50 @@ species unity_linker parent: abstract_unity_linker {
 
 
 		
-		unity_aspect player_aspect_1 <- prefab_aspect("temp/Prefab/Character/PlayerPrefab1",1.00,0.0,-1.0,90.0,precision);
-		up_player_1 <- geometry_properties("player1","",player_aspect_1,new_geometry_interaction(true, false,false,[]),false);
-		unity_properties << up_player_1;
-		
-		unity_aspect player_aspect_2 <- prefab_aspect("temp/Prefab/Character/PlayerPrefab2",1.00,0.0,-1.0,90.0,precision);
-		up_player_2 <- geometry_properties("player2","",player_aspect_2,new_geometry_interaction(true, false,false,[]),false);
-		unity_properties << up_player_2; 
-		
-		unity_aspect player_aspect_3 <- prefab_aspect("temp/Prefab/Character/PlayerPrefab3",1.00,0.0,-1.0,90.0,precision);
-		up_player_3 <- geometry_properties("player3","",player_aspect_3,new_geometry_interaction(true, false,false,[]),false);
-		unity_properties << up_player_3; 
-		
-		unity_aspect player_aspect_4 <- prefab_aspect("temp/Prefab/Character/PlayerPrefab4",1.00,0.0,-1.0,90.0,precision);
-		up_player_4 <- geometry_properties("player4","",player_aspect_4,new_geometry_interaction(true, false,false,[]),false);
-		unity_properties << up_player_4; 
-		
-		unity_aspect player_aspect_5 <- prefab_aspect("temp/Prefab/Character/PlayerPrefab5",1.00,0.0,-1.0,90.0,precision);
-		up_player_5 <- geometry_properties("player5","",player_aspect_5,new_geometry_interaction(true, false,false,[]),false);
-		unity_properties << up_player_5; 
-		
-		unity_aspect player_aspect_6 <- prefab_aspect("temp/Prefab/Character/PlayerPrefab6",1.00,0.0,-1.0,90.0,precision);
-		up_player_6 <- geometry_properties("player6","",player_aspect_6,new_geometry_interaction(true, false,false,[]),false);
-		unity_properties << up_player_6; 
+//		unity_aspect player_aspect_1 <- prefab_aspect("temp/Prefab/Character/PlayerPrefab1",1.00,0.0,-1.0,90.0,precision);
+//		up_player_1 <- geometry_properties("player1","",player_aspect_1,new_geometry_interaction(true, false,false,[]),false);
+//		unity_properties << up_player_1;
+//		
+//		unity_aspect player_aspect_2 <- prefab_aspect("temp/Prefab/Character/PlayerPrefab2",1.00,0.0,-1.0,90.0,precision);
+//		up_player_2 <- geometry_properties("player2","",player_aspect_2,new_geometry_interaction(true, false,false,[]),false);
+//		unity_properties << up_player_2; 
+//		
+//		unity_aspect player_aspect_3 <- prefab_aspect("temp/Prefab/Character/PlayerPrefab3",1.00,0.0,-1.0,90.0,precision);
+//		up_player_3 <- geometry_properties("player3","",player_aspect_3,new_geometry_interaction(true, false,false,[]),false);
+//		unity_properties << up_player_3; 
+//		
+//		unity_aspect player_aspect_4 <- prefab_aspect("temp/Prefab/Character/PlayerPrefab4",1.00,0.0,-1.0,90.0,precision);
+//		up_player_4 <- geometry_properties("player4","",player_aspect_4,new_geometry_interaction(true, false,false,[]),false);
+//		unity_properties << up_player_4; 
+//		
+//		unity_aspect player_aspect_5 <- prefab_aspect("temp/Prefab/Character/PlayerPrefab5",1.00,0.0,-1.0,90.0,precision);
+//		up_player_5 <- geometry_properties("player5","",player_aspect_5,new_geometry_interaction(true, false,false,[]),false);
+//		unity_properties << up_player_5; 
+//		
+//		unity_aspect player_aspect_6 <- prefab_aspect("temp/Prefab/Character/PlayerPrefab6",1.00,0.0,-1.0,90.0,precision);
+//		up_player_6 <- geometry_properties("player6","",player_aspect_6,new_geometry_interaction(true, false,false,[]),false);
+//		unity_properties << up_player_6; 
 	}
 	
 	reflex send_geometries {
+//		do add_geometries_to_send(tree,up_tree_1a);
 		list<tree> t1 <- tree where ((each.tree_type = 1) and (each.it_state = 1));
 		list<tree> t1f <- tree where ((each.tree_type = 1) and (each.it_state = 2) and (each.it_alien = false));
 		list<tree> t1a <- tree where ((each.tree_type = 1) and (each.it_state = 2) and (each.it_alien = true));
+//		write "t1 " + t1;
+//		write "t1f " + t1f;
+//		write "t1a " + t1a;
 		if not empty(t1){
 			do add_geometries_to_send(t1,up_tree_1a);
+//			write "send t1";
 		}
 		if not empty(t1f){
 			do add_geometries_to_send(t1f,up_tree_1b);
+//			write "send t1f";
 		}
 		if not empty(t1a){
 			do add_geometries_to_send(t1a,up_alien_tree_1);
+//			write "send t1a";
 		}	
  
 		list<tree> t2 <- tree where ((each.tree_type = 2) and (each.it_state = 1));
@@ -449,119 +473,109 @@ species unity_linker parent: abstract_unity_linker {
 		list<tree> t2a <- tree where ((each.tree_type = 2) and (each.it_state = 2) and (each.it_alien = true));
 		if not empty(t2){
 			do add_geometries_to_send(t2,up_tree_2a);
+//			write "send t2";
 		}
 		if not empty(t2f){
 			do add_geometries_to_send(t2f,up_tree_2b);
+//			write "send t2f";
 		}
 		if not empty(t2a){
 			do add_geometries_to_send(t2a,up_alien_tree_2);
+//			write "send t2a";
 		}	
  
 		list<tree> t3 <- tree where ((each.tree_type = 3) and (each.it_state = 1));
 		list<tree> t3f <- tree where ((each.tree_type = 3) and (each.it_state = 2) and (each.it_alien = false));
-		list<tree> t3a <- tree where ((each.tree_type = 3) and (each.it_state = 2) and (each.it_alien = true));
 		if not empty(t3){
 			do add_geometries_to_send(t3,up_tree_3a);
+//			write "send t3";
 		}
 		if not empty(t3f){
 			do add_geometries_to_send(t3f,up_tree_3b);
+//			write "send t3f";
 		}
-		if not empty(t3a){
-			do add_geometries_to_send(t3a,up_alien_tree_8);
-		}	
  
 		list<tree> t4 <- tree where ((each.tree_type = 4) and (each.it_state = 1));
 		list<tree> t4f <- tree where ((each.tree_type = 4) and (each.it_state = 2) and (each.it_alien = false));
-		list<tree> t4a <- tree where ((each.tree_type = 4) and (each.it_state = 2) and (each.it_alien = true));
 		if not empty(t4){
 			do add_geometries_to_send(t4,up_tree_4a);
+//			write "send t4";
 		}
 		if not empty(t4f){
 			do add_geometries_to_send(t4f,up_tree_4b);
-		}
-		if not empty(t4a){
-			do add_geometries_to_send(t4a,up_alien_tree_8);
+//			write "send t4f";
 		}	
  
 		list<tree> t5 <- tree where ((each.tree_type = 5) and (each.it_state = 1));
 		list<tree> t5f <- tree where ((each.tree_type = 5) and (each.it_state = 2) and (each.it_alien = false));
-		list<tree> t5a <- tree where ((each.tree_type = 5) and (each.it_state = 2) and (each.it_alien = true));
 		if not empty(t5){
 			do add_geometries_to_send(t5,up_tree_5a);
+//			write "send t5";
 		}
 		if not empty(t5f){
 			do add_geometries_to_send(t5f,up_tree_5b);
-		}
-		if not empty(t5a){
-			do add_geometries_to_send(t5a,up_alien_tree_8);
+//			write "send t5f";
 		}	
  
 		list<tree> t6 <- tree where ((each.tree_type = 6) and (each.it_state = 1));
 		list<tree> t6f <- tree where ((each.tree_type = 6) and (each.it_state = 2) and (each.it_alien = false));
-		list<tree> t6a <- tree where ((each.tree_type = 6) and (each.it_state = 2) and (each.it_alien = true));
 		if not empty(t6){
 			do add_geometries_to_send(t6,up_tree_6a);
+//			write "send t6";
 		}
 		if not empty(t6f){
 			do add_geometries_to_send(t6f,up_tree_6b);
+//			write "send t6f";
 		}
-		if not empty(t6a){
-			do add_geometries_to_send(t6a,up_alien_tree_8);
-		}	
  
 		list<tree> t7 <- tree where ((each.tree_type = 7) and (each.it_state = 1));
 		list<tree> t7f <- tree where ((each.tree_type = 7) and (each.it_state = 2) and (each.it_alien = false));
-		list<tree> t7a <- tree where ((each.tree_type = 7) and (each.it_state = 2) and (each.it_alien = true));
 		if not empty(t7){
 			do add_geometries_to_send(t7,up_tree_7a);
+//			write "send t7";
 		}
 		if not empty(t7f){
 			do add_geometries_to_send(t7f,up_tree_7b);
+//			write "send t7f";
 		}
-		if not empty(t7a){
-			do add_geometries_to_send(t7a,up_alien_tree_8);
-		}	
  
 		list<tree> t8 <- tree where ((each.tree_type = 8) and (each.it_state = 1));
 		list<tree> t8f <- tree where ((each.tree_type = 8) and (each.it_state = 2) and (each.it_alien = false));
 		list<tree> t8a <- tree where ((each.tree_type = 8) and (each.it_state = 2) and (each.it_alien = true));
 		if not empty(t8){
 			do add_geometries_to_send(t8,up_tree_8a);
+//			write "send t8";
 		}
 		if not empty(t8f){
 			do add_geometries_to_send(t8f,up_tree_8b);
+//			write "send t8f";
 		}
 		if not empty(t8a){
 			do add_geometries_to_send(t8a,up_alien_tree_8);
+//			write "send t8a";
 		}	
  
 		list<tree> t9 <- tree where ((each.tree_type = 9) and (each.it_state = 1));
 		list<tree> t9f <- tree where ((each.tree_type = 9) and (each.it_state = 2) and (each.it_alien = false));
-		list<tree> t9a <- tree where ((each.tree_type = 9) and (each.it_state = 2) and (each.it_alien = true));
 		if not empty(t9){
 			do add_geometries_to_send(t9,up_tree_9a);
+//			write "send t9";
 		}
 		if not empty(t9f){
 			do add_geometries_to_send(t9f,up_tree_9b);
+//			write "send t9f";
 		}
-		if not empty(t9a){
-			do add_geometries_to_send(t9a,up_alien_tree_8);
-		}	
  
 		list<tree> t10 <- tree where ((each.tree_type = 10) and (each.it_state = 1));
 		list<tree> t10f <- tree where ((each.tree_type = 10) and (each.it_state = 2) and (each.it_alien = false));
-		list<tree> t10a <- tree where ((each.tree_type = 10) and (each.it_state = 2) and (each.it_alien = true));
 		if not empty(t10){
 			do add_geometries_to_send(t10,up_tree_10a);
+//			write "send t10";
 		}
 		if not empty(t10f){
 			do add_geometries_to_send(t10f,up_tree_10b);
+//			write "send t10f";
 		}
-		if not empty(t10a){
-			do add_geometries_to_send(t10a,up_alien_tree_8);
-		}	
- 
-
 	}
 }
 
