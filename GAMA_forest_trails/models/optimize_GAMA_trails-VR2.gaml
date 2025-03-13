@@ -69,7 +69,7 @@ global {
 			if not tutorial_finish{
 				ask unity_linker {
 					do send_message players: unity_player[player_ID] as list mes: ["Head"::"Tutorial", "Body"::""];
-					//write "Resend command for Player: " + unity_player.name + " to Tutorial";
+					write "Resend command for Player: " + unity_player.name + " to Tutorial";
 				}
 				ask unity_player[player_ID]{
 					location <- {180, 120, 0} + {0, 0, 3};
@@ -80,6 +80,13 @@ global {
 				}
 			}
 			else {
+//				if skip_tutorial{
+//					ask unity_linker {
+//						do send_message players: unity_player[player_ID] as list mes: ["Head"::"Tutorial", "Body"::""];
+//						write "Resend command for Player: " + unity_player.name + " to Tutorial";
+//					}
+//				}
+				
 				ask unity_player[player_ID]{
 //					location <- any_location_in(road_midpoint[map_zone[count_start-1]] - adjust_location) + {0, 0, 3};
 //					location <- road_midpoint[map_zone[count_start-1]].location + 
@@ -95,7 +102,7 @@ global {
 		
 				ask unity_linker {
 					do send_message players: unity_player[player_ID] as list mes: ["Head"::"Start", "Body"::""];
-					//write "Resend command for Player: " + unity_player.name + " to Trial zone " + count_start;
+					write "Resend command for Player: " + unity_player.name + " to Trial zone " + count_start;
 				}
 			}	
 		}	
@@ -105,7 +112,7 @@ global {
 		if not tutorial_finish{
 			ask unity_linker {
 				do send_message players: unity_player as list mes: ["Head"::"Tutorial", "Body"::""];
-				//write "send Tutorial";
+				write "send Tutorial";
 			}
 			ask unity_player{
 				location <- {180, 120, 0} + {0, 0, 3};
@@ -114,8 +121,21 @@ global {
 					move_player_event <- true;
 				}
 			}
+			
+			if skip_tutorial{
+				do pause;
+				can_start <- true;
+				tutorial_finish <- true;
+			}
 		}
 		else {
+			if skip_tutorial{
+				ask unity_linker {
+					do send_message players: unity_player as list mes: ["Head"::"Tutorial", "Body"::""];
+					write "send Tutorial";
+				}
+			}
+			
 			ask unity_player{
 //				location <- any_location_in(road_midpoint[map_zone[count_start-1]] - adjust_location) + {0, 0, 3};
 //				location <- road_midpoint[map_zone[count_start-1]].location + 
@@ -128,10 +148,10 @@ global {
 					move_player_event <- true;
 				}
 			}
-	
+			
 			ask unity_linker {
 				do send_message players: unity_player as list mes: ["Head"::"Start", "Body"::""];
-				//write "send Start";
+				write "send Start";
 			}
 		}
 	}
@@ -144,9 +164,10 @@ global {
 			}
 		}
 		
-		if not skip_tutorial{
-			tutorial_finish <- false;
-		}
+//		if not skip_tutorial{
+//			tutorial_finish <- false;
+//		}
+		tutorial_finish <- false;
 		player_id_finish_tutorial_list <- [];
 		who_finish_tutorial <- [false,false,false,false,false,false];
 	}

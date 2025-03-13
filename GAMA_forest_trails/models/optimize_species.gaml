@@ -103,6 +103,6 @@ species zone_for_player_warp{
 	rgb color ; //<- rnd_color(255);
 	geometry shape <- circle(40#m);
 	aspect default {
-		draw shape color: color ;	
+		draw shape color: color;
 	}
 }

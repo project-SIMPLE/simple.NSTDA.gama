@@ -21,7 +21,7 @@ import "optimize_species.gaml"
 global{
 	// Parameter
 	int n_team <- 6;
-	int stop_time <- 30; //second
+	int stop_time <- 180; //second
 	
 	// Variable
 	shape_file Trail_shape_file <- shape_file("../includes/Trail.shp");
@@ -75,12 +75,12 @@ global{
 	bool can_start <- true;
 	bool tutorial_finish <- false;
 	bool it_end_game <- false;
-	bool skip_tutorial <- false;
+	bool skip_tutorial <- true;
 	
 	init{
-		if skip_tutorial{
-			tutorial_finish <- true;
-		}
+//		if skip_tutorial{
+//			tutorial_finish <- true;
+//		}
 		
 		create support{
 			location <- {width/2, height/2, -1};
@@ -150,8 +150,8 @@ global{
 					location <- road_midpoint[map_zone[j]].location;
 				}
 				create zone_for_player_warp {
-					location <- road_midpoint[map_zone[j]].location;
-					color <- player_colors[j];
+					location <- road_midpoint[map_zone[j]].location + {0,0,0.5};
+					color <- player_colors[3];
 				}
 			}
 			
@@ -280,7 +280,7 @@ global{
 	}
 	
 	reflex do_resume when: not paused and can_start{
-		bool  result <- user_confirm("Simulation Start Confirmation","Do you want to start the simulation?");
+//		bool  result <- user_confirm("Simulation Start Confirmation","Do you want to start the simulation?");
 		//write "do_resume";
 		ask sign{
 			icon <- stop;
