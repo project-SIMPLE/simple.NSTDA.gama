@@ -16,14 +16,11 @@ global {
 	image_file correct_image <- image_file("../images/correct_icon.png");
 	image_file incorrect_image <- image_file("../images/incorrect_icon.png");
 	image_file alert_image <- image_file("../images/alert_icon.png");
-//	image_file no_signal_image <- image_file("../images/no_signal_icon.png");
 	image_file blank_image <- image_file("../images/blank.png");
 
 }
 
 species player_status{
-//	image_file status_icon <- no_signal_image;
-//	image_file status_icon <- incorrect_image;
 	image_file status_icon <- blank_image;
 	aspect default {
 		draw status_icon size:{30,30};
@@ -32,9 +29,7 @@ species player_status{
 
 species support {
 	image_file img <- static_map;
-//	int size_value <- 950;
 	aspect default {
-//		draw img size:{size_value,size_value/2};
 		draw img size:{520,312};
 	}
 }

@@ -49,9 +49,6 @@ global{
 	int count_as_planned <- 0;
 	geometry my_rect <- rectangle(55, 18);
 	float total_tree;
-	
-//	list<list> avg_height_list ; //<- [[],[],[],[],[],[],[],[],[],[]]
-//	list<list> avg_RCD_list ;  //[[],[],[],[],[],[],[],[],[],[]]
 
 	list<int> count_tree_survi <- list_with(n_type,0); 
 	list<int> finaldeath_tree <- list_with(n_type,0);
@@ -62,20 +59,13 @@ global{
 	int alien_germination_rate <- 100;
 	float alien_survi_rate <- 1.00;
 	
-	int type_of_scenario <- 3;	
-	
-// 	list<rgb> color_list <- [#magenta, #green, #tan, #yellow, #pink, #gray, #coral, #gold,#blue , #olive];
-	list<rgb> color_list <- [#red, #blue, #green, #teal, #cyan, #magenta, #orange, #purple, #pink, #brown, 
-								#lime, #crimson, #indigo, #gray, #coral];
+ 	list<rgb> color_list <- [#magenta, #green, #tan, #yellow, #pink, #gray, #coral, #gold,#blue , #olive];
 								
 	map<string, string> map_player_id <- ["Team1"::"Blue", "Team2"::"Red", "Team3"::"Green", "Team4"::"Yellow", "Team5"::"Black", "Team6"::"White"];
 	map<string, rgb> map_player_color <- ["Team1"::rgb(66, 72, 255), "Team2"::#red, "Team3"::#green, "Team4"::rgb(255, 196, 0), "Team5"::#black, "Team6"::rgb(156, 152, 142)]; 
-	//
 	
 	map<string, rgb> map_radar_color <- ["Team1"::rgb(66, 72, 255), "Team2"::#red, "Team3"::#green, "Team4"::rgb(255, 196, 0), "Team5"::#black, "Team6"::#purple]; //rgb(156, 152, 142)
 	
-//	map<string, rgb> map_player_color <- ["Team1"::#blue, "Team2"::#red, "Team3"::#green, "Team4"::#yellow, "Team5"::#black, "Team6"::#white];
-
 	rgb color_oldtree <- rgb(163, 191, 172);
 	
 	list<string> team_id <- [];
@@ -86,36 +76,11 @@ global{
 	int cnt_created_tree <- 0;
 	
 	// Read Tree Data
-//	file my_csv_file <- csv_file( "../includes/GAMA_RGR_16-12-24.csv");
 	file my_csv_file <- csv_file( "../includes/GAMA_RGR_07-01-25.csv");
-	
-	// Read seed data
-//	file seeds_file <- csv_file( "../result/total_seeds.csv");
-//	file alien_seeds_file <- csv_file( "../result/total_alien_seeds.csv");
-	file min_seed_file <- csv_file( "../result/min_collect_seed.csv");
-
-	// Read real seed data from multi-player
-//	file seeds_file <- csv_file( "../../GAMA_forest_trails/results/22Dec_result/total_seeds.csv");
-//	file alien_seeds_file <- csv_file( "../../GAMA_forest_trails/results/22Dec_result/total_alien_seeds.csv");
-//	file seeds_file <- csv_file( "../../GAMA_forest_trails/results/total_seeds.csv");
-//	file alien_seeds_file <- csv_file( "../../GAMA_forest_trails/results/total_alien_seeds.csv");
-
-//	file seeds_file <- csv_file( "../result/total_seeds.csv");
-//	file alien_seeds_file <- csv_file( "../result/total_no_alien_seeds.csv");
-	
-//	// for experiment (11/01/25)
-//	file seeds_file <- csv_file( "../../GAMA_forest_trails/results/total_seeds2.csv");
-//	file alien_seeds_file <- csv_file( "../../GAMA_forest_trails/results/total_alien_seeds2.csv");
 
 	file seeds_file <- csv_file( "../../GAMA_forest_trails/results/11Jan_result/total_seeds.csv");
 	file alien_seeds_file <- csv_file( "../../GAMA_forest_trails/results/11Jan_result/total_alien_seeds.csv");
 
-	// Read real seed data in m2l2 
-//	file seeds_file <- csv_file( "../../1-GAMA_forest_trails/results/22Dec_result/total_seeds.csv");
-//	file alien_seeds_file <- csv_file( "../../1-GAMA_forest_trails/results/total_alien_seeds.csv");
-	
-	
-	
 	// --------------------------------------- For radar chart ---------------------------------------
 	list<string> tree_name <- ['Qu','Sa','Ma','Pho','De','Di','Os','Phy','Ca','Gm'];
 	list<int> lower_bound <- [14, 12, 17, 16, 11, 12, 13, 17, 9, 14];
@@ -187,16 +152,8 @@ global{
 		
 		matrix seed_data <- matrix(seeds_file);
 		matrix alien_seed_data <- matrix(alien_seeds_file);
-		matrix minimum_seed <- matrix(min_seed_file);
 		
 		n_type <- seed_data.columns - 1; 
-		
-//		loop i from: 1 to: 7 {
-//		   add [] to: avg_height_list;
-//		   add [] to: avg_RCD_list;
-//		   add [] to: native_seed;
-//		   add [] to: alien_seed;
-//		}
 		
 		//seed data and alien data
 		loop j from:1 to:seed_data.columns-1{
@@ -212,39 +169,24 @@ global{
 		// seed data
 //		write 'player ID' + player_ID;
 		
-//		write "type_of_scenario is " + type_of_scenario;
-		switch type_of_scenario{
-			match 1{
-				// min collect seed
-				loop i from: 1 to:  minimum_seed.columns -1 {
-					add int(minimum_seed[i,0])*3 to:n_tree;
-				}
-			}
-			match 2{
-				// max collect seed
-				loop i from: 1 to:  minimum_seed.columns -1 {
-					add int(minimum_seed[i,0])*3*1.3 to:n_tree;
-				}
-			}
-			match 3{
-				// multi-player & Check Alien 
-				loop i from: 1 to: alien_seed_data.columns-1{
-					
-					if int(alien_seed_data[i,player_ID-1]) > 0{
-						add int(int(alien_seed_data[i,player_ID-1]) + int(seed_data[i,player_ID-1]))*3 to: n_tree;
-						germination_rate[i-1]  <- alien_germination_rate;
-						survi_rate_y1[i-1] <- alien_survi_rate;
-						survi_rate_y2[i-1] <- alien_survi_rate;
-						survi_rate_y3[i-1] <- alien_survi_rate;
-					}
-					
-					else{
-						add int(seed_data[i,player_ID-1])*3 to:n_tree;
 
-					}
-				}
+		// multi-player & Check Alien 
+		loop i from: 1 to: alien_seed_data.columns-1{
+			
+			if int(alien_seed_data[i,player_ID-1]) > 0{
+				add int(int(alien_seed_data[i,player_ID-1]) + int(seed_data[i,player_ID-1]))*3 to: n_tree;
+				germination_rate[i-1]  <- alien_germination_rate;
+				survi_rate_y1[i-1] <- alien_survi_rate;
+				survi_rate_y2[i-1] <- alien_survi_rate;
+				survi_rate_y3[i-1] <- alien_survi_rate;
+			}
+			
+			else{
+				add int(seed_data[i,player_ID-1])*3 to:n_tree;
+
 			}
 		}
+		
 
 		// germination rate 
 		loop i from:1 to: n_type{
@@ -302,17 +244,6 @@ global{
 			add self to: list_survive_tree;
 		}
 		
-//		loop i from: 1 to: alien_seed_data.columns-1{
-//			if int(alien_seed_data[i,player_ID-1]) > 0{
-//				list<tree> list_alien_tree <- tree where (each.tree_type = i);
-////				write "Alien tree is " + list_alien_tree;
-//				ask list_alien_tree{
-//					is_alien <- true;
-////					write "alien is" + self;
-//				}
-//			}
-//		}
-
 
 		// --------------------------------------- For radar chart ---------------------------------------
 //		write upper_bound;
@@ -454,30 +385,6 @@ species tree{
 				death <- true;
 			}
 		}
-		
-		// old
-//		if cycle = 1{
-//			if flip(1 - float(survi_rate_y1[tree_type - 1])){
-//				remove self from: list_survive_tree;
-//				add self to: list_deathtree;
-//				death <- true;
-//			}
-//		}
-//		if cycle > 1 and cycle < 5{
-//			if flip(1 - float(survi_rate_y2[tree_type - 1])){
-//				remove self from: list_survive_tree;
-//				add self to: list_deathtree;
-//				death <- true;
-//			}
-//		}
-//		if cycle = 5 {
-//			if flip(1 - survi_rate_y5){
-//				remove self from: list_survive_tree;
-//				add self to: list_deathtree;
-//				death <- true;
-//			}
-//		}
-//		
 	}
 	
 	aspect base {
@@ -523,7 +430,6 @@ experiment visualize_tree_growth{
 	float minimum_cycle_duration <- 0.30;
 	
 	init{
-		type_of_scenario <- 3;
 		if length(team_id) > 1{
 			loop i from:2 to:length(team_id){
 				create simulation with:[player_ID:i];
@@ -572,7 +478,6 @@ experiment summary_radar{
 	float minimum_cycle_duration <- 0.30;
 	
 	init{
-		type_of_scenario <- 3;
 		if length(team_id) > 1{
 			loop i from:2 to:length(team_id){
 				create simulation with:[player_ID:i];
@@ -606,7 +511,7 @@ experiment summary_radar{
 				draw "Not as planned: " + count_not_as_planned
         			color: rgb(map_radar_color[team_id[player_ID-1]]) font: font("SansSerif", 14, #bold) at: { 10#px, 320#px  };
         			
-        		draw "As planned: " + count_not_as_planned
+        		draw "As planned: " + count_as_planned
         			color: rgb(map_radar_color[team_id[player_ID-1]]) font: font("SansSerif", 14, #bold) at: { 10#px, 340#px  };	
         			
 			}
@@ -615,88 +520,4 @@ experiment summary_radar{
 	}
 	
 }
-
-//experiment example_radar{
-//	
-//	list<int> data_below <- list_with(10,1);
-//	list<int> data_optimal <- list_with(10,2);
-//	list<int> data_exceed <- list_with(10,3);
-//	
-//	
-//	
-//	output synchronized: true
-//	{
-//		layout horizontal([0::1, 1::1, 2::1])
-//		toolbars: false tabs: false parameters: false consoles: false navigator: false controls: true tray: false;
-//		
-//
-//		display "Below Criteria" type: 2d
-//		{
-//			
-//			chart ""  type: radar x_serie_labels: tree_name series_label_position: yaxis y_range: 4 position:{1.5 ,0.05} //legend_font: font("SansSerif", 9, #bold) 
-//			{	
-//
-//				data "Exceeds the Criteria"  value: max color: #grey; //"Exceeds the Criteria" 
-//				data "Below Criteria" value: min color: #grey;       //"Below Criteria"
-//				data "Meets the Criteria" value: mid color: #grey;    // "Meets the Criteria" 
-//				data "Player Data" value: data_below color: #red;
-//		
-//			}
-//			
-//		}
-//		
-//		display "Meets the Criteria" type: 2d
-//		{
-//			
-//			chart ""  type: radar x_serie_labels: tree_name series_label_position: yaxis y_range: 4 position:{1.5 ,0.05} //legend_font: font("SansSerif", 9, #bold) 
-//			{	
-//
-//				data "Exceeds the Criteria"  value: max color: #grey; //"Exceeds the Criteria" 
-//				data "Below Criteria" value: min color: #grey;       //"Below Criteria"
-//				data "Meets the Criteria" value: mid color: #grey;    // "Meets the Criteria" 
-//				data "Player Data" value: data_optimal color: #red;
-//		
-//			}
-//			
-//		}
-//		
-//		display "Exceeds the Criteria" type: 2d
-//		{
-//			
-//			chart ""  type: radar x_serie_labels: tree_name series_label_position: yaxis y_range: 4 position:{1.5 ,0.05} //legend_font: font("SansSerif", 9, #bold) 
-//			{	
-//
-//				data "Exceeds the Criteria"  value: max color: #grey; //"Exceeds the Criteria" 
-//				data "Below Criteria" value: min color: #grey;       //"Below Criteria"
-//				data "Meets the Criteria" value: mid color: #grey;    // "Meets the Criteria" 
-//				data "Player Data" value: data_exceed color: #red;
-//		
-//			}
-//			
-//		}
-//
-//	}
-	
-	
-//}
-
-
-//experiment mininum_collect_seed parent: visualize_tree_growth{
-//	init{
-//		type_of_scenario <- 1;
-//		loop i from:2 to:6{
-////			create simulation with:[player_ID:i];
-//		}
-//	}
-//}
-//
-//experiment maximum_collect_seed parent: visualize_tree_growth{
-//	init{
-//		type_of_scenario <- 2;
-//		loop i from:2 to:6{
-////			create simulation with:[player_ID:i];
-//		}
-//	}
-//}
-
 

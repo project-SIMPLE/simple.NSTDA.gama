@@ -5,15 +5,6 @@
 * Tags: 
 */
 
-// 6 Feb 
-// การ random จุดเกิดให้อยู่กลางโซนของทุกทีม done!
-// จะไม่เรียก prefab ของเพื่อน ๆ ผู้เล่น (ไม่ส่งใครเลย) done!
-// text ของ team ให้เป็นสี แต่ text ตามท้ายเป็นเขียวกะแดงไปเลย done!
-// เพิ่มจำนวนก่อเดือยให้มากขึ้น เพราะเด็กเก็บไม่ทัน
-
-// เปลี่ยน visible walls บังไม่ให้เห็นฝั่งตรงข้าม
-// Invisible ระหว่างโซน ถ้าไม่ได้ มปร.
-
 model optimizeGAMAtrails
 
 import "optimize_species.gaml"
@@ -25,7 +16,7 @@ global{
 	
 	// Variable
 	shape_file Trail_shape_file <- shape_file("../includes/Trail.shp");
-	csv_file my_csv_file <- csv_file("../includes/pheno_tz_7Jan2025.csv");
+	csv_file my_csv_file <- csv_file("../includes/pheno_tz_31Jan2025.csv");
 
 	
 	geometry shape <- (envelope(Trail_shape_file));
@@ -119,12 +110,12 @@ global{
 			}	
 		}
 		
-		loop j from:0 to:length(n_tree)-1{
+//		loop j from:0 to:length(n_tree)-1{
 //			write "fruiting_stage type" + (j+1) + " is \t" + fruiting_stage[j];
 //			write "n_tree type" + (j+1) + " is \t\t\t" + n_tree[j];
 //			write "alien_tree type" + (j+1) + " is \t\t" + alien_tree[j];
 //			write " ";
-		}
+//		}
 		
 		create sign{
 			location <- {width/3 - 35, -45, 0};
