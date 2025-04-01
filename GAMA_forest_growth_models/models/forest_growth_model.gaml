@@ -44,6 +44,10 @@ global{
 	
 	list<int>  native_seed <- [];
 	list<int>  alien_seed <- [];
+	
+	int count_not_as_planned <- 0;
+	int count_as_planned <- 0;
+	geometry my_rect <- rectangle(55, 18);
 	float total_tree;
 	
 //	list<list> avg_height_list ; //<- [[],[],[],[],[],[],[],[],[],[]]
@@ -60,14 +64,18 @@ global{
 	
 	int type_of_scenario <- 3;	
 	
- 	list<rgb> color_list <- [#magenta, #green, #tan, #yellow, #pink, #gray, #coral, #gold,#blue , #olive];
-//	list<rgb> color_list <- [#red, #blue, #green, #teal, #cyan, #magenta, #orange, #purple, #pink, #brown, 
-//								#lime, #crimson, #indigo, #gray, #coral];
+// 	list<rgb> color_list <- [#magenta, #green, #tan, #yellow, #pink, #gray, #coral, #gold,#blue , #olive];
+	list<rgb> color_list <- [#red, #blue, #green, #teal, #cyan, #magenta, #orange, #purple, #pink, #brown, 
+								#lime, #crimson, #indigo, #gray, #coral];
 								
 	map<string, string> map_player_id <- ["Team1"::"Blue", "Team2"::"Red", "Team3"::"Green", "Team4"::"Yellow", "Team5"::"Black", "Team6"::"White"];
-	map<string, rgb> map_player_color <- ["Team1"::rgb(66, 72, 255), "Team2"::#red, "Team3"::#green, "Team4"::rgb(255, 196, 0), "Team5"::#black, "Team6"::rgb(156, 152, 142)];
-//	map<string, rgb> map_player_color <- ["Team1"::#blue, "Team2"::#red, "Team3"::#green, "Team4"::#yellow, "Team5"::#black, "Team6"::#white];
+	map<string, rgb> map_player_color <- ["Team1"::rgb(66, 72, 255), "Team2"::#red, "Team3"::#green, "Team4"::rgb(255, 196, 0), "Team5"::#black, "Team6"::rgb(156, 152, 142)]; 
+	//
 	
+	map<string, rgb> map_radar_color <- ["Team1"::rgb(66, 72, 255), "Team2"::#red, "Team3"::#green, "Team4"::rgb(255, 196, 0), "Team5"::#black, "Team6"::#purple]; //rgb(156, 152, 142)
+	
+//	map<string, rgb> map_player_color <- ["Team1"::#blue, "Team2"::#red, "Team3"::#green, "Team4"::#yellow, "Team5"::#black, "Team6"::#white];
+
 	rgb color_oldtree <- rgb(163, 191, 172);
 	
 	list<string> team_id <- [];
@@ -78,8 +86,8 @@ global{
 	int cnt_created_tree <- 0;
 	
 	// Read Tree Data
-	file my_csv_file <- csv_file( "../includes/GAMA_RGR_16-12-24.csv");
-//	file my_csv_file <- csv_file( "../includes/GAMA_RGR_07-01-25.csv");
+//	file my_csv_file <- csv_file( "../includes/GAMA_RGR_16-12-24.csv");
+	file my_csv_file <- csv_file( "../includes/GAMA_RGR_07-01-25.csv");
 	
 	// Read seed data
 //	file seeds_file <- csv_file( "../result/total_seeds.csv");
@@ -92,8 +100,8 @@ global{
 //	file seeds_file <- csv_file( "../../GAMA_forest_trails/results/total_seeds.csv");
 //	file alien_seeds_file <- csv_file( "../../GAMA_forest_trails/results/total_alien_seeds.csv");
 
-//	file seeds_file <- csv_file( "../result/seed_data_mockup.csv");
-//	file alien_seeds_file <- csv_file( "../result/alien_seed_mockup.csv");
+//	file seeds_file <- csv_file( "../result/total_seeds.csv");
+//	file alien_seeds_file <- csv_file( "../result/total_no_alien_seeds.csv");
 	
 //	// for experiment (11/01/25)
 //	file seeds_file <- csv_file( "../../GAMA_forest_trails/results/total_seeds2.csv");
@@ -232,7 +240,7 @@ global{
 					
 					else{
 						add int(seed_data[i,player_ID-1])*3 to:n_tree;
-		
+
 					}
 				}
 			}
@@ -314,19 +322,24 @@ global{
 		loop i from:0 to:length(tree_name)-1{
 			if (native_seed[i] <= upper_bound[i]) and (native_seed[i] >= lower_bound[i]){
 				add 2 to: real_data;
+				count_as_planned <- count_as_planned + 1;
+				
 			}
 			else if (native_seed[i] > upper_bound[i]){
 				add 3 to: real_data;
+				count_not_as_planned <- count_not_as_planned + 1;
 			}
 			else if (native_seed[i] < lower_bound[i]){
 				add 1 to: real_data;
+				count_not_as_planned <- count_not_as_planned + 1;
 			}
 		}
 		
-//		write " ";
-//		write max;
 //		write real_data;
-//		write min;
+//		write count_as_planned;
+//		write count_not_as_planned;
+
+
 	}
 	
 	reflex inc_height_RCD {
@@ -553,7 +566,7 @@ experiment visualize_tree_growth{
 }
 
 
-experiment radar{
+experiment summary_radar{
 	
     
 	float minimum_cycle_duration <- 0.30;
@@ -577,18 +590,25 @@ experiment radar{
 		display "radar chart" type: 2d
 		{
 			
-			chart ""  type: radar x_serie_labels: tree_name series_label_position: yaxis y_range: 4 position:{1.5 ,0.05} //legend_font: font("SansSerif", 9, #bold) 
+			chart ""  type: radar x_serie_labels: tree_name series_label_position: yaxis y_range: 4 position:{1.25 ,0.0} //legend_font: font("SansSerif", 9, #bold) 
 			{	
-//				data "Max"  value: max fill: false  marker: false  color:#grey legend:"Over" marker_shape: marker_empty  ;
-				data "Exceeds the Criteria"  value: max color: #grey;
-				data "Below Criteria " value: min color: #grey;
-				data "Meets the Criteria" value: mid color: #grey;
-				data "Player Data" value: real_data color: rgb(map_player_color[team_id[player_ID-1]]);
+
+				data "Exceeds"  value: max color: #grey; 
+				data "Below" value: min color: #grey;       
+				data "Meets" value: mid color: #grey;   
+				data "Player data" value: real_data color: rgb(map_radar_color[team_id[player_ID-1]]);
 		
 			}
-			overlay position: { 2, 2 } size: { 500 #px, 15 #px } background: rgb(map_player_color[team_id[player_ID-1]]) transparency: 0.2 border: #black rounded: false
+			overlay position: { 2, 1.05 } size: { 450 #px, 15 #px } background: rgb(map_player_color[team_id[player_ID-1]]) transparency: 0.2 border: #black rounded: false
 			{
 				draw "" + team_id[player_ID-1] + " " + string(map_player_id[team_id[player_ID-1]]) color: # white font: font("SansSerif",12, #bold) at: { 200#px, 13#px };
+				
+				draw "Not as planned: " + count_not_as_planned
+        			color: rgb(map_radar_color[team_id[player_ID-1]]) font: font("SansSerif", 14, #bold) at: { 10#px, 320#px  };
+        			
+        		draw "As planned: " + count_not_as_planned
+        			color: rgb(map_radar_color[team_id[player_ID-1]]) font: font("SansSerif", 14, #bold) at: { 10#px, 340#px  };	
+        			
 			}
 		}
 
@@ -596,15 +616,69 @@ experiment radar{
 	
 }
 
-// min 			[14.0, 12.0, 17.0, 16.0, 11.0,	12.0, 13.0,	17.0, 9.0, 14.0]
-// min_scale30 	[0.47, 0.4, 0.57, 0.53, 0.37, 0.4, 0.43, 0.57, 0.3, 0.47]
-
-
-// max 			[19.0, 16.0, 23.0, 21.0, 15.0, 16.0, 17.0, 23.0, 12.0, 19.0]
-// max_scale30	[0.63, 0.53, 0.77, 0.7, 0.5, 0.53, 0.57, 0.77, 0.4, 0.63]
-
-// scaled_list_min = [0.36, 0.21, 0.57, 0.5, 0.14, 0.21, 0.29, 0.57, 0.0, 0.36]
-// scaled_list_max = [0.71, 0.5, 1.0, 0.86, 0.43, 0.5, 0.57, 1.0, 0.21, 0.71]
+//experiment example_radar{
+//	
+//	list<int> data_below <- list_with(10,1);
+//	list<int> data_optimal <- list_with(10,2);
+//	list<int> data_exceed <- list_with(10,3);
+//	
+//	
+//	
+//	output synchronized: true
+//	{
+//		layout horizontal([0::1, 1::1, 2::1])
+//		toolbars: false tabs: false parameters: false consoles: false navigator: false controls: true tray: false;
+//		
+//
+//		display "Below Criteria" type: 2d
+//		{
+//			
+//			chart ""  type: radar x_serie_labels: tree_name series_label_position: yaxis y_range: 4 position:{1.5 ,0.05} //legend_font: font("SansSerif", 9, #bold) 
+//			{	
+//
+//				data "Exceeds the Criteria"  value: max color: #grey; //"Exceeds the Criteria" 
+//				data "Below Criteria" value: min color: #grey;       //"Below Criteria"
+//				data "Meets the Criteria" value: mid color: #grey;    // "Meets the Criteria" 
+//				data "Player Data" value: data_below color: #red;
+//		
+//			}
+//			
+//		}
+//		
+//		display "Meets the Criteria" type: 2d
+//		{
+//			
+//			chart ""  type: radar x_serie_labels: tree_name series_label_position: yaxis y_range: 4 position:{1.5 ,0.05} //legend_font: font("SansSerif", 9, #bold) 
+//			{	
+//
+//				data "Exceeds the Criteria"  value: max color: #grey; //"Exceeds the Criteria" 
+//				data "Below Criteria" value: min color: #grey;       //"Below Criteria"
+//				data "Meets the Criteria" value: mid color: #grey;    // "Meets the Criteria" 
+//				data "Player Data" value: data_optimal color: #red;
+//		
+//			}
+//			
+//		}
+//		
+//		display "Exceeds the Criteria" type: 2d
+//		{
+//			
+//			chart ""  type: radar x_serie_labels: tree_name series_label_position: yaxis y_range: 4 position:{1.5 ,0.05} //legend_font: font("SansSerif", 9, #bold) 
+//			{	
+//
+//				data "Exceeds the Criteria"  value: max color: #grey; //"Exceeds the Criteria" 
+//				data "Below Criteria" value: min color: #grey;       //"Below Criteria"
+//				data "Meets the Criteria" value: mid color: #grey;    // "Meets the Criteria" 
+//				data "Player Data" value: data_exceed color: #red;
+//		
+//			}
+//			
+//		}
+//
+//	}
+	
+	
+//}
 
 
 //experiment mininum_collect_seed parent: visualize_tree_growth{

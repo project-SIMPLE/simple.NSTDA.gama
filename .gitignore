@@ -19,3 +19,4 @@ GAMA_forest_growth_models.zip
 GAMA_forest_growth_models/models/pre_forest_growth.gaml
 GAMA_forest_growth_models/models/growth_model_3graph_3dsim_cm.gaml
 GAMA_forest_growth_models/models/test-radar Model.gaml
+GAMA_forest_growth_models/result/total_no_alien_seeds.csv
