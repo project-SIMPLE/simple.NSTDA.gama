@@ -1,16 +1,12 @@
 
-.built_in_models_1724768424904
+.built_in_models_*
 .DS_Store
 .gama_application_workspace
 /.metadata
 GAMA_demo/.DS_Store
-GAMA_demo/.project
 *.prefs
-GAMA_forest_growth_models/.project
 GAMA_forest_trails/.DS_Store
-GAMA_forest_trails/.project
 GAMA_forest_trails/models/.DS_Store
-.built_in_models_1722161094579
 GAMA_forest_trails/includes/.DS_Store
 GAMA_forest_growth_models/includes/RGR_GAMA_tree_cm copy.csv
 GAMA_forest_trails/results/result_cut.zip
