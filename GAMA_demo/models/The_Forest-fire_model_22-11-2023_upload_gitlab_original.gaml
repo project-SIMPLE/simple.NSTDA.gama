@@ -54,7 +54,7 @@ global{
 	int count_point_of_fire <- 0;
 	int count_block_of_firebreak <- 0;
 	
-	list fire_spread <- [0];
+	list<int> fire_spread <- [0];
 	int border_grid <- -1;
 	
 	list keep_index_list <- [];
@@ -82,7 +82,7 @@ global{
 	int medium_tree_remaining_on_sub_map <- 0;
 	int small_tree_remaining_on_sub_map <- 0;
 	
-	list inventory <- [];
+	list<seed_type1> inventory <- [];
 	
 	int n_big_tree_sub_map_onfire <- 1;
 	int n_medium_tree_sub_map_onfire <- 1;
@@ -182,7 +182,7 @@ global{
     
     //making a list of grid is catching fire
     reflex update when:count_point_of_fire > 0 and main_model{
-    	list on_fire_list <- [];
+    	list<list<int>> on_fire_list <- [];
     	loop ix from:border_grid-1 to: grid_size - border_grid{
     		loop iy from:border_grid-1 to: grid_size - border_grid{
     			ask my_grid[ix, iy]{

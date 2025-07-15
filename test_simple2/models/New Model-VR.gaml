@@ -84,8 +84,8 @@ global {
 	}
 	
 	reflex update_tree_state when:(cycle mod 100=0) and (cycle !=0) {
-		list split_tree_ID ;
-		list playerID ;
+		list<string> split_tree_ID ;
+		list<string> playerID ;
 		
 		list<map<string,string>> send_tree_update <- [];
 		ask p1tree{
@@ -214,11 +214,11 @@ species unity_linker parent: abstract_unity_linker {
 	unity_property up_default;
 	
 	action ChangeTreeState(string tree_Name, string status){
-		list split_tree_ID ;
-		list playerID ;
+		list<string> split_tree_ID_ ;
+		list<string> playerID_ ;
 		write "ChangeTreeState: " + tree_Name + " state " + status;
-		split_tree_ID <- tree_Name split_with ('tree', true);
-		playerID <- split_tree_ID[0] split_with ('p', true);
+		split_tree_ID_ <- tree_Name split_with ('tree', true);
+		playerID_ <- split_tree_ID_[0] split_with ('p', true);
 		
 
 //		switch playerID[1] {

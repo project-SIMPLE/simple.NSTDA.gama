@@ -142,11 +142,11 @@ species unity_linker parent: abstract_unity_linker {
 	unity_property up_t6;
 	
 	action ChangeTreeState(string treeID, string state){
-		list split_tree_ID ;
-		list playerID ;
+		list<string> split_tree_ID_ ;
+		list<string> playerID_ ;
 		write "ChangeTreeState: " + treeID + " state " + state;
-		split_tree_ID <- treeID split_with ('tree', true);
-		playerID <- split_tree_ID[0] split_with ('p', true);
+		split_tree_ID_ <- treeID split_with ('tree', true);
+		playerID_ <- split_tree_ID_[0] split_with ('p', true);
 		
 
 //		switch playerID[1] {
