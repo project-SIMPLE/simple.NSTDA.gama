@@ -8,14 +8,49 @@
 
 model optimizespecies
 
+global{
+	float time_per_cycle <- 1.0;
+	int n_years <- 2;
+	int time_to_play <- 300;
+	
+	float used_cycle <- time_to_play / time_per_cycle;
+	float day_per_cycle <- (n_years*365)/used_cycle;
+	
+	
+	float init_height <- 50.0;
+//								Quercus, Debregeasia, Gmelina
+	list<int> list_of_height <- [1000, 500, 2500]; 
+	list<float> list_of_growth_rate <- [0.523, 0.8155, 0.4537];
+	
+	init{
+		write "used_cycle " + used_cycle; 
+		write "day_per_second " + day_per_cycle;
+	}
+}	
+
 species tree{
 	int tree_type <- 0;
 	int it_state <- 1;
+	float height <- 50.0 #cm;
+	string it_can_growth <- "1" ;
 	rgb color <- rgb(43, 150, 0);
+	int init_cycle <- 3;
+	int current_cycle <- 0;
+	
+	float logist_growth (float init_input, float max_height, float growth_rate){
+//		growth_rate <- growth_rate + rnd (-0.1, 0.1) * growth_rate;
+		float height_logist <- (init_input * max_height) / (init_input + (max_height - init_height) * 
+							exp (-(( growth_rate ) * ((current_cycle)/(365/day_per_cycle) - init_cycle) ))
+		) ;
+		return height_logist;
+	}
 	
 	reflex change_color{
-		if it_state = 0{
+		if it_can_growth = "0"{
 			color <- #black;
+		}
+		if it_can_growth = "-1"{
+			color <- #purple;
 		}
 		else if it_state = 1{
 			color <- rgb(43, 150, 0);
@@ -59,8 +94,26 @@ species p6tree parent:tree {
 
 
 species playerable_area{
-	geometry shape <- rectangle(50#m, 40#m);
+	geometry shape <- rectangle(50#m, 50#m);
 	rgb color <- #white;
+	
+	aspect default{
+		draw shape color:color border:#black ;
+	}
+}
+
+species zone_area{
+	geometry shape <- rectangle(82#m, 74#m);
+	rgb color <- #white;
+	
+	aspect default{
+		draw shape color:color border:#black ;
+	}
+}
+
+species wait_area{
+	geometry shape <- rectangle(10#m, 10#m);
+	rgb color <- #yellow;
 	
 	aspect default{
 		draw shape color:color border:#black ;

@@ -3,38 +3,21 @@ model NewModel_model_VR
 import "New Model.gaml"
 
 global {
+	int n_year <- 5;
 	init{
-//		list<map<string,string>> send_tree_update <- [];
-//		ask p1tree{
-//			add map<string, string>(["PlayerID"::map_player_id[1], "Name"::self.name, "State"::""]) to:send_tree_update;
+//		create wait_area{
+////			point at_location <- {-10,75,0};
+//			point at_location <- {10,10,0};
+//			location <- at_location;
 //		}
-//		ask p2tree{
-//			add map<string, string>(["PlayerID"::map_player_id[2], "Name"::self.name, "State"::""]) to:send_tree_update;
+		
+//		create unity_player{
+//			name <- "Player_106";
+//			location <- {-10,75,0};
 //		}
-//		ask p3tree{
-//			add map<string, string>(["PlayerID"::map_player_id[3], "Name"::self.name, "State"::""]) to:send_tree_update;
-//		}
-//		ask p4tree{
-//			add map<string, string>(["PlayerID"::map_player_id[4], "Name"::self.name, "State"::""]) to:send_tree_update;
-//		}
-//		ask p5tree{
-//			add map<string, string>(["PlayerID"::map_player_id[5], "Name"::self.name, "State"::""]) to:send_tree_update;
-//		}
-//		ask p6tree{
-//			add map<string, string>(["PlayerID"::map_player_id[6], "Name"::self.name, "State"::""]) to:send_tree_update;
-//		}
-//		write send_tree_update;
-//		write "End Init";
-//		
-//		if not empty(unity_player){
-//			ask unity_linker {
-//				do send_message players: unity_player as list mes: ["Head"::"ReadID", "Body"::"", "Content"::send_tree_update];
-//			}
-//		}
-//		write "Send ReadID";
 	}
 	
-	reflex send_readID when:cycle=50{
+	reflex send_readID when:cycle=4{
 		list<map<string,string>> send_tree_update <- [];
 		ask p1tree{
 			add map<string, string>(["PlayerID"::map_player_id[1], "Name"::self.name, "State"::""]) to:send_tree_update;
@@ -83,123 +66,91 @@ global {
 		}
 	}
 	
-	reflex update_tree_state when:(cycle mod 100=0) and (cycle !=0) {
-		list<string> split_tree_ID ;
-		list<string> playerID ;
+	reflex end_game when:(cycle >= (n_year*365)){
+		do pause;
+	}
+	
+	reflex prepare_step when:(cycle=1) and (first_start=true){
+		first_start <- false;
+		do pause_game;
+		do pause;
+	}
+	
+	reflex do_create_tree_and_move_player when:(first_start=false) and (first_create_tree=true) and (cycle>2){
+//		write "do create tree";
+		first_create_tree <- false;
 		
-		list<map<string,string>> send_tree_update <- [];
-		ask p1tree{
-			if it_state = 3{
-				it_state <- 0;
-			}
-			else {
-				it_state <- it_state + 1;
-			}
-			
-			split_tree_ID <- self.name split_with ('tree', true);
-			playerID <- split_tree_ID[0] split_with ('p', true);
-			
-			add map<string, string>(["PlayerID"::map_player_id[1], "Name"::self.name, "State"::it_state]) to:send_tree_update;			
-		}
-		
-		ask p2tree{
-//			if flip(1.0){
-//			it_state <- rnd(0,2);
-			if it_state = 3{
-				it_state <- 0;
-			}
-			else {
-				it_state <- it_state + 1;
-			}
-			
-			split_tree_ID <- self.name split_with ('tree', true);
-			playerID <- split_tree_ID[0] split_with ('p', true);
-			
-			add map<string, string>(["PlayerID"::map_player_id[2], "Name"::self.name, "State"::it_state]) to:send_tree_update;
-		}
-		
-		ask p3tree{
-//			if flip(1.0){
-//			it_state <- rnd(0,2);
-			if it_state = 3{
-				it_state <- 0;
-			}
-			else {
-				it_state <- it_state + 1;
-			}
-			
-			split_tree_ID <- self.name split_with ('tree', true);
-			playerID <- split_tree_ID[0] split_with ('p', true);
-			
-			add map<string, string>(["PlayerID"::map_player_id[3], "Name"::self.name, "State"::it_state]) to:send_tree_update;
-		}
-		
-		ask p4tree{
-//			if flip(1.0){
-//			it_state <- rnd(0,2);
-			if it_state = 3{
-				it_state <- 0;
-			}
-			else {
-				it_state <- it_state + 1;
-			}
-			
-			split_tree_ID <- self.name split_with ('tree', true);
-			playerID <- split_tree_ID[0] split_with ('p', true);
-			
-			add map<string, string>(["PlayerID"::map_player_id[4], "Name"::self.name, "State"::it_state]) to:send_tree_update;
-		}
-		
-		ask p5tree{
-//			if flip(1.0){
-//			it_state <- rnd(0,2);
-			if it_state = 3{
-				it_state <- 0;
-			}
-			else {
-				it_state <- it_state + 1;
-			}
-			
-			split_tree_ID <- self.name split_with ('tree', true);
-			playerID <- split_tree_ID[0] split_with ('p', true);
-			
-			add map<string, string>(["PlayerID"::map_player_id[5], "Name"::self.name, "State"::it_state]) to:send_tree_update;
-		}
-		
-		ask p6tree{
-//			if flip(1.0){
-//			it_state <- rnd(0,2);
-			if it_state = 3{
-				it_state <- 0;
-			}
-			else {
-				it_state <- it_state + 1;
-			}
-			
-			split_tree_ID <- self.name split_with ('tree', true);
-			playerID <- split_tree_ID[0] split_with ('p', true);
-			
-			add map<string, string>(["PlayerID"::map_player_id[6], "Name"::self.name, "State"::it_state]) to:send_tree_update;
-		}
-		
-//		if flip(0.5){
-//			if not empty(unity_player){
-//				ask unity_linker {
-//					do send_message players: unity_player as list mes: ["Head"::"Stop", "Body"::"", "Content"::""];
-//				}
-//			}
-//		}
-		write send_tree_update;
-		write length(send_tree_update);
-
-		if not empty(unity_player){
+		ask unity_player{
+			write "move player " + self.name;
+			location <- playerable_area[map_player_id_reverse[self.name]-1].location + {0, 0, 3};
 			ask unity_linker {
-				do send_message players: unity_player as list mes: ["Head"::"Update", "Body"::"", "Content"::send_tree_update];
-				write "send Update" + p1tree.name;
+				new_player_position[myself.name] <- [myself.location.x *precision,myself.location.y *precision,myself.location.z *precision];
+				move_player_event <- true;
+			}
+		}	
+	}
+//	and (cycle mod 10=0)
+	reflex update_height_and_state when:(cycle >= 3)  {
+		list<map<string,string>> send_tree_update <- [];
+		
+		ask p1tree{
+			if (it_can_growth = "1"){
+				current_cycle <- current_cycle + 1;
+				height <- logist_growth(init_height, float(list_of_height[self.tree_type-1]), float(list_of_growth_rate[self.tree_type-1]));
+	
+				if (height >= (list_of_height[self.tree_type-1]*(n_year/20)*0.5)) and 
+					(height < (list_of_height[self.tree_type-1]*(n_year/20)*0.8)) and 
+					(it_state = 1){
+					it_state <- 2;
+					write "Tree: " + self.name + " State -> 2 (it_type=" + self.tree_type +")";
+					add map<string, string>(["PlayerID"::map_player_id[1], "Name"::self.name, "State"::it_state]) to:send_tree_update;
+				}
+				else if (height >= (list_of_height[self.tree_type-1]*(n_year/20)*0.8)) and 
+						(height <= (list_of_height[self.tree_type-1])) and 
+						(it_state = 2){
+					it_state <- 3;
+					write "Tree: " + self.name + " State -> 3 (it_type=" + self.tree_type +")";
+					add map<string, string>(["PlayerID"::map_player_id[1], "Name"::self.name, "State"::it_state]) to:send_tree_update;
+				}
+			}
+			else if (it_can_growth = "-1"){
+				write "Tree" + self.name + "Stop Growth";
+			}
+			else if (it_can_growth = "0"){
+				write "Tree" + self.name + "Die";
+			}
+		}
+		
+		if (not empty(unity_player)) and (not empty(send_tree_update)){
+			write send_tree_update;
+			write length(send_tree_update);
+			ask unity_linker {
+				do send_message players: unity_player as list mes: ["Head"::"Update", "Body"::"GROW", "Content"::send_tree_update];
+				write "send Update";
 			}
 		}
 
 		send_tree_update <- [];
+	}
+	
+	reflex update_grass when:(cycle >= 3) and (cycle mod 45=0) and (cycle <= 100){
+		list<map<string,string>> send_tree_update_grass <- [];
+		ask p1tree{
+			if flip(0.05){
+				add map<string, string>(["PlayerID"::map_player_id[1], "Name"::self.name, "State"::99]) to:send_tree_update_grass;
+			}
+			ask unity_linker {
+				do send_message players: unity_player as list mes: ["Head"::"Update", "Body"::"GRASS", "Content"::send_tree_update_grass];
+				write "send Grass";
+			}
+		}
+	}
+	
+	reflex update_n_remain_tree when:(cycle >= 3){
+		loop i from:0 to:2{
+			write "loop update_n_remain_tree here!";
+			write n_remain_tree[i];
+		}
 	}
 }
 
@@ -212,53 +163,76 @@ species unity_linker parent: abstract_unity_linker {
 	unity_property up_tree_3;
 	unity_property up_tree_Dead;
 	unity_property up_default;
+	unity_property up_alien;
+	unity_property up_fire;
+	unity_property up_road;
 	
 	action ChangeTreeState(string tree_Name, string status){
-		list<string> split_tree_ID_ ;
-		list<string> playerID_ ;
-		write "ChangeTreeState: " + tree_Name + " state " + status;
-		split_tree_ID_ <- tree_Name split_with ('tree', true);
-		playerID_ <- split_tree_ID_[0] split_with ('p', true);
-		
+		list<string> split_tree_ID ;
+		list<string> playerID ;
+		write "ChangeTreeState: " + tree_Name + " it_can_growth " + status;
+		split_tree_ID <- tree_Name split_with ('tree', true);
+		playerID <- split_tree_ID[0] split_with ('p', true);
+		write split_tree_ID;
+		write playerID;
+		write "------------";
+		write split_tree_ID[1];
+		write playerID[1];
+		write p1tree[int(split_tree_ID[1])].name;
 
-//		switch playerID[1] {
-//			match 1 {
-//				ask p1tree[int(split_tree_ID[1])]{
-//					it_state <- int(state);
-//				}
-//			}
-//			match 2 {
-//				ask p2tree[int(split_tree_ID[1])]{
-//					it_state <- int(state);
-//				}
-//			}
-//			match 3 {
-//				ask p3tree[int(split_tree_ID[1])]{
-//					it_state <- int(state);
-//				}
-//			}
-//			match 4 {
-//				ask p4tree[int(split_tree_ID[1])]{
-//					it_state <- int(state);
-//				}
-//			}
-//			match 5 {
-//				ask p5tree[int(split_tree_ID[1])]{
-//					it_state <- int(state);
-//				}
-//			}
-//			match 6 {
-//				ask p6tree[int(split_tree_ID[1])]{
-//					it_state <- int(state);
-//				}
-//			}
-//		}
+		switch playerID[1] {
+			match "1" {
+				ask p1tree[int(split_tree_ID[1])]{
+					it_can_growth <- status;
+					write "Tree:" + self.name + "State" + it_state;
+				}
+			}
+			match "2" {
+				ask p2tree[int(split_tree_ID[1])]{
+					it_can_growth <- status;
+					write "Tree:" + self.name + "State" + it_state;
+				}
+			}
+			match "3" {
+				ask p3tree[int(split_tree_ID[1])]{
+					it_can_growth <- status;
+					write "Tree:" + self.name + "State" + it_state;
+				}
+			}
+			match "4" {
+				ask p4tree[int(split_tree_ID[1])]{
+					it_can_growth <- status;
+					write "Tree:" + self.name + "State" + it_state;
+				}
+			}
+			match "5" {
+				ask p5tree[int(split_tree_ID[1])]{
+					it_can_growth <- status;
+					write "Tree:" + self.name + "State" + it_state;
+				}
+			}
+			match "6" {
+				ask p6tree[int(split_tree_ID[1])]{
+					it_can_growth <- status;
+					write "Tree:" + self.name + "State" + it_state;
+				}
+			}
+		}
 	}
 	
 	list<point> init_locations <- define_init_locations();
 
+//	list<point> define_init_locations {
+//		return [{50.0,50.0,0.0},{50.0,50.0,0.0},{50.0,50.0,0.0},{50.0,50.0,0.0},{50.0,50.0,0.0},{50.0,50.0,0.0}];
+//	}
 	list<point> define_init_locations {
-		return [{50.0,50.0,0.0},{50.0,50.0,0.0},{50.0,50.0,0.0},{50.0,50.0,0.0},{50.0,50.0,0.0},{50.0,50.0,0.0}];
+		list<point> init_pos;
+		loop times: 6 {
+//			init_pos << {-10, 75, 0} + {0, 0, 3};
+			init_pos << {0, 0, 0};
+			//write "init_pos " + init_pos;
+		}
+		return init_pos;
 	}
 
 
@@ -272,7 +246,11 @@ species unity_linker parent: abstract_unity_linker {
 		do add_background_geometries(p4tree,up_default);
 		do add_background_geometries(p5tree,up_default);
 		do add_background_geometries(p6tree,up_default);
+//		do add_background_geometries(zone_area,up_road);
+//		do add_background_geometries(playerable_area,up_road);
+//		do add_background_geometries(wait_area,up_road);
 	}
+	
 	action define_properties {
 		unity_aspect tree1_aspect <- prefab_aspect("temp/Prefab/VU2/Seeding_1",1.0,0.0,1.0,0.0,precision);
 		up_tree_1 <- geometry_properties("tree_state1","",tree1_aspect,new_geometry_interaction(true, false,false,[]),false);
@@ -289,11 +267,22 @@ species unity_linker parent: abstract_unity_linker {
 		unity_aspect treeDead_aspect <- prefab_aspect("temp/Prefab/VU2/Seeding_Dead",1.0,0.0,1.0,0.0,precision);
 		up_tree_Dead <- geometry_properties("tree_stateDead","",treeDead_aspect,new_geometry_interaction(true, false,false,[]),false);
 		unity_properties << up_tree_Dead;
+		
+		unity_aspect alien_aspect <- prefab_aspect("temp/Prefab/VU2/AlienWeed_F",1.0,0.0,1.0,0.0,precision);
+		up_alien <- geometry_properties("alien","",alien_aspect,new_geometry_interaction(true, false,false,[]),false);
+		unity_properties << up_alien;
+		
+		unity_aspect fire_aspect <- prefab_aspect("temp/Prefab/VU2/ForestFire",1.0,0.0,1.0,0.0,precision);
+		up_fire <- geometry_properties("fire","",fire_aspect,new_geometry_interaction(true, false,false,[]),false);
+		unity_properties << up_fire;
 
-
-		unity_aspect default_aspect <- prefab_aspect("temp/Prefab/VU2/Seeding",1.0,0.0,1.0,0.0,precision);
+		unity_aspect default_aspect <- prefab_aspect("temp/Prefab/VU2/SeedingWithGrass",1.0,0.0,1.0,0.0,precision);
 		up_default <- geometry_properties("default","",default_aspect,new_geometry_interaction(true, false,false,[]),false);
 		unity_properties << up_default;
+		
+		unity_aspect road_aspect <- geometry_aspect(0.1, #black, precision);
+		up_road<- geometry_properties("road", "", road_aspect, #collider, false);
+		unity_properties << up_road;
 
 	}
 	reflex send_geometries {
@@ -391,9 +380,10 @@ species unity_player parent: abstract_unity_player{
 }
 
 experiment vr_xp parent:init_exp autorun: false type: unity {
-	float minimum_cycle_duration <- 0.1;
+//	float minimum_cycle_duration <- 0.1;
+	float minimum_cycle_duration <- 1.0;
 	string unity_linker_species <- string(unity_linker);
-	list<string> displays_to_hide <- ["Main","Main","Main"];
+	list<string> displays_to_hide <- ["Main"];
 	float t_ref;
 
 	action create_player(string id) {
