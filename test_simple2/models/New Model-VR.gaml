@@ -17,7 +17,7 @@ global {
 //		}
 	}
 	
-	reflex send_readID when:cycle=4{
+	reflex send_readID when:cycle=(init_cycle+1){
 		list<map<string,string>> send_tree_update <- [];
 		ask p1tree{
 			add map<string, string>(["PlayerID"::map_player_id[1], "Name"::self.name, "State"::""]) to:send_tree_update;
@@ -76,7 +76,7 @@ global {
 		do pause;
 	}
 	
-	reflex do_create_tree_and_move_player when:(first_start=false) and (first_create_tree=true) and (cycle>2){
+	reflex do_create_tree_and_move_player when:(first_start=false) and (first_create_tree=true) and (cycle>=init_cycle){
 //		write "do create tree";
 		first_create_tree <- false;
 		
@@ -90,23 +90,24 @@ global {
 		}	
 	}
 //	and (cycle mod 10=0)
-	reflex update_height_and_state when:(cycle >= 3)  {
+	reflex update_height_and_state when:(cycle >= init_cycle)  {
 		list<map<string,string>> send_tree_update <- [];
 		
 		ask p1tree{
 			if (it_can_growth = "1"){
 				current_cycle <- current_cycle + 1;
+//				write "update tree " + self.tree_type + " " + init_height  + " " + float(list_of_height[self.tree_type-1]) + " " + float(list_of_growth_rate[self.tree_type-1]);
 				height <- logist_growth(init_height, float(list_of_height[self.tree_type-1]), float(list_of_growth_rate[self.tree_type-1]));
 	
-				if (height >= (list_of_height[self.tree_type-1]*(n_year/20)*0.5)) and 
-					(height < (list_of_height[self.tree_type-1]*(n_year/20)*0.8)) and 
+				if (height >= (list_of_max_height_in_n_years[self.tree_type-1]*0.5)) and 
+					(height < (list_of_max_height_in_n_years[self.tree_type-1]*0.8)) and 
 					(it_state = 1){
 					it_state <- 2;
 					write "Tree: " + self.name + " State -> 2 (it_type=" + self.tree_type +")";
 					add map<string, string>(["PlayerID"::map_player_id[1], "Name"::self.name, "State"::it_state]) to:send_tree_update;
 				}
-				else if (height >= (list_of_height[self.tree_type-1]*(n_year/20)*0.8)) and 
-						(height <= (list_of_height[self.tree_type-1])) and 
+				else if (height >= (list_of_max_height_in_n_years[self.tree_type-1]*0.8)) and 
+						(height <= (list_of_max_height_in_n_years[self.tree_type-1])) and 
 						(it_state = 2){
 					it_state <- 3;
 					write "Tree: " + self.name + " State -> 3 (it_type=" + self.tree_type +")";
@@ -133,24 +134,54 @@ global {
 		send_tree_update <- [];
 	}
 	
-	reflex update_grass when:(cycle >= 3) and (cycle mod 45=0) and (cycle <= 100){
+	reflex update_grass when:(cycle >= init_cycle) and (cycle mod 10 = 0){
 		list<map<string,string>> send_tree_update_grass <- [];
+		int target_zone <- rnd(1,4);
+//		write "target_zone " + target_zone;
 		ask p1tree{
 			if flip(0.05){
 				add map<string, string>(["PlayerID"::map_player_id[1], "Name"::self.name, "State"::99]) to:send_tree_update_grass;
 			}
-			ask unity_linker {
-				do send_message players: unity_player as list mes: ["Head"::"Update", "Body"::"GRASS", "Content"::send_tree_update_grass];
+		}
+		ask unity_linker {
+			do send_message players: unity_player as list mes: ["Head"::"Update", "Body"::"GRASS", "Content"::send_tree_update_grass];
 				write "send Grass";
-			}
 		}
 	}
 	
-	reflex update_n_remain_tree when:(cycle >= 3){
-		loop i from:0 to:2{
-			write "loop update_n_remain_tree here!";
-			write n_remain_tree[i];
+	reflex update_wildfire when:(cycle >= init_cycle) and (cycle mod 10 = 0){
+		point at_location <- any_location_in(usable_area_for_wildfire[0]-1);
+		loop j from:0 to:1{
+			loop i from:0 to:2{
+				create wildfire{
+					point final_location <- {at_location.x + (83.33*i), at_location.y + (75*j), at_location.z};
+					location <- final_location;
+				}
+			}	
 		}
+	}
+	
+	reflex update_alien when:(cycle >= init_cycle) and (cycle mod 10 = 0){
+		point at_location <- any_location_in(playerable_area[0]-1);
+		loop j from:0 to:1{
+			loop i from:0 to:2{
+				create alien{
+					point final_location <- {at_location.x + (83.33*i), at_location.y + (75*j), at_location.z};
+					location <- final_location;
+				}
+			}	
+		}
+	}
+	
+	reflex update_n_remain_tree when:(cycle >= init_cycle){
+//		loop i from:0 to:2{
+//			write "loop update_n_remain_tree here!";
+//			write n_remain_tree[i];
+//		}
+	}
+	
+	reflex delete_tree{
+
 	}
 }
 
@@ -168,56 +199,59 @@ species unity_linker parent: abstract_unity_linker {
 	unity_property up_road;
 	
 	action ChangeTreeState(string tree_Name, string status){
-		list<string> split_tree_ID ;
-		list<string> playerID ;
-		write "ChangeTreeState: " + tree_Name + " it_can_growth " + status;
-		split_tree_ID <- tree_Name split_with ('tree', true);
-		playerID <- split_tree_ID[0] split_with ('p', true);
-		write split_tree_ID;
-		write playerID;
-		write "------------";
-		write split_tree_ID[1];
-		write playerID[1];
-		write p1tree[int(split_tree_ID[1])].name;
-
-		switch playerID[1] {
-			match "1" {
-				ask p1tree[int(split_tree_ID[1])]{
-					it_can_growth <- status;
-					write "Tree:" + self.name + "State" + it_state;
+		if tree_Name = "SeedingWithGrass"{
+			list<string> split_tree_ID ;
+			list<string> playerID ;
+			write "ChangeTreeState: " + tree_Name + " it_can_growth " + status;
+			split_tree_ID <- tree_Name split_with ('tree', true);
+			playerID <- split_tree_ID[0] split_with ('p', true);
+			write split_tree_ID;
+			write playerID;
+			write "------------";
+			write split_tree_ID[1];
+			write playerID[1];
+			write p1tree[int(split_tree_ID[1])].name;
+	
+			switch playerID[1] {
+				match "1" {
+					ask p1tree[int(split_tree_ID[1])]{
+						it_can_growth <- status;
+						write "Tree: " + self.name + " it_can_growth " + it_state;
+					}
 				}
-			}
-			match "2" {
-				ask p2tree[int(split_tree_ID[1])]{
-					it_can_growth <- status;
-					write "Tree:" + self.name + "State" + it_state;
+				match "2" {
+					ask p2tree[int(split_tree_ID[1])]{
+						it_can_growth <- status;
+						write "Tree: " + self.name + " it_can_growth " + it_state;
+					}
 				}
-			}
-			match "3" {
-				ask p3tree[int(split_tree_ID[1])]{
-					it_can_growth <- status;
-					write "Tree:" + self.name + "State" + it_state;
+				match "3" {
+					ask p3tree[int(split_tree_ID[1])]{
+						it_can_growth <- status;
+						write "Tree: " + self.name + " it_can_growth " + it_state;
+					}
 				}
-			}
-			match "4" {
-				ask p4tree[int(split_tree_ID[1])]{
-					it_can_growth <- status;
-					write "Tree:" + self.name + "State" + it_state;
+				match "4" {
+					ask p4tree[int(split_tree_ID[1])]{
+						it_can_growth <- status;
+						write "Tree: " + self.name + " it_can_growth " + it_state;
+					}
 				}
-			}
-			match "5" {
-				ask p5tree[int(split_tree_ID[1])]{
-					it_can_growth <- status;
-					write "Tree:" + self.name + "State" + it_state;
+				match "5" {
+					ask p5tree[int(split_tree_ID[1])]{
+						it_can_growth <- status;
+						write "Tree: " + self.name + " it_can_growth " + it_state;
+					}
 				}
-			}
-			match "6" {
-				ask p6tree[int(split_tree_ID[1])]{
-					it_can_growth <- status;
-					write "Tree:" + self.name + "State" + it_state;
+				match "6" {
+					ask p6tree[int(split_tree_ID[1])]{
+						it_can_growth <- status;
+						write "Tree: " + self.name + " it_can_growth " + it_state;
+					}
 				}
 			}
 		}
+		
 	}
 	
 	list<point> init_locations <- define_init_locations();
@@ -252,21 +286,21 @@ species unity_linker parent: abstract_unity_linker {
 	}
 	
 	action define_properties {
-		unity_aspect tree1_aspect <- prefab_aspect("temp/Prefab/VU2/Seeding_1",1.0,0.0,1.0,0.0,precision);
-		up_tree_1 <- geometry_properties("tree_state1","",tree1_aspect,new_geometry_interaction(true, false,false,[]),false);
-		unity_properties << up_tree_1;
-		
-		unity_aspect tree2_aspect <- prefab_aspect("temp/Prefab/VU2/Seeding_2",1.0,0.0,1.0,0.0,precision);
-		up_tree_2 <- geometry_properties("tree_state2","",tree2_aspect,new_geometry_interaction(true, false,false,[]),false);
-		unity_properties << up_tree_2;
-		
-		unity_aspect tree3_aspect <- prefab_aspect("temp/Prefab/VU2/Seeding_3",1.0,0.0,1.0,0.0,precision);
-		up_tree_3 <- geometry_properties("tree_state3","",tree3_aspect,new_geometry_interaction(true, false,false,[]),false);
-		unity_properties << up_tree_3;
-		
-		unity_aspect treeDead_aspect <- prefab_aspect("temp/Prefab/VU2/Seeding_Dead",1.0,0.0,1.0,0.0,precision);
-		up_tree_Dead <- geometry_properties("tree_stateDead","",treeDead_aspect,new_geometry_interaction(true, false,false,[]),false);
-		unity_properties << up_tree_Dead;
+//		unity_aspect tree1_aspect <- prefab_aspect("temp/Prefab/VU2/Seeding_1",1.0,0.0,1.0,0.0,precision);
+//		up_tree_1 <- geometry_properties("tree_state1","",tree1_aspect,new_geometry_interaction(true, false,false,[]),false);
+//		unity_properties << up_tree_1;
+//		
+//		unity_aspect tree2_aspect <- prefab_aspect("temp/Prefab/VU2/Seeding_2",1.0,0.0,1.0,0.0,precision);
+//		up_tree_2 <- geometry_properties("tree_state2","",tree2_aspect,new_geometry_interaction(true, false,false,[]),false);
+//		unity_properties << up_tree_2;
+//		
+//		unity_aspect tree3_aspect <- prefab_aspect("temp/Prefab/VU2/Seeding_3",1.0,0.0,1.0,0.0,precision);
+//		up_tree_3 <- geometry_properties("tree_state3","",tree3_aspect,new_geometry_interaction(true, false,false,[]),false);
+//		unity_properties << up_tree_3;
+//		
+//		unity_aspect treeDead_aspect <- prefab_aspect("temp/Prefab/VU2/Seeding_Dead",1.0,0.0,1.0,0.0,precision);
+//		up_tree_Dead <- geometry_properties("tree_stateDead","",treeDead_aspect,new_geometry_interaction(true, false,false,[]),false);
+//		unity_properties << up_tree_Dead;
 		
 		unity_aspect alien_aspect <- prefab_aspect("temp/Prefab/VU2/AlienWeed_F",1.0,0.0,1.0,0.0,precision);
 		up_alien <- geometry_properties("alien","",alien_aspect,new_geometry_interaction(true, false,false,[]),false);
@@ -286,6 +320,25 @@ species unity_linker parent: abstract_unity_linker {
 
 	}
 	reflex send_geometries {
+		if not empty(wildfire){
+			list<wildfire> list_wildfire_to_send <- wildfire where (each.it_sent = false);
+			write "list_wildfire_to_send " + list_wildfire_to_send;
+			do add_geometries_to_send(list_wildfire_to_send, up_fire);
+			ask list_wildfire_to_send{
+				it_sent <- true;
+			}
+		}
+		
+		if not empty(alien){
+			list<alien> list_alien_to_send <- alien where (each.it_sent = false);
+			write "list_alien_to_send " + list_alien_to_send;
+			do add_geometries_to_send(list_alien_to_send, up_alien);
+			ask list_alien_to_send{
+				it_sent <- true;
+			}
+		}
+		
+		
 //		list<tree> t1_state1 <- p1tree where ((each.it_state = 1));
 //		list<tree> t1_state2 <- p1tree where ((each.it_state = 2));
 //		list<tree> t1_state3 <- p1tree where ((each.it_state = 3));

@@ -82,20 +82,19 @@ global{
 	geometry shape <- rectangle(250#m, 150#m);
 //	geometry shape <- (envelope(map_shape_file));
 	
-//	int max_y <- 4 - 1 ;
-//	int max_x <- 5 - 1 ;
-	int max_y <- 12 - 1 ;
-	int max_x <- 12 - 1 ;
+//	int max_y <- 4 ;
+//	int max_x <- 5 ;
+	int max_y <- 12 ;
+	int max_x <- 12 ;
 	
-	list<point> big_tree <- [{max_y,0},{0,max_x}];
-	list<point> med_tree <- [{0,0},{max_y,max_x}];
 	float size_of_tree <- 50.0;
 	float tree_distance <- 3.5;
 	float x_adaptive <- 5.5;
 	float y_adaptive <- 0.5;
 	
-	map<int, string> map_player_id <- [1::"Player_59", 2::"Player_102", 3::"Player_103", 4::"Player_104", 5::"Player_105", 6::"Player_106"];
-	map<string, int> map_player_id_reverse <- ["Player_59"::1, "Player_102"::2, "Player_103"::3, "Player_104"::4, "Player_105"::5, "Player_106"::6];
+	list<string> player_name <- ["Player_102", "Player_1022", "Player_103", "Player_104", "Player_105", "Player_106"];
+	map<int, string> map_player_id <- [1::player_name[0], 2::player_name[1], 3::player_name[2], 4::player_name[3], 5::player_name[4], 6::player_name[5]];
+	map<string, int> map_player_id_reverse <- [player_name[0]::1, player_name[1]::2, player_name[2]::3, player_name[3]::4, player_name[4]::5, player_name[5]::6];
 	
 	bool can_start <- true;
 	bool first_start <- true;
@@ -104,12 +103,22 @@ global{
 	action resume_game;
 	action pause_game;
 	
+	list<geometry> usable_area_for_wildfire ;
+	
 	list<list<int>> n_remain_tree <- list_with(6, list_with(3, 0));
+	list<int> sum_score_list <- list_with(6,0);
+	
+	list<list<int>> tree_index_list <- [[],[],[],[]];
 	
 	init{	
+		write "sum_score_list " + sum_score_list;
 		loop j from:0 to:1{
 			loop i from:0 to:2{
 				create playerable_area{
+					point at_location <- {((83.33*i)+41.67)#m,((75*j)+37.5)#m,0};
+					location <- at_location;
+				}
+				create tree_area{
 					point at_location <- {((83.33*i)+41.67)#m,((75*j)+37.5)#m,0};
 					location <- at_location;
 				}
@@ -120,8 +129,19 @@ global{
 			}	
 		}
 		
-		loop i from:0 to:max_y{
-			loop j from:0 to:max_x{
+		loop i from:0 to:5{
+			ask playerable_area[i]{
+				ask tree_area[i]{
+					add myself.shape - self.shape to: usable_area_for_wildfire;
+				}
+			}
+		}
+		
+//		save usable_area_for_wildfire to:"../includes/export/usable_area_for_wildfire.shp" format:"shp";
+		
+		
+		loop i from:0 to:max_y-1{
+			loop j from:0 to:max_x-1{
 				int temp_type <- rnd(1, 3);
 				create p1tree{
 					point at_location <- {((83.33*0)+16.67+x_adaptive+(tree_distance*j))#m,((75*0)+17.5+y_adaptive+(tree_distance*i))#m,0};
@@ -165,8 +185,53 @@ global{
 					tree_type <- temp_type;
 					it_state <- 1;
 				}
+				if (i < max_y/2) and (j < max_x/2){
+					write "zone1";
+					add (12*i)+j to: tree_index_list[0];
+				}
+				else if (i < max_y/2) and (j >= max_x/2){
+					write "zone2";
+					add (12*i)+j to: tree_index_list[1];
+				}
+				else if (i >= max_y/2) and (j < max_x/2){
+					write "zone3";
+					add (12*i)+j to: tree_index_list[2];
+				}
+				else if (i >= max_y/2) and (j >= max_x/2){
+					write "zone4";
+					add (12*i)+j to: tree_index_list[3];
+				}
 			}
 		}
+		
+//		write "tree_index_list[0] " + tree_index_list[0] + length(tree_index_list[0]);
+//		write "tree_index_list[1] " + tree_index_list[1] + length(tree_index_list[1]);
+//		write "tree_index_list[2] " + tree_index_list[2] + length(tree_index_list[2]);
+//		write "tree_index_list[3] " + tree_index_list[3] + length(tree_index_list[3]);
+//		
+//		loop i over:tree_index_list[0]{
+//			ask p1tree[i]{
+//				color <- #purple;
+//			}
+//		}
+//		
+//		loop i over:tree_index_list[1]{
+//			ask p1tree[i]{
+//				color <- #brown;
+//			}
+//		}
+//		
+//		loop i over:tree_index_list[2]{
+//			ask p1tree[i]{
+//				color <- #yellow;
+//			}
+//		}
+//		
+//		loop i over:tree_index_list[3]{
+//			ask p1tree[i]{
+//				color <- #black;
+//			}
+//		}
 	}
 	
 	reflex for_send_start when:(can_start and not paused){
@@ -200,6 +265,30 @@ experiment init_exp type: gui {
 			species p4tree;
 			species p5tree;
 			species p6tree;
+			species wildfire;
+			species alien; 
 		}
+		
+//		display "Total seeds" type: 2d locked:true{
+//			chart "Total seeds" type:histogram reverse_axes:true
+//			y_range:[0, 100]
+//			x_serie_labels: [""]
+//			
+//			style:"3d"
+//			series_label_position: xaxis
+//			{
+//				loop i from:0 to:(length(sum_total_seeds)-1){
+//					data "Team" + (i+1) value:int(sum_total_seeds[i])
+//					color:player_colors[i];
+////					legend: string(int(sum_total_seeds[i])) ;
+//				}
+//			}
+//			graphics Strings {
+//				loop i from:0 to:(length(sum_total_seeds)-1){
+//					draw "=> " + int(sum_total_seeds[i]) at:{420,65 + 36*i} font:font("Times", 16, #bold+#italic) 
+//					border:#black color:player_colors[i];
+//				}
+//			}
+//		}
 	}
 }
