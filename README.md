@@ -19,10 +19,9 @@ Thanks, enjoy filling this complete template and adjust it to your specific case
 
 The BiodiVRestorer Virtual Universe version 1 (VU#1) employs three integrated GAMA simulation models. 
 This suite includes:
-- "Forest trails" model, designed as an interactive gameplay simulation for seed collection
--  "Forest growth" model that projects the forest's ecological development over the subsequent 20 years based on the collected seeds
-- "Radar Chart" model, used to visually summarize and analyze the key results derived from the seed collection simulation. thereby offering a comprehensive overview of the restoration process from immersive interaction to long-term ecological prediction and results visualization.
-
+- Forest trail model, designed as an interactive gameplay simulation for seed collection
+- Forest growth model that projects the forest's ecological development over the subsequent 20 years based on the collected seeds
+- Radar Chart model, used to visually summarize and analyze the key results derived from the seed collection simulation.
 
 ### Learning Objectives
 - Raising awareness about biodiversity loss, fostering an understanding of its causes and impacts
