@@ -54,8 +54,11 @@ global{
 	
 	bool alien_experimant <- false;
 	
-	map<string, int> map_player_id <- ["Player_101"::1, "Player_102"::2, "Player_103"::3, "Player_104"::4, "Player_105"::5, "Player_106"::6];
-//	map<string, int> map_player_id <- ["Player_51"::1, "Player_102"::2, "Player_103"::3, "Player_104"::4, "Player_105"::5, "Player_106"::6];
+	// Keep NSTDA's M2L2 color scheme for user
+	map<string, int> map_player_id_m2l2 <- ["Player_101"::1, "Player_102"::2, "Player_103"::3, "Player_104"::4, "Player_105"::5, "Player_106"::6];
+	// Allow any player's name with automatic colors
+	map<string, int> map_player_id <- [];
+	
 	list<rgb> player_colors <- [rgb(66, 72, 255), #red, #green, rgb(255, 196, 0), #black, rgb(156, 152, 142)];
 	list<string> color_list <- ["Blue", "Red", 'Green', "Yellow", "Black", "White"];
 	list<string> player_id_finish_tutorial_list <- [];
@@ -214,18 +217,18 @@ global{
 					}
 					if not it_end_game{
 						if player_walk_in_zone[i]{
-							ask player_status[i+6]{
+							ask player_status[i]{
 								status_icon <- blank_image;
 							}
 						}
 						else{
-							ask player_status[i+6]{
+							ask player_status[i]{
 								status_icon <- alert_image;
 							}
 						}
 					}
 					else{
-						ask player_status[i+6]{
+						ask player_status[i]{
 							status_icon <- correct_image;
 							status_icon <- blank_image;
 						}
