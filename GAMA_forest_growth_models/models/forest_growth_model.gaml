@@ -82,15 +82,19 @@ global{
 	file alien_seeds_file <- csv_file( "../../GAMA_forest_trails/results/11Jan_result/total_alien_seeds.csv");
 
 	// --------------------------------------- For radar chart ---------------------------------------
+	
 	list<string> tree_name <- ['Qu','Sa','Ma','Pho','De','Di','Os','Phy','Ca','Gm'];
-	list<int> lower_bound <- [14, 12, 17, 16, 11, 12, 13, 17, 9, 14];
-	list<int> upper_bound <- [19, 16, 23, 21, 15, 16, 17, 23, 12, 19];
+	
+// update new lower bound and upper bound (14/11/2025)
+	list<int> lower_bound <- [15, 13, 18, 15, 16, 14, 18, 15, 14, 15];
+	list<int> upper_bound <- [20, 17, 24, 20, 21, 19, 24, 20, 19, 20];
     
     list<int> max <- list_with(10,3);
     list<int> mid <- list_with(10,2);
     list<int> min <- list_with(10,1);
     list<int> real_data ;
-
+    int n_alien_species;
+	
 	init{
 		
 		// tree data
@@ -163,12 +167,11 @@ global{
 		
 		loop i from: 0 to: seed_data.rows - 1{
 			add seed_data[0,i] to: team_id;
-			
 		}
 		
 		// seed data
 //		write 'player ID' + player_ID;
-		
+// 		write alien_seed;
 
 		// multi-player & Check Alien 
 		loop i from: 1 to: alien_seed_data.columns-1{
@@ -254,7 +257,6 @@ global{
 			if (native_seed[i] <= upper_bound[i]) and (native_seed[i] >= lower_bound[i]){
 				add 2 to: real_data;
 				count_as_planned <- count_as_planned + 1;
-				
 			}
 			else if (native_seed[i] > upper_bound[i]){
 				add 3 to: real_data;
@@ -266,10 +268,16 @@ global{
 			}
 		}
 		
+// 		count aliens by species
+	
+		
+		
+		n_alien_species <- length(alien_seed where (each != 0)); 
+		write n_alien_species;
+		
 //		write real_data;
 //		write count_as_planned;
 //		write count_not_as_planned;
-
 
 	}
 	
@@ -460,7 +468,6 @@ experiment visualize_tree_growth{
     	draw "RSA: " + int ((( sum(count_old_tree_in_circles) + sum(count_tree_in_circles) ) / 10) * 10000 / 78 )
 //    	draw "RSA: " + int ((( sum(count_old_tree_in_circles)   ) / 10) * 10000 / 78 )
         	color: #black font: font("SansSerif", 20, #bold) at: { 10#px, 340#px  };
-        // 
 	    
         }
         	species my_circles aspect: default;
@@ -495,10 +502,10 @@ experiment summary_radar{
 		display "radar chart" type: 2d
 		{
 			
-			chart ""  type: radar x_serie_labels: tree_name series_label_position: yaxis y_range: 4 position:{1.25 ,0.0} //legend_font: font("SansSerif", 9, #bold) 
+			chart ""  type: radar x_serie_labels: tree_name series_label_position: yaxis y_range: 4 position:{1.25 ,0.0} size:{0.95,0.95}//legend_font: font("SansSerif", 9, #bold) 
 			{	
 
-				data "Exceeds"  value: max color: #grey; 
+				data "Exceeds"  value: max color: #grey ; 
 				data "Below" value: min color: #grey;       
 				data "Meets" value: mid color: #grey;   
 				data "Player data" value: real_data color: rgb(map_radar_color[team_id[player_ID-1]]);
@@ -508,12 +515,17 @@ experiment summary_radar{
 			{
 				draw "" + team_id[player_ID-1] + " " + string(map_player_id[team_id[player_ID-1]]) color: # white font: font("SansSerif",12, #bold) at: { 200#px, 13#px };
 				
+				draw "As planned: " + count_as_planned
+ //       			color: rgb(map_radar_color[team_id[player_ID-1]]) font: font("SansSerif", 14, #bold) at: { 10#px, 280#px  };
+        			color: #green font: font("SansSerif", 14, #bold) at: { 10#px, 280#px  };
+        			
 				draw "Not as planned: " + count_not_as_planned
-        			color: rgb(map_radar_color[team_id[player_ID-1]]) font: font("SansSerif", 14, #bold) at: { 10#px, 320#px  };
+//        			color: rgb(map_radar_color[team_id[player_ID-1]]) font: font("SansSerif", 14, #bold) at: { 10#px, 300#px  };	
+					color: #red font: font("SansSerif", 14, #bold) at: { 10#px, 300#px  };
         			
-        		draw "As planned: " + count_as_planned
-        			color: rgb(map_radar_color[team_id[player_ID-1]]) font: font("SansSerif", 14, #bold) at: { 10#px, 340#px  };	
-        			
+        		draw "Aliens by Species: " + n_alien_species
+//        			color: rgb(map_radar_color[team_id[player_ID-1]]) font: font("SansSerif", 14, #bold) at: { 10#px, 320#px  };
+        			color: #red font: font("SansSerif", 14, #bold) at: { 10#px, 320#px  };
 			}
 		}
 
