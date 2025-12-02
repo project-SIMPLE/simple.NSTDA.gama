@@ -36,16 +36,24 @@ global {
 				
 				if self.name = string("Player_10" + min_team_id){
 					save temp to: "../results/total_seeds.csv" header:false format:"csv" rewrite:true;
+					save temp to: "../results_backup/total_seeds.csv" header:false format:"csv" rewrite:true;
+					save temp to: "../results_backup_with_date/total_seeds_" + today + ".csv" header:false format:"csv" rewrite:true;
 				}
 				else{
 					save temp to: "../results/total_seeds.csv" header:false format:"csv" rewrite:false;
+					save temp to: "../results_backup/total_seeds.csv" header:false format:"csv" rewrite:false;
+					save temp to: "../results_backup_with_date/total_seeds_" + today + ".csv" header:false format:"csv" rewrite:false;
 				}
 				
 				if self.name = string("Player_10" + min_team_id){
 					save temp2 to: "../results/total_alien_seeds.csv" header:false format:"csv" rewrite:true;
+					save temp2 to: "../results_backup/total_alien_seeds.csv" header:false format:"csv" rewrite:true;
+					save temp2 to: "../results_backup_with_date/total_alien_seeds_" + today + ".csv" header:false format:"csv" rewrite:true;
 				}
 				else{
 					save temp2 to: "../results/total_alien_seeds.csv" header:false format:"csv" rewrite:false;
+					save temp2 to: "../results_backup/total_alien_seeds.csv" header:false format:"csv" rewrite:false;
+					save temp2 to: "../results_backup_with_date/total_alien_seeds_" + today + ".csv" header:false format:"csv" rewrite:false;
 				}
 			}
 			//write string("Save data for Player_10" + j + " Completed!");

@@ -29,6 +29,7 @@ global{
 	list<list<int>> seeds <- list_with(n_team, list_with(length(n_tree), 0));
 	list<list<int>> alien_seeds <- list_with(n_team, list_with(length(n_tree), 0));
 	list<int> sum_total_seeds <- list_with(n_team, 0);
+	string today <- string(date("now"), "dd_MM_yyyy_HH:mm:ss");
 	
 	int init_time <- 0;
 	int count_start <- 0 ;
