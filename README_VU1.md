@@ -282,12 +282,13 @@ Users interact with the GAMA interface mainly by **left-clicking** on the availa
 
    When the player collects fruit into the basket, a sound effect will play when the fruit is successfully dropped into the basket.
 
-- **Interactive Objects**:
-
-   **Equipment**
+- **In Game Activities**:
+	
+   **Collect Fruit**
+  
+   There are three ways to collect fruit from a tree or the ground: using equipment, such as a crossbow or a fruit picker, or using your hand to pick it directly. 
 
    On the player’s left arm, there are two equipment boxes:
-
    1. **Crossbow**
 
       - The player can raise their left arm and look at it.  
@@ -306,11 +307,15 @@ Users interact with the GAMA interface mainly by **left-clicking** on the availa
       - **How to use:**
       After the player has picked up the fruit picker, hook it onto the fruit to make the fruit fall down.
 
-   **Picking up fruit and placing it in the basket**
+   3. **Picking up fruit**
+      
+	  - Once the fruit has fallen to the ground, use the **left thumbstick (left thumb)** to move toward the fruit.  
+      Then, use the **right grip button (right middle finger)** to pick up the fruit.
 
-   Once the fruit has fallen to the ground, use the **left thumbstick (left thumb)** to move toward the fruit.  
-   Then, use the **right grip button (right middle finger)** to pick up the fruit.  
-
+	(PICTURES/VR-Ingame-Activity.png)
+	
+   **Placing fruit in the basket**
+     
    A basket is located at the player’s left hip.  
    Place the fruit into the basket by releasing the right middle finger.  
    A sound effect will play when the fruit is successfully placed in the basket.
