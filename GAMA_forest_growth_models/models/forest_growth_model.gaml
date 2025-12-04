@@ -20,7 +20,7 @@ global{
 	float init_height <- 50.0 #cm;
 	float init_RCD <- 2.0 #cm;
 	float init_time <- 0.0;
-	int num_of_oldtree <- 2859; 
+	int num_of_oldtree <- 2500; 
 	int n_circles <- 10;
 	
 	int num_of_survive_tree <- 0;
@@ -80,7 +80,7 @@ global{
 
 	file seeds_file <- csv_file( "../../GAMA_forest_trails/results/11Jan_result/total_seeds.csv");
 	file alien_seeds_file <- csv_file( "../../GAMA_forest_trails/results/11Jan_result/total_alien_seeds.csv");
-
+	
 	// --------------------------------------- For radar chart ---------------------------------------
 	
 	list<string> tree_name <- ['Qu','Sa','Ma','Pho','De','Di','Os','Phy','Ca','Gm'];
