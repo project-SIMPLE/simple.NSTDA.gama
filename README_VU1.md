@@ -210,6 +210,10 @@ Users interact with the GAMA interface mainly by **left-clicking** on the availa
 - **Menu Access**: 
    - Press the **Meta / Oculus button** on the right controller to open the main menu and exit the game.
 
+	<a href="PICTURES/VRGamecontrol.png">
+      <img src="PICTURES/VRGamecontrol.png" alt="VR control" width="600">
+	</a>
+
 
 #### For Web Platform 
 1. **Play / Pause Button** 
