@@ -61,10 +61,15 @@ This suite includes:
 ## Simulation Workflow
 
 ### Forest trail model
-
-
+<a href="PICTURES/Forest_Trails_WF.png">
+      <img src="PICTURES/Forest_Trails_WF.png" alt="Forest_trails" width="800">
+</a>
 
 ### Forest growth model
+
+<a href="PICTURES/Forest_growth_WF.png">
+      <img src="PICTURES/Forest_growth_WF.png" alt="Forest_growth" width="800">
+</a>
 
 
 
@@ -94,27 +99,36 @@ This suite includes:
 
    Open the webplatform and select **1. Forest Trails** as shown in the following figure.   
 
-   ![scenario](PICTURES/scenario.PNG)
-
+   <a href="PICTURES/scenario.PNG">
+         <img src="PICTURES/scenario.PNG" alt="scenario" width="600">
+   </a>
+  
 #### 3. Launch the VR application
 
    After the player puts on the VR headset, make sure it is connected to the same Wi-Fi network as the computer.
    Then, select the **“BiodiVRestorer”**  application on the headset.
 
-   ![vr_app](PICTURES/select_app.png)
+   <a href="PICTURES/select_app.png">
+         <img src="PICTURES/select_app.png" alt="vr_app" width="600">
+   </a>
 
 #### 4.  Check VR connections from the webplatform
 
    Click the VR headset icon on the webplatform to check the connection status of each player.
 
-   ![vr_connection](PICTURES/check_connect.png)
+   <a name= "fig-check-connect" href="PICTURES/check_connect.png">
+         <img src="PICTURES/check_connect.png" alt="vr_connection" width="600">
+   </a>
+
 
 #### 5. Wait for GAMA to launch and start the model
 
 Once you have confirmed that all players are connected, 
 you can click the **“begin anyway”** button to call the **Forest Trails** Simulation.
 
-   ![begin](PICTURES/beginanyway.PNG)
+   <a href="PICTURES/beginanyway.PNG">
+         <img src="PICTURES/beginanyway.PNG" alt="begin" width="600">
+   </a>
 
 #### 6. Start the tutorial
 
@@ -124,7 +138,9 @@ In the tutorial, players will practice three basic skills needed in the game:
 2.	Using the fruit picker
 3.	Using the crossbow to shoot fruit down from the trees
 
-   ![play_button](PICTURES/play.PNG)
+   <a href="PICTURES/play.PNG">
+      <img src="PICTURES/play.PNG" alt="play_button" width="600">
+   </a>
 
 #### 7. Start the main simulation (3-minute rounds)
 
@@ -143,8 +159,10 @@ Players must plan their seed collection strategy for each round based on these s
 After 3 minutes, the system will display a notification on the VR headset to inform the player that the time is up. \
 Then, change the VR glasses to the next player to start a new round.
  
-![image 10](PICTURES/ui_timeout.png)
 
+   <a href="PICTURES/ui_timeout.png">
+      <img src="PICTURES/ui_timeout.png" alt="timeout" width="600">
+   </a>
 
 #### 9. Repeating Rounds for All Players
 
@@ -158,7 +176,9 @@ so that all players have the opportunity to fully participate.
 When the simulation has completed and you want to return to the web platform’s home page,\
 click the red cross button on the web platform to stop the simulation in GAMA and prepare for the next session.
 
-![end_simulation](PICTURES/end_sim.PNG)
+   <a href="PICTURES/end_sim.PNG">
+      <img src="PICTURES/end_sim.PNG" alt="end_simulation" width="600">
+   </a>
 
 
 > [!NOTE]\
@@ -176,8 +196,9 @@ Users interact with the GAMA interface mainly by **left-clicking** on the availa
 2. **Close experiment** (keyboard shortcut: `Shift + Command + X` or `Shift + Control + X`)
 3. **Reset** button — used when a player loses connection 
 
-![GAMA control](PICTURES/GAMA_control.PNG)
-
+   <a href="PICTURES/GAMA_control.PNG">
+      <img src="PICTURES/GAMA_control.PNG" alt="GAMA control" width="600">
+   </a>
 
 #### For Unity VR Games 
 
@@ -194,10 +215,13 @@ Users interact with the GAMA interface mainly by **left-clicking** on the availa
 1. **Play / Pause Button** 
 2. **Close Button**
 
-![web_control](PICTURES/webpf_control.PNG)
+   <a href="PICTURES/webpf_control.PNG">
+      <img src="PICTURES/webpf_control.PNG" alt="web_control" width="600">
+   </a>
 
 3. **VR headset Status Checking**
-ตามรูปที่ 4 ใน starting vu
+   
+   See [Check VR connections](#fig-check-connect).
 
 ---
 
@@ -242,7 +266,8 @@ Users interact with the GAMA interface mainly by **left-clicking** on the availa
      the forest growth simulation is run. This simulation shows tree growth within a 1-hectare area over a 20-year period. \
      Each team can then see the outcome of their forest restoration efforts, including the RSA value after 20 years of simulation.\
      Then the results will be discussed among each team. For example, if alien species are collected, how will they affect forest restoration?
-    
+
+   
 ---
 
 #### Interactive Elements
@@ -289,6 +314,8 @@ Users interact with the GAMA interface mainly by **left-clicking** on the availa
 #### GAMA
 
    - **Agents**: 
+
+      ![agents](PICTURES/agents.png)
 
       1. **Map**
 
