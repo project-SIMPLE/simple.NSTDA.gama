@@ -457,8 +457,8 @@ Users interact with the GAMA interface mainly by **left-clicking** on the availa
 
          **Survival rate** = *number of surviving trees* / *total number of trees planted*
 
-        <a href="PICTURES/forest_growth.png">
-            <img src="PICTURES/forest_growth.png" alt="forest growth" width="600">
+        <a href="PICTURES/tree_growth_sim.png">
+            <img src="PICTURES/tree_growth_sim.png" alt="forest growth" width="600">
         </a>
 
       - **Charts**
