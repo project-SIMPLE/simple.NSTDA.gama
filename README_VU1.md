@@ -8,11 +8,11 @@
 
 ### About BiodiVRestorer VU#1
 
-The BiodiVRestorer Virtual Universe version 1 (VU#1) employs three integrated GAMA simulation models. 
+The BiodiVRestorer Virtual Universe version 1 (VU#1) employs three integrated GAMA simulation models. \
 This suite includes:
 - **Forest trail model**, designed as an interactive gameplay simulation for seed collection
 - **Forest growth model**, that projects the forest's ecological development over the subsequent 20 years based on the collected seeds
-- **Radar Chart model**, used to visually summarize and analyze the key results derived from the seed collection simulation.
+   - **Radar Chart model**, used to visually summarize and analyze the key results derived from the seed collection simulation.
 
 ### Learning Objectives
 - Raising awareness about biodiversity loss, fostering an understanding of its causes and impacts
@@ -43,7 +43,7 @@ This suite includes:
 
 ### Unity VR Application Installation
 
-1. Download BiodiVRestorer.apk from [download location]
+1. Download BiodiVRestorer.apk from [download location](https://github.com/project-SIMPLE/simple.NSTDA.unityVRproject/releases/tag/v1.0)
 2. Run the installer
 3. Follow on-screen instructions
 4. Launch from desktop shortcut or Start menu
@@ -56,22 +56,6 @@ This suite includes:
 3. Create an account or login with provided credentials
 4. Select [Application Name] from the dashboard
 -->
-
----
-## Simulation Workflow
-
-### Forest trail model
-<a href="PICTURES/Forest_Trails_WF.png">
-      <img src="PICTURES/Forest_Trails_WF.png" alt="Forest_trails" width="800">
-</a>
-
-### Forest growth model
-
-<a href="PICTURES/Forest_growth_WF.png">
-      <img src="PICTURES/Forest_growth_WF.png" alt="Forest_growth" width="800">
-</a>
-
-
 
 ---
 
@@ -116,7 +100,7 @@ This suite includes:
 
    Click the VR headset icon on the webplatform to check the connection status of each player.
 
-   <a name= "fig-check-connect" href="PICTURES/check_connect.png">
+   <a id= "fig-check-connect" href="PICTURES/check_connect.png">
          <img src="PICTURES/check_connect.png" alt="vr_connection" width="600">
    </a>
 
@@ -183,7 +167,7 @@ click the red cross button on the web platform to stop the simulation in GAMA an
 
 > [!NOTE]\
 > If any player encounters a problem, such as a lost connection, have them exit the game on the VR headset and reopen it.\
-> After that, press the **Reset** button for that player in GAMA.
+> After that, press the [**Reset**](#play-close-reset) button for that player in GAMA.
 
 ---
 
@@ -196,7 +180,7 @@ Users interact with the GAMA interface mainly by **left-clicking** on the availa
 2. **Close experiment** (keyboard shortcut: `Shift + Command + X` or `Shift + Control + X`)
 3. **Reset** button — used when a player loses connection 
 
-   <a href="PICTURES/GAMA_control.PNG">
+   <a id= "play-close-reset" href="PICTURES/GAMA_control.PNG">
       <img src="PICTURES/GAMA_control.PNG" alt="GAMA control" width="600">
    </a>
 
@@ -239,7 +223,7 @@ Users interact with the GAMA interface mainly by **left-clicking** on the availa
 
 #### Learning Modules 
 
-1. **Module 1: Forest Trails**
+1. **Module 1: Forest Trails** (With VR)
    - Duration: 
       - tutorial: It depends on the player
       - In game: 18 minutes
@@ -256,13 +240,22 @@ Users interact with the GAMA interface mainly by **left-clicking** on the availa
       In every round, each player takes a turn exploring the forest and collecting seeds from trees of different species, \
       all within a limited amount of time.
 
-2. **Module 2: Forest Growth**
+   - Technical Info:
+
+      The diagram below shows the overall workflow of the Forest Trails module.
+
+      <a href="PICTURES/Forest_Trails.png">
+         <img src="PICTURES/Forest_Trails.png" alt="Forest_trails" width="700">
+      </a>
+
+
+2. **Module 2: Forest Growth** (Without VR)
    - Duration: approximately 10-15 minutes
 
    - Objectives:
       -	Raise awareness of how collecting alien species can affect long-term forest restoration through a 20-year forest growth simulation.
 	   -	Learn about forest growth through visualization, which shows healthy trees, alien species, and dead trees.
-	   -	Learn about RSA as an indicator for assessing the level of forest degradation.
+	   -	Learn about Rapid Site Assessment (RSA) as an indicator for assessing the level of forest degradation.
 
    - Activities: 
 
@@ -271,7 +264,14 @@ Users interact with the GAMA interface mainly by **left-clicking** on the availa
      Each team can then see the outcome of their forest restoration efforts, including the RSA value after 20 years of simulation.\
      Then the results will be discussed among each team. For example, if alien species are collected, how will they affect forest restoration?
 
-   
+   - Technical Info: 
+
+      The diagram below shows the overall workflow of the Forest Growth module.
+
+      <a href="PICTURES/Forest_Growth.png">
+         <img src="PICTURES/Forest_Growth.png" alt="Forest_growth" width="700">
+      </a>
+
 ---
 
 #### Interactive Elements
@@ -287,8 +287,8 @@ Users interact with the GAMA interface mainly by **left-clicking** on the availa
    **Collect Fruit**
   
    There are three ways to collect fruit from a tree or the ground: using equipment, such as a crossbow or a fruit picker, or using your hand to pick it directly. 
-
    On the player’s left arm, there are two equipment boxes:
+
    1. **Crossbow**
 
       - The player can raise their left arm and look at it.  
@@ -311,20 +311,26 @@ Users interact with the GAMA interface mainly by **left-clicking** on the availa
       
 	  - Once the fruit has fallen to the ground, use the **left thumbstick (left thumb)** to move toward the fruit.  
       Then, use the **right grip button (right middle finger)** to pick up the fruit.
+   Once the fruit has fallen to the ground, use the **left thumbstick (left thumb)** to move toward the fruit.  
+   Then, use the **right grip button (right middle finger)** to pick up the fruit.  
 
-	(PICTURES/VR-Ingame-Activity.png)
+        <a href="PICTURES/VR-Ingame-Activity.png">
+            <img src="PICTURES/VR-Ingame-Activity.png" alt="VR_Ingame_Activity" width="600">
+     </a>
 	
-   **Placing fruit in the basket**
-     
-   A basket is located at the player’s left hip.  
-   Place the fruit into the basket by releasing the right middle finger.  
-   A sound effect will play when the fruit is successfully placed in the basket.
+	
+    **Placing fruit in the basket**\
+    A basket is located at the player’s left hip.  
+    Place the fruit into the basket by releasing the right middle finger.  
+    A sound effect will play when the fruit is successfully placed in the basket.
 
 #### GAMA
 
    - **Agents**: 
 
-      ![agents](PICTURES/agents.png)
+      <a href="PICTURES/agents.png">
+         <img src="PICTURES/agents.png" alt="agents" width="600">
+      </a>
 
       1. **Map**
 
@@ -348,65 +354,67 @@ Users interact with the GAMA interface mainly by **left-clicking** on the availa
 
 
    - **Data Visualization**: 
-      - **Graphs**
-
-         Forest trail model
-
-         1. Graph shows the total number of seeds in each team
+      - **Graphs**\
+      *Forest trail model*
+         1. Graph shows the total number of seeds in each team: \
             A graph showing the total number of seeds collected by players on each team
-
-         2. Graph of seed counts by species
+         2. Graph of seed counts by species: \
             A graph shows the number of seeds of each species collected by players on each team 
         
-        ![graph_seed](PICTURES/Graph_seed.PNG)
-
+        <a id="Graph_seed" href="PICTURES/Graph_seed.png">
+            <img src="PICTURES/Graph_seed.png" alt="graph_seed" width="600">
+        </a>
+            
       - **Map**
 
-          ![map](PICTURES/Map.PNG)
+        <a id="map" href="PICTURES/Map.png">
+            <img src="PICTURES/Map.png" alt="map" width="600">
+        </a>
 
-         1. **Trails Map**:  It represents the forest trails for the players to walk along, with
+        1. **Trails Map**:  It represents the forest trails for the players to walk along, with \
 
-            1.1 *Tutorial Zone*
+        1.1 *Tutorial Zone*:
 
-               It is the area used to practice the various skills that players will need in the game, 
-               such as walking, picking up equipment, and placing fruit into the basket,
-               in order to prepare them before entering the forest to collect seeds. 
-               In the figure, this corresponds to the grey rectangular area in the center of the trails map.
+        It is the area used to practice the various skills that players will need in the game, \
+        such as walking, picking up equipment, and placing fruit into the basket, \
+        in order to prepare them before entering the forest to collect seeds. \
+        In the figure, this corresponds to the grey rectangular area in the center of the trails map.\
 
-            1.2 *Trails Zone*
-               
-               It is the forest trail used for collecting seeds for forest restoration. 
-               In the figure, this corresponds to the long grey path, which is divided into six zones as previously described.
+         1.2 *Trails Zone*: \
+        It is the forest trail used for collecting seeds for forest restoration. \
+        In the figure, this corresponds to the long grey path, which is divided into six zones as previously described.
 
-            <a href="PICTURES/table_pheno.png">
-               <img src="PICTURES/table_pheno.png" alt="Table pheno" width="600">
-            </a>
 
-         2. **Players** 
+        <a id="Table_pheno" href="PICTURES/table_pheno.png">
+            <img src="PICTURES/table_pheno.png" alt="Table pheno" width="450">
+        </a> 
+
+
+        2. **Players** 
 
             It represents the players who are currently wearing the VR headsets. 
             Each player is shown as a colored circle, such as red, blue, green, yellow, black, or white.
 
-         3. **Remaining Time**
+        3. **Remaining Time**
 
             It is a countdown timer (3 minutes) that indicates how much time is left in each round.
 
-         4. **Icon play/pause**
+        4. **Icon play/pause**
 
             It is an icon used to indicate whether the game is currently playing or paused.
 
-         5. **Reset Button**
+        5. **Reset Button**
 
             It is a button used when a player encounters an error,
             such as a lost connection that prevents their current data from being updated.
             Pressing this button will resend the current game state and the player’s position.
 
-         6. **Tutorial Completed**
+        6. **Tutorial Completed**
 
             It is an icon that appears when a player has completed the tutorial, 
             helping to check whether everyone is ready to start the game.
 
-         7. **Out of bounds**
+        7. **Out of bounds**
 
             It is an icon used to indicate whether a player has walked outside the designated zone.
 
@@ -434,15 +442,24 @@ Users interact with the GAMA interface mainly by **left-clicking** on the availa
             | Gmelina         | `#olive`                    |
             | Dead tree       | `#black`                    |
             | Alien Species   | `#red`                      | 
+            | old tree        | rgb(163, 191, 172)        | 
+                              
+         
+        In the forest growth simulation view below, the small ground-level circles in **rgb(163, 191, 172)** represent *the original trees already present* in the forest. The yellow circles on the ground (10 in total), each with a 5 m radius and randomly distributed, are sampling plots. These plots are used to count the number of trees inside each circle, and the counts are then used to calculate the RSA (Rapid Site Assessment), an indicator of the forest’s level of degradation.
 
+         In the 3D visualization, each cylinder represents a single tree.
+         Differences in cylinder height and diameter reflect the growth rate of each species,
+         so trees of different species end up with different sizes.
 
-         Differences in the height and thickness of each cylinder reflect the growth rate of each species, so trees end up with different sizes depending on their species.
+         The simulation also displays the RSA value for each team.
+         The team whose RSA is closest to 2500 is considered to have the most thriving forest.
+         In addition, tree survival for each team is shown as:
 
-         The simulation also displays the RSA value. The team whose RSA is closest to 2500 is considered to have the most thriving forest.
-         In addition, the survival of trees for each team is shown as:
-         number of **surviving trees / total number of trees planted**
+         **Survival rate** = *number of surviving trees* / *total number of trees planted*
 
-         ![tree growth](PICTURES/forest_growth.png)
+        <a href="PICTURES/forest_growth.png">
+            <img src="PICTURES/forest_growth.png" alt="forest growth" width="600">
+        </a>
 
       - **Charts**
 
@@ -454,11 +471,17 @@ Users interact with the GAMA interface mainly by **left-clicking** on the availa
          - Level 2: **Meets** the criteria (middle ring)
          - Level 3: **Exceeds** the criteria (outer ring)
 
-         ![criteria radar](PICTURES/radar_chart.jpg)
+        <a href="PICTURES/radar_chart.jpg">
+            <img src="PICTURES/radar_chart.jpg" alt="criteria radar" width="600">
+        </a>
+         
 
          In addition, the radar chart also shows the number of species that are as planned, not as planned, and the number of species that contain alien species.
 
-         ![radar chart](PICTURES/radar_chart_new.jpg)
+        <a href="PICTURES/radar_chart_new.png">
+            <img src="PICTURES/radar_chart_new.png" alt="criteria radar" width="600">
+        </a>
+        
 
 <!--
 - **Scenario Controls**: [How to modify parameters]
@@ -511,14 +534,17 @@ Users interact with the GAMA interface mainly by **left-clicking** on the availa
 
 #### Stages
 
-In Forest Trails, the activity is divided into six stages, each with a different level of difficulty. For example, the fruiting patterns of tree species vary across stages, as shown in Table X. In addition, in Stages 2, 4, and 6, alien tree species are included so that players can observe and be cautious about collecting alien species.
+In Forest Trails, the activity is divided into six stages, each with a different level of difficulty. For example, the fruiting patterns of tree species vary across stages, as shown in [Table of phenology](#Table_pheno). In addition, in Stages 2, 4, and 6, alien tree species are included so that players can observe and be cautious about collecting alien species.
 
-![zone_6_season](PICTURES/allstage.png)
+
+<a href="PICTURES/allstage.png">
+   <img src="PICTURES/allstage.png" alt="zone_6_season" width="600">
+</a>
 
 #### Progress tracking 
 
-   Graph showing the number of seeds collected for each species and the total number of seeds.
-ตามรูปที่ graph seed (link)
+   Graph showing the number of seeds collected for each species and the total number of seeds.\
+   see [the seed collection graph](#Graph_seed)
 
 ---
 
@@ -532,44 +558,45 @@ In Forest Trails, the activity is divided into six stages, each with a different
 
   1. Total Seeds Collected
    
-      The figure shows the total number of seeds collected by each team, \
+      [The figure](#Graph_seed) shows the total number of seeds collected by each team, \
       updated in real time so that facilitators can monitor team performance during the activity.
 
   2. Seeds by Species
    
-      The figure shows the number of seeds collected by each team, broken down by species.  \
+      [The figure](#Graph_seed) shows the number of seeds collected by each team, broken down by species.  \
       This view is also updated in real time and helps students see how many seeds come from different species
       (including native and alien species).
 
 - Post-activity evaluation
 
-   After the Forest Trails activity is completed, the number of seeds collected by each group is sent to the **Forest Growth** simulation and the **radar chart** module.
+   After the Forest Trails activity is completed, the number of seeds collected by each group is sent to \
+   the **Forest Growth** simulation and the **radar chart** module.
 
-   - *Forest growth*
-   This simulation visualizes 20 years of forest growth to show how the seeds collected by each group would develop into a forest over time.  
+   - *Forest growth* \
+   This simulation visualizes 20 years of forest growth to show how the seeds collected 
+   by each group would develop into a forest over time.  
    Students can observe how their seed collection decisions influence forest structure and composition in the long term.
-
-   - *Radar chart*
-   The radar chart visualizes how well each group’s seed collection matches the predefined seed collection plan.  
-    It shows:
-    - The number of species collected **according to plan**  
-    - The number of species collected **not according to plan**  
-    - The number of species for which players collected **alien species**  
+   - *Radar chart* \
+   The radar chart visualizes how well each group’s seed collection matches the predefined seed collection plan. \
+   It shows: 
+        - The number of species collected **according to plan**
+        - The number of species collected **not according to plan**
+        - The number of species for which players collected **alien species**  
 
     This helps students reflect on their planning, decision-making, and the impact of collecting alien species.
 
 - Progress reports for educators
 
-   - Forest growth 
-   The Forest Growth simulation uses the number of seeds collected by each team in the Forest Trails activity \
+   - *Forest growth* \
+   The Forest Growth simulation uses the number of seeds collected by each team in the Forest Trails activity 
    to model how the forest will develop over the next 20 years.
-   Its main purpose is to highlight the long-term outcomes of each team’s restoration efforts over a 20-year period.\
+   Its main purpose is to highlight the long-term outcomes of each team’s restoration efforts over a 20-year period.
    Through this visualization, learners can observe that:
       - Different tree species grow at different rates and reach different sizes.
       - Planting alien species has noticeable impacts on overall forest structure and health.
 
-      After viewing the simulation results, facilitators can invite learners to discuss:\
-	   - The ecological impacts of collecting and planting alien species, and\
+      After viewing the simulation results, facilitators can invite learners to discuss: 
+	   - The ecological impacts of collecting and planting alien species, and 
 	   - How they might plan more sustainable forest restoration strategies in the future.
 
 
@@ -602,8 +629,12 @@ In Forest Trails, the activity is divided into six stages, each with a different
 -->
 
 - Fact sheets 
-   - Phenology fact sheets: Worksheets that indicate the fruiting periods of each species and support in-group decision-making about which member will enter which zone.
-   - Seed Collection Plan: A worksheet that guides students to calculate the minimum and maximum number of seeds to collect for each species. Player can use it to design their seed collection strategy for each round before entering the forest trails.
+   - Phenology fact sheets: 
+   Worksheets that indicate the fruiting periods of each species and support in-group decision-making about 
+   which member will enter which zone.
+   - Seed Collection Plan: A worksheet that guides students to calculate 
+   the minimum and maximum number of seeds to collect for each species. 
+   Player can use it to design their seed collection strategy for each round before entering the forest trails.
 
 - External links to resources (link)
 
