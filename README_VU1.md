@@ -361,14 +361,14 @@ Users interact with the GAMA interface mainly by **left-clicking** on the availa
          2. Graph of seed counts by species: \
             A graph shows the number of seeds of each species collected by players on each team 
         
-        <a id="Graph_seed" href="PICTURES/Graph_seed.png">
-            <img src="PICTURES/Graph_seed.png" alt="graph_seed" width="600">
+        <a id="Graph_seed" href="PICTURES/Graph_seed.PNG">
+            <img src="PICTURES/Graph_seed.PNG" alt="Graph_seed" width="600">
         </a>
             
       - **Map**
 
-        <a id="map" href="PICTURES/Map.png">
-            <img src="PICTURES/Map.png" alt="map" width="600">
+        <a id="map" href="PICTURES/Map.PNG">
+            <img src="PICTURES/Map.PNG" alt="map" width="600">
         </a>
 
         1. **Trails Map**:  It represents the forest trails for the players to walk along, with \
