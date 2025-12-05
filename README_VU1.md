@@ -268,8 +268,8 @@ Users interact with the GAMA interface mainly by **left-clicking** on the availa
 
       The diagram below shows the overall workflow of the Forest Growth module.
 
-      <a href="PICTURES/Forest_Growth.png">
-         <img src="PICTURES/Forest_Growth.png" alt="Forest_growth" width="700">
+      <a href="PICTURES/Forest_Growth_WF.png">
+         <img src="PICTURES/Forest_Growth_WF.png" alt="Forest_growth" width="700">
       </a>
 
 ---
