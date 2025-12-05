@@ -134,7 +134,7 @@ Each round is limited to 3 minutes of playtime (max 6 rounds)\
 
 In the main game, players explore the forest to collect seeds.\
 In each round, different tree species are available, \
-and each species produces fruit according to the schedule shown in Table X.... \
+and each species produces fruit according to the schedule shown in [Table of phenology](#Table_pheno) \
 Players must plan their seed collection strategy for each round based on these species and their fruiting times.
 
 
