@@ -654,6 +654,12 @@ In Forest Trails, the activity is divided into six stages, each with a different
 - Reopen the game
 - Auto-magically reconnecting
 
+**Problem**: Unable to connect to GAMA during a game
+
+**Solution**:
+- Reopen the game
+- Restart GAMA or Middleware
+
 ---
 
 ## Frequently Asked Questions
@@ -673,6 +679,10 @@ A: Unable to save progress
 **Q: Is this available in my language?**
 
 A: Only in English
+
+****Q: Can not find game “BiodiVRestorer” on universal menu**
+
+A: Go to Application -> Unknown-source
 
 ---
 
