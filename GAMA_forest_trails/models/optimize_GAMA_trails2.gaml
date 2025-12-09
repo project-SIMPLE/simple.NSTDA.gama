@@ -218,18 +218,18 @@ global{
 					}
 					if not it_end_game{
 						if player_walk_in_zone[i]{
-							ask player_status[i]{
+							ask player_status[i+6]{
 								status_icon <- blank_image;
 							}
 						}
 						else{
-							ask player_status[i]{
+							ask player_status[i+6]{
 								status_icon <- alert_image;
 							}
 						}
 					}
 					else{
-						ask player_status[i]{
+						ask player_status[i+6]{
 							status_icon <- correct_image;
 							status_icon <- blank_image;
 						}
