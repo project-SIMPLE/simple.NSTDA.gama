@@ -620,26 +620,27 @@ species unity_player parent: abstract_unity_player{
 	int team_id ;
 	
 	init{
-		// Use m2l2 colors
-		if (map_player_id_m2l2.keys contains name){
-			if (map_player_id[name] != nil){
-				team_id <- map_player_id_m2l2[name];
-				// Move already existing player to end of index
-				ask first(unity_player where (each.name = name)) {
-					team_id <- length(map_player_id)+1;	
-					map_player_id[name] <- team_id;
-					color <- rgb(player_colors[team_id-1]);
-				}
-			} else {
-				team_id <- map_player_id_m2l2[name];
-			}
-		// Other Player_IP set, put colors at random
-		} else {
-			team_id <- length(map_player_id)+1;//map_player_id[name];	
-		}
-		map_player_id[name] <- team_id;
-
-		color <- rgb(player_colors[team_id-1]);
+//		// Use m2l2 colors
+//		if (map_player_id_m2l2.keys contains name){
+//			if (map_player_id[name] != nil){
+//				team_id <- map_player_id_m2l2[name];
+//				// Move already existing player to end of index
+//				ask first(unity_player where (each.name = name)) {
+//					team_id <- length(map_player_id)+1;	
+//					map_player_id[name] <- team_id;
+//					color <- rgb(player_colors[team_id-1]);
+//				}
+//			} else {
+//				team_id <- map_player_id_m2l2[name];
+//			}
+//		// Other Player_IP set, put colors at random
+//		} else {
+//			team_id <- length(map_player_id)+1;//map_player_id[name];	
+//		}
+//		map_player_id[name] <- team_id;
+		
+		team_id <- map_player_id[name];
+		color <- rgb(player_colors[team_id-1]);	
 	}
 	
 	aspect default {
