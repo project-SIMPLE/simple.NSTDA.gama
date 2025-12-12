@@ -30,7 +30,7 @@ This suite includes:
 ### Server
 
 - GAMA Platform [2024.7.0-SNAPSHOT]
-   - With the SIMPLE plugin installed
+   - With the additional VR plugin from [this link](https://github.com/project-SIMPLE/simple.toolchain/tree/Unity-6/GAMA%20Plugin).
 - SIMPLE Webplatform
 
 ### VR Headsets
@@ -43,10 +43,10 @@ This suite includes:
 
 ### Unity VR Application Installation
 
-1. Download BiodiVRestorer.apk from [download location](https://github.com/project-SIMPLE/simple.NSTDA.unityVRproject/releases/tag/v1.0)
-2. Run the installer
-3. Follow on-screen instructions
-4. Launch from desktop shortcut or Start menu
+1. Download BiodiVRestorer.apk from [download location](https://github.com/project-SIMPLE/simple.NSTDA.unityVRproject/releases/tag/v1.0) to your computer.
+2. Connect the headset to your computer with a USB-C cable and allow data access.
+3. Install the APK using SideQuest.
+4. On the headset, go to Apps Unknown Sources and launch BiodiVRestorer.
 
 ### Web Platform Access
 1. Open your web browser
@@ -81,7 +81,7 @@ This suite includes:
 
 #### 2. Select a scenario
 
-   Open the webplatform and select **1. Forest Trails** as shown in the following figure.   
+   Open the web platform and select **1. Forest Trails** as shown in the following figure.   
 
    <a href="PICTURES/scenario.PNG">
          <img src="PICTURES/scenario.PNG" alt="scenario" width="600">
@@ -96,9 +96,9 @@ This suite includes:
          <img src="PICTURES/select_app.png" alt="vr_app" width="600">
    </a>
 
-#### 4.  Check VR connections from the webplatform
+#### 4.  Check VR connections from the web platform
 
-   Click the VR headset icon on the webplatform to check the connection status of each player.
+   Click the VR headset icon on the web platform to check the connection status of each player.
 
    <a id= "fig-check-connect" href="PICTURES/check_connect.png">
          <img src="PICTURES/check_connect.png" alt="vr_connection" width="600">
@@ -129,8 +129,8 @@ In the tutorial, players will practice three basic skills needed in the game:
 #### 7. Start the main simulation (3-minute rounds)
 
 After all players have completed the tutorial, check that everyone is ready. \
-Then click **“Play”** on the webplatform again (as in Step 6) to send the players into the assigned zone.\
-Each round is limited to 3 minutes of playtime (max 6 rounds)\
+Then click **“Play”** on the web platform again (as in Step 6) to send the players into the assigned zone.\
+Each round is limited to 3 minutes of playtime (max 6 rounds) 
 
 In the main game, players explore the forest to collect seeds.\
 In each round, different tree species are available, \
@@ -244,8 +244,8 @@ Users interact with the GAMA interface mainly by **left-clicking** on the availa
 
       The diagram below shows the overall workflow of the Forest Trails module.
 
-      <a href="PICTURES/Forest_Trails.png">
-         <img src="PICTURES/Forest_Trails.png" alt="Forest_trails" width="700">
+      <a href="PICTURES/forest_trails.png">
+         <img src="PICTURES/forest_trails.png" alt="Forest_trails" width="150">
       </a>
 
 
@@ -268,8 +268,8 @@ Users interact with the GAMA interface mainly by **left-clicking** on the availa
 
       The diagram below shows the overall workflow of the Forest Growth module.
 
-      <a href="PICTURES/Forest_Growth_WF.png">
-         <img src="PICTURES/Forest_Growth_WF.png" alt="Forest_growth" width="700">
+      <a href="PICTURES/forest_growth.png">
+         <img src="PICTURES/forest_growth.png" alt="Forest_growth" width="150">
       </a>
 
 ---
@@ -350,7 +350,7 @@ Users interact with the GAMA interface mainly by **left-clicking** on the availa
          
       3. **Player**
 
-      Player agents represent the individual VR headset users in each team.
+      Represents the team member who is currently wearing the VR headset. Each player is shown as a colored circle (red, green, yellow, blue, black, or white). The cone shape extending from the player indicates the direction they are facing.
 
 
    - **Data Visualization**: 
@@ -442,7 +442,7 @@ Users interact with the GAMA interface mainly by **left-clicking** on the availa
             | Gmelina         | `#olive`                    |
             | Dead tree       | `#black`                    |
             | Alien Species   | `#red`                      | 
-            | old tree        | rgb(163, 191, 172)        | 
+            | old tree        | `rgb(163, 191, 172) `       | 
                               
          
         In the forest growth simulation view below, the small ground-level circles in **rgb(163, 191, 172)** represent *the original trees already present* in the forest. The yellow circles on the ground (10 in total), each with a 5 m radius and randomly distributed, are sampling plots. These plots are used to count the number of trees inside each circle, and the counts are then used to calculate the RSA (Rapid Site Assessment), an indicator of the forest’s level of degradation.
@@ -628,15 +628,16 @@ In Forest Trails, the activity is divided into six stages, each with a different
 - In-app glossary
 -->
 
-- Fact sheets 
-   - Phenology fact sheets: 
+- Work sheets 
+   - Phenology work sheets: 
    Worksheets that indicate the fruiting periods of each species and support in-group decision-making about 
    which member will enter which zone.
    - Seed Collection Plan: A worksheet that guides students to calculate 
    the minimum and maximum number of seeds to collect for each species. 
    Player can use it to design their seed collection strategy for each round before entering the forest trails.
 
-- External links to resources (link)
+- External links to resources\
+ (link canva)
 
 - Teacher's guide availability
 
@@ -647,15 +648,13 @@ In Forest Trails, the activity is divided into six stages, each with a different
 ### Common Issues and Solutions
 
 #### VR-Specific Issues
-**Problem**: One headset turned-off during a game
-
+**Problem**: One headset turned-off during a game\
 **Solution**:
 - Turn it back on
 - Reopen the game
 - Auto-magically reconnecting
 
-**Problem**: Unable to connect to GAMA during a game
-
+**Problem**: Unable to connect to GAMA during a game\
 **Solution**:
 - Reopen the game
 - Restart GAMA or Middleware
@@ -666,49 +665,39 @@ In Forest Trails, the activity is divided into six stages, each with a different
 
 ### General Questions
 
-**Q: Can I use this offline?**
-
+**Q: Can I use this offline?**\
 A: There is no offline version yet
 
-
-**Q: How do I save my progress?**
-
+**Q: How do I save my progress?**\
 A: Unable to save progress
 
 
-**Q: Is this available in my language?**
-
+**Q: Is this available in my language?**\
 A: Only in English
 
-****Q: Can not find game “BiodiVRestorer” on universal menu**
-
+**Q: Can not find game “BiodiVRestorer” on universal menu**\
 A: Go to Application -> Unknown-source
 
 ---
 
 ### Technical Questions
 
-**Q: What VR headsets are supported?**
-
+**Q: What VR headsets are supported?**\
 A: Meta Quest 3 only
 
-
-**Q: Can I run this on a tablet/mobile device?**
-
+**Q: Can I run this on a tablet/mobile device?**\
 A: No 
 
 ---
 
 ### Educational Questions
 
-**Q: How long does each session take?**
-
+**Q: How long does each session take?**\
 A: **Forest Trails**: approximately 30 - 45 minutes\
    **Forest Growth**: approximately 10 - 20 minutes
 
 
-**Q: Can teachers monitor student progress?**
-
+**Q: Can teachers monitor student progress?**\
 A: Yes, teachers can monitor student progress through GAMA, 
    which displays real-time graphs of seed collection for each team.
 
@@ -717,8 +706,7 @@ A: Yes, teachers can monitor student progress through GAMA,
 ### Bug Reporting
 
 Please report bugs through:
-1. GitHub issues page: [your repo]
-2. [Else ?]
+Please report bugs through: [**GitHub issues page**](https://github.com/project-SIMPLE/simple.NSTDA.gama/issues)
 
 ---
 
