@@ -325,47 +325,47 @@ Users interact with the GAMA interface mainly by **left-clicking** on the availa
    When the player collects fruit into the basket, a sound effect will play when the fruit is successfully dropped into the basket.
 
 - **In Game Activities**:
-	
-   **Collect Fruit**
-  
-   There are three ways to collect fruit from a tree or the ground: using equipment, such as a crossbow or a fruit picker, or using your hand to pick it directly. 
-   On the player’s left arm, there are two equipment boxes:
 
-   1. **Crossbow**
+**Collect Fruit**
 
-      - The player can raise their left arm and look at it.  
-      When the equipment box with the crossbow appears, use the right hand to point at the box until it is highlighted in green.\
-      Then, use the **right grip button (right middle finger)** to grab the equipment.
+There are three ways to collect fruit from a tree or the ground: using equipment, such as a crossbow or a fruit picker, or using your hand to pick it directly. 
+On the player’s left arm, there are two equipment boxes:
 
-      - **How to use:**
-      After the player has equipped the crossbow, point at the fruit box on the tree.  
-      Press the **right trigger button (right index finger)** to shoot.  
-      When the message **“pull back”** appears, pull your hand back to make the fruit fall.
+1. **Crossbow**
 
-         <a href="PICTURES/crossbow.png">
-            <img src="PICTURES/crossbow.png" alt="crossbow" width="600">
-         </a>
+   - The player can raise their left arm and look at it.  
+   When the equipment box with the crossbow appears, use the right hand to point at the box until it is highlighted in green.\
+   Then, use the **right grip button (right middle finger)** to grab the equipment.
 
-   2. **Fruit picker**
+   - **How to use:**
+   After the player has equipped the crossbow, point at the fruit box on the tree.  
+   Press the **right trigger button (right index finger)** to shoot.  
+   When the message **“pull back”** appears, pull your hand back to make the fruit fall.
 
-      - Picking up the fruit picker is done in the same way as the crossbow.
+      <a href="PICTURES/crossbow.png">
+         <img src="PICTURES/crossbow.png" alt="crossbow" width="600">
+      </a>
 
-      - **How to use:**
-      After the player has picked up the fruit picker, hook it onto the fruit to make the fruit fall down.
+2. **Fruit picker**
 
-         <a href="PICTURES/fruit_pick.png">
-            <img src="PICTURES/fruit_pick.png" alt="fruit_pick" width="600">
-         </a>
+   - Picking up the fruit picker is done in the same way as the crossbow.
 
-   3. **Picking up fruit**
-      
-	  - Once the fruit has fallen to the ground, use the **left thumbstick (left thumb)** to move toward the fruit.  
-      Then, use the **right grip button (right middle finger)** to pick up the fruit.
+   - **How to use:**
+   After the player has picked up the fruit picker, hook it onto the fruit to make the fruit fall down.
 
-        <a href="PICTURES/hand_pick.png">
-            <img src="PICTURES/hand_pick.png" alt="VR_Ingame_Activity" width="600">
-         </a>
-	
+      <a href="PICTURES/fruit_pick.png">
+         <img src="PICTURES/fruit_pick.png" alt="fruit_pick" width="600">
+      </a>
+
+3. **Picking up fruit**
+   
+   - Once the fruit has fallen to the ground, use the **left thumbstick (left thumb)** to move toward the fruit.  
+   Then, use the **right grip button (right middle finger)** to pick up the fruit.
+
+      <a href="PICTURES/hand_pick.png">
+         <img src="PICTURES/hand_pick.png" alt="VR_Ingame_Activity" width="600">
+      </a>
+
 	<!--
     **Placing fruit in the basket**\
     A basket is located at the player’s left hip.  
@@ -375,99 +375,99 @@ Users interact with the GAMA interface mainly by **left-clicking** on the availa
 
 #### GAMA
 
-   - **Agents**: 
+- **Agents**: 
 
-      <a href="PICTURES/agents.png">
-         <img src="PICTURES/agents.png" alt="agents" width="600">
-      </a>
+  <a href="PICTURES/agents.png">
+     <img src="PICTURES/agents.png" alt="agents" width="600">
+  </a>
 
-      1. **Map**
+  1. **Map**
 
-      The map represents the overall forest environment in the game, including the trails that players explore. \
-      These forest trails are divided into six zones, as shown in the image above.
+  The map represents the overall forest environment in the game, including the trails that players explore. \
+  These forest trails are divided into six zones, as shown in the image above.
 
-      2. **Tree** 
+  2. **Tree** 
 
-      Tree agents are displayed along the forest trails. Each tree stores information such as its position, species, \
-      whether it is fruit-bearing or not, and whether it is an alien or native species.
+  Tree agents are displayed along the forest trails. Each tree stores information such as its position, species, \
+  whether it is fruit-bearing or not, and whether it is an alien or native species.
 
-      - Tree agents are displayed as circles in three colors, where:
+  - Tree agents are displayed as circles in three colors, where:
 
-         - **Green**  represents native species without fruit.
-         - **Orange** represents native species with fruit.
-         - **Purple** represents alien species with fruit.
-         
-      3. **Player**
+     - **Green**  represents native species without fruit.
+     - **Orange** represents native species with fruit.
+     - **Purple** represents alien species with fruit.
+     
+  1. **Player**
 
-      Represents the team member who is currently wearing the VR headset. \
-      Each player is shown as a colored circle (red, green, yellow, blue, black, or white), \
-      and the cone shape extending from the player indicates the direction they are facing.
+  Represents the team member who is currently wearing the VR headset. \
+  Each player is shown as a colored circle (red, green, yellow, blue, black, or white), \
+  and the cone shape extending from the player indicates the direction they are facing.
 
 
-   - **Data Visualization**: 
-      - **Graphs** 
+- **Data Visualization**: 
+  - **Graphs** 
 
-      <a id="Graph_seed" href="PICTURES/graph_seed2.png">
-         <img src="PICTURES/graph_seed2.png" alt="Graph_seed" width="600">
-      </a>
-            
-      *Forest trail model*
-      1. Graph shows the total number of seeds in each team: \
-               A graph showing the total number of seeds collected by players on each team
-      2. Graph of seed counts by species: \
-               A graph shows the number of seeds of each species collected by players on each team 
+  <a id="Graph_seed" href="PICTURES/graph_seed2.png">
+     <img src="PICTURES/graph_seed2.png" alt="Graph_seed" width="600">
+  </a>
         
-        
-      - **Map**
+  *Forest trail model*
+  1. Graph shows the total number of seeds in each team: \
+           A graph showing the total number of seeds collected by players on each team
+  2. Graph of seed counts by species: \
+           A graph shows the number of seeds of each species collected by players on each team 
+    
+    
+  - **Map**
 
-         <a id="map" href="PICTURES/map_2.png">
-               <img src="PICTURES/map_2.png" alt="map" width="600">
-         </a>
+     <a id="map" href="PICTURES/map_2.png">
+           <img src="PICTURES/map_2.png" alt="map" width="600">
+     </a>
 
-        1. **Trails Map**:  It represents the forest trails for the players to walk along, with 
+1. **Trails Map**:  It represents the forest trails for the players to walk along, with 
 
-        1.1 *Tutorial Zone*:
+1.1 *Tutorial Zone*:
 
-        It is the area used to practice the various skills that players will need in the game, \
-        such as walking, picking up equipment, and placing fruit into the basket, \
-        in order to prepare them before entering the forest to collect seeds. \
-        In the figure, this corresponds to the grey rectangular area in the center of the trails map.
+It is the area used to practice the various skills that players will need in the game, \
+such as walking, picking up equipment, and placing fruit into the basket, \
+in order to prepare them before entering the forest to collect seeds. \
+In the figure, this corresponds to the grey rectangular area in the center of the trails map.
 
-         1.2 *Trails Zone*: \
-        It is the forest trail used for collecting seeds for forest restoration. \
-        In the figure, this corresponds to the long grey path, which is divided into six zones as previously described.
+ 1.2 *Trails Zone*: \
+It is the forest trail used for collecting seeds for forest restoration. \
+In the figure, this corresponds to the long grey path, which is divided into six zones as previously described.
 
-         <a id="Table_pheno" href="PICTURES/table_pheno.png">
-               <img src="PICTURES/table_pheno.png" alt="Table pheno" width="450">
-         </a> 
+ <a id="Table_pheno" href="PICTURES/table_pheno.png">
+       <img src="PICTURES/table_pheno.png" alt="Table pheno" width="450">
+ </a> 
 
-        2.  **Player** \
-            Represents the team member who is currently wearing the VR headset. \
-            Each player is shown as a colored circle (red, green, yellow, blue, black, or white), \
-            and the cone shape extending from the player indicates the direction they are facing.
+2.  **Player** \
+    Represents the team member who is currently wearing the VR headset. \
+    Each player is shown as a colored circle (red, green, yellow, blue, black, or white), \
+    and the cone shape extending from the player indicates the direction they are facing.
 
-        3. **Remaining Time**
+3. **Remaining Time**
 
-            It is a countdown timer (3 minutes) that indicates how much time is left in each round.
+    It is a countdown timer (3 minutes) that indicates how much time is left in each round.
 
-        4. **Icon play/pause**
+4. **Icon play/pause**
 
-            It is an icon used to indicate whether the game is currently playing or paused.
+    It is an icon used to indicate whether the game is currently playing or paused.
 
-        5. **Reset Button**
+5. **Reset Button**
 
-            It is a button used when a player encounters an error,
-            such as a lost connection that prevents their current data from being updated.
-            Pressing this button will resend the current game state and the player’s position.
+    It is a button used when a player encounters an error,
+    such as a lost connection that prevents their current data from being updated.
+    Pressing this button will resend the current game state and the player’s position.
 
-        6. **Tutorial Completed**
+6. **Tutorial Completed**
 
-            It is an icon that appears when a player has completed the tutorial, 
-            helping to check whether everyone is ready to start the game.
+    It is an icon that appears when a player has completed the tutorial, 
+    helping to check whether everyone is ready to start the game.
 
-        7. **Out of bounds**
+7. **Out of bounds**
 
-            It is an icon used to indicate whether a player has walked outside the designated zone.
+    It is an icon used to indicate whether a player has walked outside the designated zone.
 
       - **Forest growth simulation**
 
@@ -687,7 +687,7 @@ In Forest Trails, the activity is divided into six stages, each with a different
    the minimum and maximum number of seeds to collect for each species. 
    Player can use it to design their seed collection strategy for each round before entering the forest trails.
 
-- External links to resources\
+- External links to resources
 <!--
 (link canva)
 -->
