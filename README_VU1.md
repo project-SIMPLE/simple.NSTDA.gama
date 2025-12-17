@@ -69,103 +69,140 @@ This suite includes:
 
 ### Starting the Virtual Universe (VU)
 
+   <a href="PICTURES/flow_control1.png">
+         <img src="PICTURES/flow_control1.png" alt="control1" width="200">
+   </a><br><br>
+
+According to the flowchart above, these are the steps for preparing the system and equipment before starting the game. \
+The details for each step are as follows:
+
 #### 1. Open the web platform
 
-   Open a terminal and run the command below to generate a URL for the web platform.
-   Then copy that URL and open it in your web browser.
+   Open a terminal and run the command below to generate a URL for the web platform, \
+   then copy that URL, open it in your web browser, and select 1. Forest Trails as shown in the figure below.
 
 ```bash
  cd /path/to/simple.webplatform/
  npm start
 ```
 
-#### 2. Select a scenario
-
-   Open the web platform and select **1. Forest Trails** as shown in the following figure.   
-
-   <a href="PICTURES/scenario.PNG">
-         <img src="PICTURES/scenario.PNG" alt="scenario" width="600">
+   
+<!--
+    <a href="PICTURES/scenario.PNG">
+         <img src="PICTURES/scenario.PNG" alt="scenario" width="450">
    </a>
+-->
   
-#### 3. Launch the VR application
+  
+#### 2. Launch the VR application
 
-   After the player puts on the VR headset, make sure it is connected to the same Wi-Fi network as the computer.
+   After the player puts on the VR headset, make sure it is connected to the same Wi-Fi network as the computer. \
    Then, select the **“BiodiVRestorer”**  application on the headset.
-
+<!--
    <a href="PICTURES/select_app.png">
-         <img src="PICTURES/select_app.png" alt="vr_app" width="600">
+         <img src="PICTURES/select_app.png" alt="vr_app" width="450">
    </a>
+-->
 
-#### 4.  Check VR connections from the web platform
+#### 3. Connect the VR headset
+
+- 3.1 Check VR connections from the web platform
 
    Click the VR headset icon on the web platform to check the connection status of each player.
 
    <a id= "fig-check-connect" href="PICTURES/check_connect.png">
-         <img src="PICTURES/check_connect.png" alt="vr_connection" width="600">
+         <img src="PICTURES/check_connect.png" alt="vr_connection" width="450">
+   </a><br><br>
+
+
+- 3.2 Wait for GAMA to launch and start the model
+
+   Once you have confirmed that all players are connected, \
+   you can click the <img src="PICTURES/begin_anyway_button.png" alt="beginanyway" width="80">  (**“begin anyway”**) button to call the **Forest Trails** Simulation.
+
+<!--
+<a href="PICTURES/beginanyway.PNG">
+         <img src="PICTURES/beginanyway.PNG" alt="begin" width="450">
    </a>
+-->
+   
+---
 
+### Game Play
 
-#### 5. Wait for GAMA to launch and start the model
+   <a href="PICTURES/flow_gameplay.png">
+      <img src="PICTURES/flow_gameplay.png" alt="gameplay" width="300">
+   </a><br><br>
 
-Once you have confirmed that all players are connected, 
-you can click the **“begin anyway”** button to call the **Forest Trails** Simulation.
+The flowchart above summarizes the gameplay steps, which are described below.
 
-   <a href="PICTURES/beginanyway.PNG">
-         <img src="PICTURES/beginanyway.PNG" alt="begin" width="600">
-   </a>
+Check that all players are ready, then click the <img src="PICTURES/play_button.png" alt="playbutton" width="50"> (**“Play”**) button on the web platform to start the tutorial.
 
-#### 6. Start the tutorial
+<!--
+ <a href="PICTURES/play.PNG">
+      <img src="PICTURES/play.PNG" alt="play_button" width="500">
+   </a><br><br>
+--->
 
-Check that all players are ready, then click the **“Play”** button on the web platform to start the tutorial.\
-In the tutorial, players will practice three basic skills needed in the game:
-1.	Walking
-2.	Using the fruit picker
-3.	Using the crossbow to shoot fruit down from the trees
+#### 1. Start the tutorial
 
-   <a href="PICTURES/play.PNG">
-      <img src="PICTURES/play.PNG" alt="play_button" width="600">
-   </a>
-
-#### 7. Start the main simulation (3-minute rounds)
+   In the tutorial, players will practice three basic skills needed in the game: 
+   - **1.1	Walking**
+   - **1.2	Using the fruit picker**
+   - **1.3	Using the crossbow to shoot fruit down from the trees**
 
 After all players have completed the tutorial, check that everyone is ready. \
-Then click **“Play”** on the web platform again (as in Step 6) to send the players into the assigned zone.\
-Each round is limited to 3 minutes of playtime (max 6 rounds) 
+Then click <img src="PICTURES/play_button.png" alt="playbutton" width="50">  on the web platform to send the players into the assigned zone.
 
-In the main game, players explore the forest to collect seeds.\
-In each round, different tree species are available, \
-and each species produces fruit according to the schedule shown in [Table of phenology](#Table_pheno) \
-Players must plan their seed collection strategy for each round based on these species and their fruiting times.
+#### 2. Start exploring the forest to collect the seed (3-minute/rounds)
+
+In each round, a player explores the forest to collect the planned number of seeds and then passes the VR headset to the next player. \
+The group can play up to six rounds. (The number of rounds depends on the number of players in the group.)
+
+When all players have finished, <img src="PICTURES/close_button.PNG" alt="closebutton" width="50"> stop the simulation on the web platform and select **Forest Growth Simulation**.
 
 
-#### 8. Switch players between rounds
+#### 3. Start the forest growth simulation
+
+Click <img src="PICTURES/play_button.png" alt="playbutton" width="50"> to starts the Forest Growth Simulation to show how the forest develops over the next 20 years. 
+
+When the simulation is finished, <img src="PICTURES/close_button.PNG" alt="closebutton" width="50"> stop it and choose **Summary** or **Radar Chart**.
+
+#### 4. Open the radar chart
+
+Open the **Radar Chart** to review the results.  
+When you have finished viewing the outcomes, <img src="PICTURES/close_button.PNG" alt="closebutton" width="50"> close the simulation.
+
+<!--
+####  Switch players between rounds
 
 After 3 minutes, the system will display a notification on the VR headset to inform the player that the time is up. \
 Then, change the VR glasses to the next player to start a new round.
  
 
    <a href="PICTURES/ui_timeout.png">
-      <img src="PICTURES/ui_timeout.png" alt="timeout" width="600">
+      <img src="PICTURES/ui_timeout.png" alt="timeout" width="500">
    </a>
 
-#### 9. Repeating Rounds for All Players
+####  Repeating Rounds for All Players
 
 Repeat steps 6 – 8 as needed, depending on the number of students (Max 6 player)\
 and how many times you want them to play,\
 so that all players have the opportunity to fully participate.
 
-
-#### 10. End the simulation and return to the home page
+####  End the simulation and return to the home page
 
 When the simulation has completed and you want to return to the web platform’s home page,\
 click the red cross button on the web platform to stop the simulation in GAMA and prepare for the next session.
 
    <a href="PICTURES/end_sim.PNG">
-      <img src="PICTURES/end_sim.PNG" alt="end_simulation" width="600">
-   </a>
+      <img src="PICTURES/end_sim.PNG" alt="end_simulation" width="500">
+   </a><br><br>
+--->
 
 
-> [!NOTE]\
+
+> [!NOTE] 
 > If any player encounters a problem, such as a lost connection, have them exit the game on the VR headset and reopen it.\
 > After that, press the [**Reset**](#play-close-reset) button for that player in GAMA.
 
@@ -181,7 +218,7 @@ Users interact with the GAMA interface mainly by **left-clicking** on the availa
 3. **Reset** button — used when a player loses connection 
 
    <a id= "play-close-reset" href="PICTURES/GAMA_control.PNG">
-      <img src="PICTURES/GAMA_control.PNG" alt="GAMA control" width="600">
+      <img src="PICTURES/GAMA_control.PNG" alt="GAMA control" width="500">
    </a>
 
 #### For Unity VR Games 
@@ -195,7 +232,7 @@ Users interact with the GAMA interface mainly by **left-clicking** on the availa
    - Press the **Meta / Oculus button** on the right controller to open the main menu and exit the game.
 
 	<a href="PICTURES/VRGameControl.png">
-      <img src="PICTURES/VRGameControl.png" alt="VR control" width="600">
+      <img src="PICTURES/VRGameControl.png" alt="VR control" width="500">
 	</a>
 
 
@@ -204,7 +241,7 @@ Users interact with the GAMA interface mainly by **left-clicking** on the availa
 2. **Close Button**
 
    <a href="PICTURES/webpf_control.PNG">
-      <img src="PICTURES/webpf_control.PNG" alt="web_control" width="600">
+      <img src="PICTURES/webpf_control.PNG" alt="web_control" width="500">
    </a>
 
 3. **VR headset Status Checking**
@@ -223,7 +260,7 @@ Users interact with the GAMA interface mainly by **left-clicking** on the availa
 
 #### Learning Modules 
 
-1. **Module 1: Forest Trails** (With VR)
+**Module 1: Forest Trails** (With VR)
    - Duration: 
       - tutorial: It depends on the player
       - In game: 18 minutes
@@ -240,16 +277,19 @@ Users interact with the GAMA interface mainly by **left-clicking** on the availa
       In every round, each player takes a turn exploring the forest and collecting seeds from trees of different species, \
       all within a limited amount of time.
 
-   - Technical Info:
+<!--
+ - Technical Info:
 
       The diagram below shows the overall workflow of the Forest Trails module.
 
-      <a href="PICTURES/forest_trails.png">
-         <img src="PICTURES/forest_trails.png" alt="Forest_trails" width="150">
+      <a href="PICTURES/forest_trails_wf.png">
+         <img src="PICTURES/forest_trails_wf.png" alt="Forest_trails" width="150">
       </a>
+-->
+  
 
 
-2. **Module 2: Forest Growth** (Without VR)
+**Module 2: Forest Growth** (Without VR)
    - Duration: approximately 10-15 minutes
 
    - Objectives:
@@ -264,13 +304,15 @@ Users interact with the GAMA interface mainly by **left-clicking** on the availa
      Each team can then see the outcome of their forest restoration efforts, including the RSA value after 20 years of simulation.\
      Then the results will be discussed among each team. For example, if alien species are collected, how will they affect forest restoration?
 
-   - Technical Info: 
+<!--
+- Technical Info: 
 
       The diagram below shows the overall workflow of the Forest Growth module.
 
       <a href="PICTURES/forest_growth.png">
          <img src="PICTURES/forest_growth.png" alt="Forest_growth" width="150">
       </a>
+-->
 
 ---
 
@@ -300,6 +342,10 @@ Users interact with the GAMA interface mainly by **left-clicking** on the availa
       Press the **right trigger button (right index finger)** to shoot.  
       When the message **“pull back”** appears, pull your hand back to make the fruit fall.
 
+         <a href="PICTURES/crossbow.png">
+            <img src="PICTURES/crossbow.png" alt="crossbow" width="600">
+         </a>
+
    2. **Fruit picker**
 
       - Picking up the fruit picker is done in the same way as the crossbow.
@@ -307,22 +353,25 @@ Users interact with the GAMA interface mainly by **left-clicking** on the availa
       - **How to use:**
       After the player has picked up the fruit picker, hook it onto the fruit to make the fruit fall down.
 
+         <a href="PICTURES/fruit_pick.png">
+            <img src="PICTURES/fruit_pick.png" alt="fruit_pick" width="600">
+         </a>
+
    3. **Picking up fruit**
       
 	  - Once the fruit has fallen to the ground, use the **left thumbstick (left thumb)** to move toward the fruit.  
       Then, use the **right grip button (right middle finger)** to pick up the fruit.
-   Once the fruit has fallen to the ground, use the **left thumbstick (left thumb)** to move toward the fruit.  
-   Then, use the **right grip button (right middle finger)** to pick up the fruit.  
 
-        <a href="PICTURES/VR-Ingame-Activity.png">
-            <img src="PICTURES/VR-Ingame-Activity.png" alt="VR_Ingame_Activity" width="600">
-     </a>
+        <a href="PICTURES/hand_pick.png">
+            <img src="PICTURES/hand_pick.png" alt="VR_Ingame_Activity" width="600">
+         </a>
 	
-	
+	<!--
     **Placing fruit in the basket**\
     A basket is located at the player’s left hip.  
     Place the fruit into the basket by releasing the right middle finger.  
     A sound effect will play when the fruit is successfully placed in the basket.
+   -->
 
 #### GAMA
 
@@ -334,12 +383,12 @@ Users interact with the GAMA interface mainly by **left-clicking** on the availa
 
       1. **Map**
 
-      The map represents the overall forest environment in the game, including the trails that players explore. 
-      These forest trails are divided into six zones, as shown in the image below.
+      The map represents the overall forest environment in the game, including the trails that players explore. \
+      These forest trails are divided into six zones, as shown in the image above.
 
       2. **Tree** 
 
-      Tree agents are displayed along the forest trails. Each tree stores information such as its position, species, 
+      Tree agents are displayed along the forest trails. Each tree stores information such as its position, species, \
       whether it is fruit-bearing or not, and whether it is an alien or native species.
 
       - Tree agents are displayed as circles in three colors, where:
@@ -350,50 +399,52 @@ Users interact with the GAMA interface mainly by **left-clicking** on the availa
          
       3. **Player**
 
-      Represents the team member who is currently wearing the VR headset. Each player is shown as a colored circle (red, green, yellow, blue, black, or white). The cone shape extending from the player indicates the direction they are facing.
+      Represents the team member who is currently wearing the VR headset. \
+      Each player is shown as a colored circle (red, green, yellow, blue, black, or white), \
+      and the cone shape extending from the player indicates the direction they are facing.
 
 
    - **Data Visualization**: 
-      - **Graphs**\
-      *Forest trail model*
-         1. Graph shows the total number of seeds in each team: \
-            A graph showing the total number of seeds collected by players on each team
-         2. Graph of seed counts by species: \
-            A graph shows the number of seeds of each species collected by players on each team 
-        
-        <a id="Graph_seed" href="PICTURES/Graph_seed.PNG">
-            <img src="PICTURES/Graph_seed.PNG" alt="Graph_seed" width="600">
-        </a>
+      - **Graphs** 
+
+      <a id="Graph_seed" href="PICTURES/graph_seed2.png">
+         <img src="PICTURES/graph_seed2.png" alt="Graph_seed" width="600">
+      </a>
             
+      *Forest trail model*
+      1. Graph shows the total number of seeds in each team: \
+               A graph showing the total number of seeds collected by players on each team
+      2. Graph of seed counts by species: \
+               A graph shows the number of seeds of each species collected by players on each team 
+        
+        
       - **Map**
 
-        <a id="map" href="PICTURES/Map.PNG">
-            <img src="PICTURES/Map.PNG" alt="map" width="600">
-        </a>
+         <a id="map" href="PICTURES/map_2.png">
+               <img src="PICTURES/map_2.png" alt="map" width="600">
+         </a>
 
-        1. **Trails Map**:  It represents the forest trails for the players to walk along, with \
+        1. **Trails Map**:  It represents the forest trails for the players to walk along, with 
 
         1.1 *Tutorial Zone*:
 
         It is the area used to practice the various skills that players will need in the game, \
         such as walking, picking up equipment, and placing fruit into the basket, \
         in order to prepare them before entering the forest to collect seeds. \
-        In the figure, this corresponds to the grey rectangular area in the center of the trails map.\
+        In the figure, this corresponds to the grey rectangular area in the center of the trails map.
 
          1.2 *Trails Zone*: \
         It is the forest trail used for collecting seeds for forest restoration. \
         In the figure, this corresponds to the long grey path, which is divided into six zones as previously described.
 
+         <a id="Table_pheno" href="PICTURES/table_pheno.png">
+               <img src="PICTURES/table_pheno.png" alt="Table pheno" width="450">
+         </a> 
 
-        <a id="Table_pheno" href="PICTURES/table_pheno.png">
-            <img src="PICTURES/table_pheno.png" alt="Table pheno" width="450">
-        </a> 
-
-
-        2. **Players** 
-
-            It represents the players who are currently wearing the VR headsets. 
-            Each player is shown as a colored circle, such as red, blue, green, yellow, black, or white.
+        2.  **Player** \
+            Represents the team member who is currently wearing the VR headset. \
+            Each player is shown as a colored circle (red, green, yellow, blue, black, or white), \
+            and the cone shape extending from the player indicates the direction they are facing.
 
         3. **Remaining Time**
 
@@ -637,8 +688,10 @@ In Forest Trails, the activity is divided into six stages, each with a different
    Player can use it to design their seed collection strategy for each round before entering the forest trails.
 
 - External links to resources\
- (link canva)
-
+<!--
+(link canva)
+-->
+ 
 - Teacher's guide availability
 
 ---
@@ -657,7 +710,7 @@ In Forest Trails, the activity is divided into six stages, each with a different
 **Problem**: Unable to connect to GAMA during a game\
 **Solution**:
 - Reopen the game
-- Restart GAMA or Middleware
+- Restart GAMA or Web platform
 
 ---
 
@@ -705,7 +758,6 @@ A: Yes, teachers can monitor student progress through GAMA,
 
 ### Bug Reporting
 
-Please report bugs through:
 Please report bugs through: [**GitHub issues page**](https://github.com/project-SIMPLE/simple.NSTDA.gama/issues)
 
 ---
