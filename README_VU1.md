@@ -156,7 +156,7 @@ Then click <img src="PICTURES/play_button.png" alt="playbutton" width="50">  on 
 
 #### 2. Start exploring the forest to collect the seed (3-minute/rounds)
 
-In each round, a player explores the forest to collect the planned number of seeds and then passes the VR headset to the next player. \
+In each round, a player explores the forest to collect the planned number of seeds and then passes the VR headset to the next player. 
 The group can play up to six rounds. (The number of rounds depends on the number of players in the group.)
 
 When all players have finished, <img src="PICTURES/close_button.PNG" alt="closebutton" width="50"> stop the simulation on the web platform and select **Forest Growth Simulation**.
