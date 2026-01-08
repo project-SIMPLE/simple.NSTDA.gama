@@ -12,7 +12,8 @@ import "optimize_species.gaml"
 global{
 	// Parameter
 	int n_team <- 6;
-	int stop_time <- 180; //second
+	int stop_time <- 60; //second
+	int n_turn <- 6;
 	
 	// Variable
 	shape_file Trail_shape_file <- shape_file("../includes/Trail.shp");
@@ -58,7 +59,9 @@ global{
 	// Keep NSTDA's M2L2 color scheme for user
 //	map<string, int> map_player_id_m2l2 <- ["Player_101"::1, "Player_102"::2, "Player_103"::3, "Player_104"::4, "Player_105"::5, "Player_106"::6];
 	// Allow any player's name with automatic colors
-	map<string, int> map_player_id <- ["Player_101"::1, "Player_102"::2, "Player_103"::3, "Player_104"::4, "Player_105"::5, "Player_106"::6];
+	list<string> player_name <- ["Player_101", "Player_102", "Player_103", "Player_104", "Player_105", "Player_106"];
+	map<int, string> map_player_intid <- [1::player_name[0], 2::player_name[1], 3::player_name[2], 4::player_name[3], 5::player_name[4], 6::player_name[5]];
+	map<string, int> map_player_idint <- [player_name[0]::1, player_name[1]::2, player_name[2]::3, player_name[3]::4, player_name[4]::5, player_name[5]::6];
 	
 	list<rgb> player_colors <- [rgb(66, 72, 255), #red, #green, rgb(255, 196, 0), #black, rgb(156, 152, 142)];
 	list<string> color_list <- ["Blue", "Red", 'Green', "Yellow", "Black", "White"];
@@ -81,7 +84,7 @@ global{
 			location <- {width/2, height/2, -1};
 		}
 		
-		loop i from:0 to:length(map_player_id)-1{
+		loop i from:0 to:length(map_player_idint)-1{
 			create reset{
 				location <- {width + 50, 12 + (40*i)};
 			}
@@ -91,7 +94,7 @@ global{
 			}
 		}
 		
-		loop i from:0 to:length(map_player_id)-1{			
+		loop i from:0 to:length(map_player_idint)-1{			
 			create player_status{
 				location <- {width + 360, 16 + (40*i)};
 			}
@@ -192,7 +195,7 @@ global{
 	}
 	
 	reflex update_status {
-		loop i from:0 to:length(map_player_id)-1{
+		loop i from:0 to:length(map_player_idint)-1{
 			if not who_connect[i]{
 //				ask player_status[i]{
 ////					status_icon <- no_signal_image;
@@ -266,12 +269,13 @@ global{
 		ask sign{
 			icon <- play;
 		}
+		
+		do save_total_seeds_to_csv;
+		
 		do pause_game;
 		do pause;
 		
 		can_start <- true;
-		
-		do save_total_seeds_to_csv;
 	}
 	
 	reflex do_resume when: not paused and can_start{
@@ -330,7 +334,7 @@ global{
 //		}
 	}
 	
-	reflex end_game when:time_now >= (stop_time*6){
+	reflex end_game when:time_now >= (stop_time*n_turn){
 		time_now <- (stop_time*6);
 		can_start <- false;
 		it_end_game <- true;
@@ -437,7 +441,7 @@ experiment init_exp type: gui {
 				}
 			// ---------------------------------------------------------------------------------------------------------
 				
-				loop i from:0 to:length(map_player_id)-1{
+				loop i from:0 to:length(map_player_idint)-1{
 					draw "Team" + (i+1) + " " + color_list[i] +  ": " 
 						at:{width+70, 20 + (40*i)} 
 						font:font("Times", 20, #bold+#italic) 

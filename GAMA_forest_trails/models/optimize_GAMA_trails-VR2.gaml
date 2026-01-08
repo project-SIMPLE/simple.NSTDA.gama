@@ -5,59 +5,105 @@ import "optimize_GAMA_trails2.gaml"
 global {	
 	int adjust_location <- 3;
 	action save_total_seeds_to_csv{
-		list header <- [];
-		loop i from:0 to:length(n_tree) - 1{
-			add 'Type' + (i+1) to: header;
-		}
-		
-		int min_team_id <- 6;
-		
-		ask unity_player{
-			if min_team_id > team_id {
-				min_team_id <- team_id;
-			}
-		}
-		
-		loop j from:1 to:6{
-			//write string("Save data for Player_10" + j);
-			
-			ask unity_player where (each.name = string("Player_10" + j)){
-				int key_player <- team_id - 1;
-				list temp <- [];
-				list temp2 <- [];
-				
-				add 'Team' + int(team_id) to: temp;
-				add 'Team' + int(team_id) to: temp2;
-				
-				loop i from:0 to:length(n_tree) - 1{
-					add container(seeds[key_player])[i] to: temp;
-					add container(alien_seeds[key_player])[i] to: temp2;
-				}
-				
-				if self.name = string("Player_10" + min_team_id){
-					save temp to: "../results/total_seeds.csv" header:false format:"csv" rewrite:true;
-					save temp to: "../results_backup/total_seeds.csv" header:false format:"csv" rewrite:true;
-					save temp to: "../results_backup_with_date/total_seeds_" + today + ".csv" header:false format:"csv" rewrite:true;
-				}
-				else{
-					save temp to: "../results/total_seeds.csv" header:false format:"csv" rewrite:false;
-					save temp to: "../results_backup/total_seeds.csv" header:false format:"csv" rewrite:false;
-					save temp to: "../results_backup_with_date/total_seeds_" + today + ".csv" header:false format:"csv" rewrite:false;
-				}
-				
-				if self.name = string("Player_10" + min_team_id){
-					save temp2 to: "../results/total_alien_seeds.csv" header:false format:"csv" rewrite:true;
-					save temp2 to: "../results_backup/total_alien_seeds.csv" header:false format:"csv" rewrite:true;
-					save temp2 to: "../results_backup_with_date/total_alien_seeds_" + today + ".csv" header:false format:"csv" rewrite:true;
-				}
-				else{
-					save temp2 to: "../results/total_alien_seeds.csv" header:false format:"csv" rewrite:false;
-					save temp2 to: "../results_backup/total_alien_seeds.csv" header:false format:"csv" rewrite:false;
-					save temp2 to: "../results_backup_with_date/total_alien_seeds_" + today + ".csv" header:false format:"csv" rewrite:false;
+		loop team_id from:1 to:6{
+			ask unity_player{
+				if map_player_idint[self.name] = team_id{
+					int key_player <- team_id - 1;
+					list temp <- [];
+					list temp2 <- [];
+					
+					add 'Team' + int(team_id) to: temp;
+					add 'Team' + int(team_id) to: temp2;
+					
+					loop i from:0 to:length(n_tree) - 1{
+						add container(seeds[key_player])[i] to: temp;
+						add container(alien_seeds[key_player])[i] to: temp2;
+					}
+					
+					add count_start to: temp;
+					add count_start to: temp2;
+					
+					if team_id = 1{
+						save temp to: "../results/total_seeds.csv" header:false format:"csv" rewrite:true;
+						save temp to: "../results_backup/total_seeds.csv" header:false format:"csv" rewrite:true;
+						save temp to: "../results_backup_with_date/total_seeds_" + today + ".csv" header:false format:"csv" rewrite:true;
+					}
+					else{
+						save temp to: "../results/total_seeds.csv" header:false format:"csv" rewrite:false;
+						save temp to: "../results_backup/total_seeds.csv" header:false format:"csv" rewrite:false;
+						save temp to: "../results_backup_with_date/total_seeds_" + today + ".csv" header:false format:"csv" rewrite:false;
+					}
+					
+					if team_id = 1{
+						save temp2 to: "../results/total_alien_seeds.csv" header:false format:"csv" rewrite:true;
+						save temp2 to: "../results_backup/total_alien_seeds.csv" header:false format:"csv" rewrite:true;
+						save temp2 to: "../results_backup_with_date/total_alien_seeds_" + today + ".csv" header:false format:"csv" rewrite:true;
+					}
+					else{
+						save temp2 to: "../results/total_alien_seeds.csv" header:false format:"csv" rewrite:false;
+						save temp2 to: "../results_backup/total_alien_seeds.csv" header:false format:"csv" rewrite:false;
+						save temp2 to: "../results_backup_with_date/total_alien_seeds_" + today + ".csv" header:false format:"csv" rewrite:false;
+					}
 				}
 			}
-			//write string("Save data for Player_10" + j + " Completed!");
 		}
+		
+//		list header <- [];
+//		loop i from:0 to:length(n_tree) - 1{
+//			add 'Type' + (i+1) to: header;
+//		}
+//		
+//		int min_team_id <- 6;
+//		
+//		ask unity_player{
+//			if min_team_id > team_id {
+//				min_team_id <- team_id;
+//			}
+//		}
+//		
+//		loop j from:1 to:6{
+//			//write string("Save data for Player_10" + j);
+//			
+//			ask unity_player where (each.name = string("Player_10" + j)){
+//				int key_player <- team_id - 1;
+//				list temp <- [];
+//				list temp2 <- [];
+//				
+//				add 'Team' + int(team_id) to: temp;
+//				add 'Team' + int(team_id) to: temp2;
+//				
+//				loop i from:0 to:length(n_tree) - 1{
+//					add container(seeds[key_player])[i] to: temp;
+//					add container(alien_seeds[key_player])[i] to: temp2;
+//				}
+//				
+//				add count_start to: temp;
+//				add count_start to: temp2;
+//				
+//				if self.name = string("Player_10" + min_team_id){
+//					save temp to: "../results/total_seeds.csv" header:false format:"csv" rewrite:true;
+//					save temp to: "../results_backup/total_seeds.csv" header:false format:"csv" rewrite:true;
+//					save temp to: "../results_backup_with_date/total_seeds_" + today + ".csv" header:false format:"csv" rewrite:true;
+//				}
+//				else{
+//					save temp to: "../results/total_seeds.csv" header:false format:"csv" rewrite:false;
+//					save temp to: "../results_backup/total_seeds.csv" header:false format:"csv" rewrite:false;
+//					save temp to: "../results_backup_with_date/total_seeds_" + today + ".csv" header:false format:"csv" rewrite:false;
+//				}
+//				
+//				if self.name = string("Player_10" + min_team_id){
+//					save temp2 to: "../results/total_alien_seeds.csv" header:false format:"csv" rewrite:true;
+//					save temp2 to: "../results_backup/total_alien_seeds.csv" header:false format:"csv" rewrite:true;
+//					save temp2 to: "../results_backup_with_date/total_alien_seeds_" + today + ".csv" header:false format:"csv" rewrite:true;
+//				}
+//				else{
+//					save temp2 to: "../results/total_alien_seeds.csv" header:false format:"csv" rewrite:false;
+//					save temp2 to: "../results_backup/total_alien_seeds.csv" header:false format:"csv" rewrite:false;
+//					save temp2 to: "../results_backup_with_date/total_alien_seeds_" + today + ".csv" header:false format:"csv" rewrite:false;
+//				}
+//			}
+////			write string("Save data for Player_10" + j + " Completed!");
+//		}
 	}
 	action resend_command_to_unity (string player_name_ID){
 		int player_ID <- -1;
@@ -258,8 +304,8 @@ species unity_linker parent: abstract_unity_linker {
 			add player_ID to: player_id_finish_tutorial_list;
 		}
 		
-		//write "Player " + player_ID + " (Team: " + map_player_id[player_ID] + ") finished tutorial.";
-		who_finish_tutorial[map_player_id[player_ID]-1] <- true;
+		//write "Player " + player_ID + " (Team: " + map_player_idint[player_ID] + ") finished tutorial.";
+		who_finish_tutorial[map_player_idint[player_ID]-1] <- true;
 		
 		if length(player_id_finish_tutorial_list) >= length(unity_player){
 			//write "Tutorial Finish!!!!";
@@ -268,7 +314,7 @@ species unity_linker parent: abstract_unity_linker {
 					self.icon <- play;
 					//write "do_pause Tutorial (Change Icon!)";
 				}
-				loop i from:0 to:length(map_player_id)-1{
+				loop i from:0 to:length(map_player_idint)-1{
 					if who_connect[i]{
 						ask player_status[i]{
 							status_icon <- correct_image;
@@ -285,7 +331,7 @@ species unity_linker parent: abstract_unity_linker {
 	
 	action collect_seeds(string player_ID, string tree_ID){
 		//write "Player " + player_ID + " collect: " + tree_ID;
-		int key_player <- map_player_id[player_ID]-1;
+		int key_player <- map_player_idint[player_ID]-1;
 		int key_tree <- int(tree_ID);
 		
 		if key_tree < 0{
@@ -622,12 +668,12 @@ species unity_player parent: abstract_unity_player{
 	init{
 //		// Use m2l2 colors
 //		if (map_player_id_m2l2.keys contains name){
-//			if (map_player_id[name] != nil){
+//			if (map_player_idint[name] != nil){
 //				team_id <- map_player_id_m2l2[name];
 //				// Move already existing player to end of index
 //				ask first(unity_player where (each.name = name)) {
-//					team_id <- length(map_player_id)+1;	
-//					map_player_id[name] <- team_id;
+//					team_id <- length(map_player_idint)+1;	
+//					map_player_idint[name] <- team_id;
 //					color <- rgb(player_colors[team_id-1]);
 //				}
 //			} else {
@@ -635,11 +681,11 @@ species unity_player parent: abstract_unity_player{
 //			}
 //		// Other Player_IP set, put colors at random
 //		} else {
-//			team_id <- length(map_player_id)+1;//map_player_id[name];	
+//			team_id <- length(map_player_idint)+1;//map_player_idint[name];	
 //		}
-//		map_player_id[name] <- team_id;
+//		map_player_idint[name] <- team_id;
 		
-		team_id <- map_player_id[name];
+		team_id <- map_player_idint[name];
 		color <- rgb(player_colors[team_id-1]);	
 	}
 	
