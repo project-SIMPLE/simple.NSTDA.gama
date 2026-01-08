@@ -76,22 +76,49 @@ global{
 	int cnt_created_tree <- 0;
 	
 	// Read Tree Data
-	file my_csv_file <- csv_file( "../includes/GAMA_RGR_07-01-25.csv");
+//	file my_csv_file <- csv_file( "../includes/GAMA_RGR_07-01-25.csv");
+	file my_csv_file <- csv_file( "../includes/GAMA_RGR_08-01-26.csv");
 
-	file seeds_file <- csv_file( "../../GAMA_forest_trails/results/11Jan_result/total_seeds.csv");
-	file alien_seeds_file <- csv_file( "../../GAMA_forest_trails/results/11Jan_result/total_alien_seeds.csv");
+	file seeds_file <- csv_file( "../../GAMA_forest_trails/results/total_seeds.csv");
+	file alien_seeds_file <- csv_file( "../../GAMA_forest_trails/results/total_alien_seeds.csv");
+	
+//	file seeds_file <- csv_file( "../../GAMA_forest_growth_models/total_seeds_3round.csv");
+//	file alien_seeds_file <- csv_file( "../../GAMA_forest_growth_models/total_alien_seeds_3round.csv");
 	
 	// --------------------------------------- For radar chart ---------------------------------------
 	
-	list<string> tree_name <- ['Qu','Sa','Ma','Pho','De','Di','Os','Phy','Ca','Gm'];
+	list<string> init_tree_name <- ['Qu','Sa','Ma','Pho','De','Di','Os','Phy','Ca','Gm'];
+	list<string> tree_name <- [];
 	
-// update new lower bound and upper bound (14/11/2025)
-	list<int> lower_bound <- [15, 13, 18, 15, 16, 14, 18, 15, 14, 15];
-	list<int> upper_bound <- [20, 17, 24, 20, 21, 19, 24, 20, 19, 20];
+// update new lower bound and upper bound (08/01/2026)
+	list<int> num_seed_collect <- [75,64,86,75,80,67,86,75,66,71];
+	
+//	list<int> lower_bound <- [15, 13, 18, 15, 16, 14, 18, 15, 14, 15];
+//	list<int> upper_bound <- [20, 17, 24, 20, 21, 19, 24, 20, 19, 20];
+	list<int> lower_bound <- [];
+	list<int> upper_bound <- [];
+	
+//	map<int, list<int>> map_round <- [ 	1::[2,7,8], 2::[1,2,4,7,8],
+//										3::[0,1,2,4,7,8,9], 4::[0,1,2,3,4,7,8,9],
+//										5::[0,1,2,3,4,5,6,7,8,9], 6::[0,1,2,3,4,5,6,7,8,9] ];
+		
+	map<int, list<int>> map_round <- [ 	1::[3,8,9], 2::[2,3,5,8,9],
+										3::[1,2,3,5,8,9,10], 4::[1,2,3,4,5,8,9,10],
+										5::[1,2,3,4,5,6,7,8,9,10], 6::[1,2,3,4,5,6,7,8,9,10] ];
+										
+//    map<int, string> map_tree_name <- [ 0::'Qu', 1::'Sa', 2::'Ma', 3::'Pho', 4::'De', 
+//    									5::'Di', 6::'Os', 7::'Phy', 8::'Ca', 9::'Gm' ];
     
-    list<int> max <- list_with(10,3);
-    list<int> mid <- list_with(10,2);
-    list<int> min <- list_with(10,1);
+    map<int, int> map_factor <- [3::10, 4::8, 5::6, 6::5];
+	
+//    list<int> max <- list_with(10,3);
+//    list<int> mid <- list_with(10,2);
+//    list<int> min <- list_with(10,1);
+    
+    list<int> max <- [];
+    list<int> mid <- [];
+    list<int> min <- [];
+    
     list<int> real_data ;
     int n_alien_species;
 	
@@ -157,10 +184,30 @@ global{
 		matrix seed_data <- matrix(seeds_file);
 		matrix alien_seed_data <- matrix(alien_seeds_file);
 		
-		n_type <- seed_data.columns - 1; 
+		n_type <- seed_data.columns - 2; 
 		
 		//seed data and alien data
-		loop j from:1 to:seed_data.columns-1{
+		int round_player <- int(seed_data[11, player_ID-1]);
+		
+		loop i over: map_round[round_player]{
+			add init_tree_name[i-1] to: tree_name;
+		}
+		
+		max <- list_with(length(map_round[round_player]),3);
+    	mid <- list_with(length(map_round[round_player]),2);
+    	min <- list_with(length(map_round[round_player]),1);
+		
+//		write tree_name;
+		
+		loop a from:0 to:9{
+			add ceil(num_seed_collect[a]/map_factor[round_player]) to:lower_bound;
+		}
+		
+		loop b from:0 to:9{
+			add ceil(lower_bound[b] * 1.3) to:upper_bound;
+		}
+		
+		loop j from:1 to:seed_data.columns-2{
 			add int(seed_data[j,player_ID-1]) to: native_seed;
 			add int(alien_seed_data[j,player_ID-1]) to: alien_seed;
 		}	
@@ -174,10 +221,10 @@ global{
 // 		write alien_seed;
 
 		// multi-player & Check Alien 
-		loop i from: 1 to: alien_seed_data.columns-1{
+		loop i from: 1 to: alien_seed_data.columns-2{
 			
 			if int(alien_seed_data[i,player_ID-1]) > 0{
-				add int(int(alien_seed_data[i,player_ID-1]) + int(seed_data[i,player_ID-1]))*3 to: n_tree;
+				add int(int(alien_seed_data[i,player_ID-1]) + int(seed_data[i,player_ID-1]))* map_factor[round_player] to: n_tree;
 				germination_rate[i-1]  <- alien_germination_rate;
 				survi_rate_y1[i-1] <- alien_survi_rate;
 				survi_rate_y2[i-1] <- alien_survi_rate;
@@ -185,7 +232,7 @@ global{
 			}
 			
 			else{
-				add int(seed_data[i,player_ID-1])*3 to:n_tree;
+				add int(seed_data[i,player_ID-1])* map_factor[round_player] to:n_tree;
 
 			}
 		}
@@ -197,7 +244,6 @@ global{
 		}
 		
 //		write initial_treeid;
-		
 //		int total_initial_treeid <- sum(initial_treeid);
 //		write total_initial_treeid;
 //		int total_survive_tree <- sum(count_tree_survi);
@@ -253,16 +299,18 @@ global{
 //		write native_seed;
 //		write lower_bound;
 		
-		loop i from:0 to:length(tree_name)-1{
-			if (native_seed[i] <= upper_bound[i]) and (native_seed[i] >= lower_bound[i]){
+//		loop i from:0 to:length(tree_name)-1{
+
+		loop i over: map_round[round_player]{
+			if (native_seed[i-1] <= upper_bound[i-1]) and (native_seed[i-1] >= lower_bound[i-1]){
 				add 2 to: real_data;
 				count_as_planned <- count_as_planned + 1;
 			}
-			else if (native_seed[i] > upper_bound[i]){
+			else if (native_seed[i-1] > upper_bound[i-1]){
 				add 3 to: real_data;
 				count_not_as_planned <- count_not_as_planned + 1;
 			}
-			else if (native_seed[i] < lower_bound[i]){
+			else if (native_seed[i-1] < lower_bound[i-1]){
 				add 1 to: real_data;
 				count_not_as_planned <- count_not_as_planned + 1;
 			}
@@ -270,8 +318,6 @@ global{
 		
 // 		count aliens by species
 	
-		
-		
 		n_alien_species <- length(alien_seed where (each != 0)); 
 		write n_alien_species;
 		
@@ -502,7 +548,7 @@ experiment summary_radar{
 		display "radar chart" type: 2d
 		{
 			
-			chart ""  type: radar x_serie_labels: tree_name series_label_position: yaxis y_range: 4 position:{1.25 ,0.0} size:{0.95,0.95}//legend_font: font("SansSerif", 9, #bold) 
+			chart ""  type: radar x_serie_labels: tree_name series_label_position: yaxis y_range: 4 position:{1.25 ,0.0} size:{0.95,0.95} //legend_font: font("SansSerif", 9, #bold) 
 			{	
 
 				data "Exceeds"  value: max color: #grey ; 
