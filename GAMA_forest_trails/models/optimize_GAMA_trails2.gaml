@@ -12,7 +12,7 @@ import "optimize_species.gaml"
 global{
 	// Parameter
 	int n_team <- 6;
-	int stop_time <- 60; //second
+	int stop_time <- 180; //second
 	int n_turn <- 6;
 	
 	// Variable
