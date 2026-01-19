@@ -5,25 +5,32 @@ import "optimize_GAMA_trails2.gaml"
 global {	
 	int adjust_location <- 3;
 	action save_total_seeds_to_csv{
-		loop team_id from:1 to:6{
+		int min_team_id <- 6;
+		ask unity_player{
+			if min_team_id > team_id {
+				min_team_id <- team_id;
+			}
+		}
+
+		loop i from:1 to:6{
 			ask unity_player{
-				if map_player_idint[self.name] = team_id{
-					int key_player <- team_id - 1;
+				if team_id = i{
+					int key_player <- i - 1;
 					list temp <- [];
 					list temp2 <- [];
 					
-					add 'Team' + int(team_id) to: temp;
-					add 'Team' + int(team_id) to: temp2;
+					add 'Team' + int(i) to: temp;
+					add 'Team' + int(i) to: temp2;
 					
-					loop i from:0 to:length(n_tree) - 1{
-						add container(seeds[key_player])[i] to: temp;
-						add container(alien_seeds[key_player])[i] to: temp2;
+					loop j from:0 to:length(n_tree) - 1{
+						add container(seeds[key_player])[j] to: temp;
+						add container(alien_seeds[key_player])[j] to: temp2;
 					}
 					
 					add count_start to: temp;
 					add count_start to: temp2;
 					
-					if team_id = 1{
+					if i = min_team_id{
 						save temp to: "../results/total_seeds.csv" header:false format:"csv" rewrite:true;
 						save temp to: "../results_backup/total_seeds.csv" header:false format:"csv" rewrite:true;
 						save temp to: "../results_backup_with_date/total_seeds_" + today + ".csv" header:false format:"csv" rewrite:true;
@@ -34,7 +41,7 @@ global {
 						save temp to: "../results_backup_with_date/total_seeds_" + today + ".csv" header:false format:"csv" rewrite:false;
 					}
 					
-					if team_id = 1{
+					if i = min_team_id{
 						save temp2 to: "../results/total_alien_seeds.csv" header:false format:"csv" rewrite:true;
 						save temp2 to: "../results_backup/total_alien_seeds.csv" header:false format:"csv" rewrite:true;
 						save temp2 to: "../results_backup_with_date/total_alien_seeds_" + today + ".csv" header:false format:"csv" rewrite:true;
