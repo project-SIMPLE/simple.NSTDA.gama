@@ -79,11 +79,14 @@ global{
 //	file my_csv_file <- csv_file( "../includes/GAMA_RGR_07-01-25.csv");
 	file my_csv_file <- csv_file( "../includes/GAMA_RGR_08-01-26.csv");
 
-	file seeds_file <- csv_file( "../../GAMA_forest_trails/results/total_seeds.csv");
-	file alien_seeds_file <- csv_file( "../../GAMA_forest_trails/results/total_alien_seeds.csv");
+//	file seeds_file <- csv_file( "../../GAMA_forest_trails/results/total_seeds.csv");
+//	file alien_seeds_file <- csv_file( "../../GAMA_forest_trails/results/total_alien_seeds.csv");
 	
 //	file seeds_file <- csv_file( "../../GAMA_forest_growth_models/total_seeds_3round.csv");
 //	file alien_seeds_file <- csv_file( "../../GAMA_forest_growth_models/total_alien_seeds_3round.csv");
+	
+	file seeds_file <- csv_file( "../../GAMA_forest_growth_models/total_seeds_14_01_26.csv");
+	file alien_seeds_file <- csv_file( "../../GAMA_forest_growth_models/total_alien_seeds_14_01_26.csv");
 	
 	// --------------------------------------- For radar chart ---------------------------------------
 	
@@ -91,7 +94,7 @@ global{
 	list<string> tree_name <- [];
 	
 // update new lower bound and upper bound (08/01/2026)
-	list<int> num_seed_collect <- [75,64,86,75,80,67,86,75,66,71];
+	list<int> num_seed_collect <- [75, 64, 86, 75, 80, 67, 86, 75, 66, 71];
 	
 //	list<int> lower_bound <- [15, 13, 18, 15, 16, 14, 18, 15, 14, 15];
 //	list<int> upper_bound <- [20, 17, 24, 20, 21, 19, 24, 20, 19, 20];
@@ -109,7 +112,7 @@ global{
 //    map<int, string> map_tree_name <- [ 0::'Qu', 1::'Sa', 2::'Ma', 3::'Pho', 4::'De', 
 //    									5::'Di', 6::'Os', 7::'Phy', 8::'Ca', 9::'Gm' ];
     
-    map<int, int> map_factor <- [3::10, 4::8, 5::6, 6::5];
+    map<int, int> map_factor <- [3::6, 4::5, 5::4, 6::4];
 	
 //    list<int> max <- list_with(10,3);
 //    list<int> mid <- list_with(10,2);
@@ -200,7 +203,7 @@ global{
 //		write tree_name;
 		
 		loop a from:0 to:9{
-			add ceil(num_seed_collect[a]/map_factor[round_player]) to:lower_bound;
+			add ceil(num_seed_collect[a] / map_factor[round_player]) to:lower_bound;
 		}
 		
 		loop b from:0 to:9{
