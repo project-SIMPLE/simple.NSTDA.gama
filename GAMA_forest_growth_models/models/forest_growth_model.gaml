@@ -79,14 +79,11 @@ global{
 //	file my_csv_file <- csv_file( "../includes/GAMA_RGR_07-01-25.csv");
 	file my_csv_file <- csv_file( "../includes/GAMA_RGR_08-01-26.csv");
 
-//	file seeds_file <- csv_file( "../../GAMA_forest_trails/results/total_seeds.csv");
-//	file alien_seeds_file <- csv_file( "../../GAMA_forest_trails/results/total_alien_seeds.csv");
+	file seeds_file <- csv_file( "../../GAMA_forest_trails/results/total_seeds.csv");
+	file alien_seeds_file <- csv_file( "../../GAMA_forest_trails/results/total_alien_seeds.csv");
 	
-//	file seeds_file <- csv_file( "../../GAMA_forest_growth_models/total_seeds_3round.csv");
-//	file alien_seeds_file <- csv_file( "../../GAMA_forest_growth_models/total_alien_seeds_3round.csv");
-	
-	file seeds_file <- csv_file( "../../GAMA_forest_growth_models/total_seeds_14_01_26.csv");
-	file alien_seeds_file <- csv_file( "../../GAMA_forest_growth_models/total_alien_seeds_14_01_26.csv");
+//	file seeds_file <- csv_file( "../../GAMA_forest_growth_models/total_seeds_14_01_26.csv");
+//	file alien_seeds_file <- csv_file( "../../GAMA_forest_growth_models/total_alien_seeds_14_01_26.csv");
 	
 	// --------------------------------------- For radar chart ---------------------------------------
 	
