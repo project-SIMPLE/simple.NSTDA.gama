@@ -1,0 +1,10 @@
+{
+  "type": "json_settings",
+  "name": "2.Summary",
+  "splashscreen": "learning-packages/GAMA_forest_growth_models/splashscreen/radar_chart.jpeg",
+  "model_file_path": "./models/forest_growth_model.gaml",
+  "experiment_name": "summary_radar", 
+  "minimal_players": "0", 
+  "maximal_players": "0", 
+  "selected_monitoring": "gama_screen"
+}

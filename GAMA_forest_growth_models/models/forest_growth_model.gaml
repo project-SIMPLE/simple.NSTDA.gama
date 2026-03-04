@@ -179,7 +179,7 @@ global{
 				}
 		}
 		
-		save use_able_area to: "use_able_area_circle.shp" format:"shp";
+//		save use_able_area to: "use_able_area_circle.shp" format:"shp";
 		
 		matrix seed_data <- matrix(seeds_file);
 		matrix alien_seed_data <- matrix(alien_seeds_file);
@@ -287,7 +287,7 @@ global{
 			}
 		}
 		
-		save use_able_area to: "use_able_area.shp" format:"shp";
+//		save use_able_area to: "use_able_area.shp" format:"shp";
 		
 		ask tree{
 			add self to: list_survive_tree;

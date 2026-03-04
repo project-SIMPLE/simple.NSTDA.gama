@@ -17,3 +17,6 @@ GAMA_forest_growth_models/models/growth_model_3graph_3dsim_cm.gaml
 GAMA_forest_growth_models/models/test-radar Model.gaml
 GAMA_forest_growth_models/result/total_no_alien_seeds.csv
 /test_simple2/includes/export
+/GAMA_forest_trails/results_backup
+/GAMA_forest_trails/results_backup_with_date
+/GAMA_forest_trails/includes/export

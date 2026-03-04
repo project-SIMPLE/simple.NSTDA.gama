@@ -189,9 +189,9 @@ global{
 			}
 		}
 		
-		save usable_area to:"../includes/export/usable_area.shp" format:"shp";
-		save usable_area_for_tree to:"../includes/export/usable_area_for_tree.shp" format:"shp";
-		save union(road_midpoint) to:"../includes/export/road_midpoint.shp" format:"shp";
+//		save usable_area to:"../includes/export/usable_area.shp" format:"shp";
+//		save usable_area_for_tree to:"../includes/export/usable_area_for_tree.shp" format:"shp";
+//		save union(road_midpoint) to:"../includes/export/road_midpoint.shp" format:"shp";
 	}
 	
 	reflex update_status {

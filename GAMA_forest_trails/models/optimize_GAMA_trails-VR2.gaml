@@ -162,7 +162,7 @@ global {
 				}
 		
 				ask unity_linker {
-					do send_message players: unity_player[player_ID] as list mes: ["Head"::"Start", "Body"::""];
+					do send_message players: unity_player[player_ID] as list mes: ["Head"::"Start", "Body"::count_start];
 					write "Resend command for Player: " + unity_player.name + " to Trial zone " + count_start;
 				}
 			}	
@@ -211,7 +211,7 @@ global {
 			}
 			
 			ask unity_linker {
-				do send_message players: unity_player as list mes: ["Head"::"Start", "Body"::""];
+				do send_message players: unity_player as list mes: ["Head"::"Start", "Body"::count_start];
 				write "send Start";
 			}
 		}
